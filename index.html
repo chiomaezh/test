@@ -81,6 +81,31 @@
       .nav-link { font-size: 13px; letter-spacing: 1px; }
     }
 
+    /* ── Desktop only: move Play to the top right, mirroring About's
+         top-left position, without touching the About/Services layout.
+         The original Play link (inside .site-nav) is kept in place with
+         visibility:hidden so About and Services keep the exact same
+         flex space-between positions they have today; a separate Play
+         link is fixed to the top right instead. ── */
+    .nav-link-play-desktop {
+      display: none;
+    }
+
+    @media (min-width: 561px) {
+      .nav-link-play-mobile {
+        visibility: hidden;
+      }
+      .nav-link-play-desktop {
+        display: inline-block;
+        position: fixed;
+        top: 28px;
+        right: 32px;
+        opacity: 0;
+        animation: fadeIn 1.8s ease forwards;
+        animation-delay: 0.4s;
+      }
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -344,8 +369,10 @@
   <nav class="site-nav">
     <a href="https://sabi.london/about" class="nav-link">About</a>
     <a href="https://sabi.london/services/"class="nav-link">Services</a>
-    <a href="https://play.sabi.london/word-search" class="nav-link">Play</a>
+    <a href="https://play.sabi.london/word-search" class="nav-link nav-link-play-mobile">Play</a>
   </nav>
+
+  <a href="https://play.sabi.london/word-search" class="nav-link nav-link-play-desktop">Play</a>
 
   <img src="sabi-logo.png" alt="SABI">
 
