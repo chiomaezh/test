@@ -532,15 +532,25 @@
       // (desktop, and phone landscape — grid-template-areas "desc weather"
       // "contact weather", i.e. weather spans both rows). On phone portrait
       // the grid becomes "desc desc" / "contact weather", so weather only
-      // sits next to the contact block — matching it against desc+contact
-      // combined was making the portrait footer way too tall. So on
-      // portrait mobile we just leave the CSS's fixed small spacer height.
+      // sits next to the contact block — so there it should match against
+      // the contact block alone, not desc+contact combined.
       const isLandscapeShort = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
       const isPortraitMobile = window.innerWidth <= 760 && !isLandscapeShort;
-      if (isPortraitMobile) return;
+
+      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
+
+      if (isPortraitMobile) {
+        const stationHeight = station.getBoundingClientRect().height;
+        const contactHeight = contact.getBoundingClientRect().height;
+        const diff = contactHeight - stationHeight;
+        if (diff > 0) {
+          const extraPerSpacer = diff / 2;
+          spacers.forEach(td => { td.style.height = (baseSpacerHeight + extraPerSpacer) + 'px'; });
+        }
+        return;
+      }
 
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
-      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
 
       const stationHeight = station.getBoundingClientRect().height;
       const descHeight = desc.getBoundingClientRect().height;
