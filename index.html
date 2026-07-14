@@ -113,25 +113,43 @@
       flex-direction: column;
     }
 
-    .footer-col-left {
+    /* Both columns stretch to the SAME shared row height first — this is
+       what makes top and bottom line up between the two columns, since
+       they're no longer scaling from two different natural heights. */
+    .footer-col-left,
+    .footer-col-right {
+      align-self: stretch;
+    }
+    .footer-col-left { align-items: flex-start; }
+    .footer-col-right { align-items: flex-end; }
+
+    /* The scale/cosmetic shrink now lives on this inner wrapper instead
+       of the aligned outer column, so scaling never disturbs the
+       top/bottom pinning set up above. */
+    .footer-col-scale {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .footer-col-left .footer-col-scale {
       align-items: flex-start;
       transform: scale(0.9);
       transform-origin: bottom left;
     }
-
-    .footer-col-right {
+    .footer-col-right .footer-col-scale {
       align-items: flex-end;
       transform: scale(0.9);
       transform-origin: bottom right;
     }
 
-    /* ── World clock / weather block ──
-         Built as a 1-column table with invisible borders (same strategy
-         used on the About page) so the block's height comes purely from
-         its own rows/spacers, not from stretching to fill a parent whose
-         height can shift slightly when the phone rotates. ── */
+    /* ── World clock / weather block ── */
     .station {
-      border-collapse: collapse;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-between;
+      height: 100%;
+      gap: 8px;
       opacity: 0;
       transition: opacity 0.35s ease;
     }
@@ -140,16 +158,10 @@
       opacity: 1;
     }
 
-    .station td {
-      padding: 0;
-      border: 1px solid transparent;
-      text-align: right;
-    }
-
-    .station-spacer td {
-      height: 8px;
-      line-height: 0;
-      font-size: 0;
+    .station-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .station-city {
@@ -160,27 +172,26 @@
       text-transform: uppercase;
       color: #000000;
       font-weight: 400;
-      white-space: nowrap;
     }
 
     .station-time {
       font-family: var(--font-body);
       font-size: 38px;
+      line-height: 1;
       letter-spacing: 1px;
       color: #000000;
       font-weight: 400;
-      white-space: nowrap;
     }
 
     .station-meta {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 7px;
       font-family: var(--font-body);
       font-size: 30px;
+      line-height: 1;
       letter-spacing: 1px;
       color: #000000;
-      white-space: nowrap;
     }
 
     .station-icon {
@@ -212,6 +223,8 @@
 .contact-block {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   gap: 11px;
   text-align: left;
 }
@@ -219,6 +232,7 @@
     .contact-label {
       font-family: var(--font-body);
       font-size: 15px;
+      line-height: 1;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text);
@@ -228,6 +242,7 @@
     .contact-line {
       font-family: var(--font-body);
       font-size: 16px;
+      line-height: 1;
       color: #000000;
       font-weight: 300;
     }
@@ -254,18 +269,24 @@
       .footer-row { display: contents; }
       .footer-col-left {
         align-items: flex-start;
-        transform: none;
         align-self: stretch;
       }
       .footer-col-right {
         align-items: flex-end;
-        transform: none;
         align-self: stretch;
+      }
+      .footer-col-scale {
+        height: 100%;
+        transform: none;
       }
       .contact-block {
         height: 100%;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+      }
+      .station {
+        height: 100%;
         justify-content: space-between;
       }
       .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
@@ -274,6 +295,7 @@
       .station-time { font-size: 28px; }
       .station-meta { font-size: 22px; }
       .station-icon { width: 22px; height: 22px; }
+      .station { width: auto; }
     }
 
     /* ── Phone landscape (short viewport): keep the compact single-row
@@ -297,14 +319,16 @@
       .footer-col-left {
         grid-area: contact;
         align-items: flex-start;
-        transform: none;
         align-self: end;
       }
       .footer-col-right {
         grid-area: weather;
         align-items: flex-end;
-        transform: none;
         align-self: end;
+      }
+      .footer-col-scale {
+        height: auto;
+        transform: none;
       }
 
       .footer-desc {
@@ -320,7 +344,7 @@
       .contact-label { font-size: 10px; letter-spacing: 1.5px; }
       .contact-line { font-size: 11px; }
 
-      .station-spacer td { height: 3px; }
+      .station { gap: 3px; }
       .station-city { font-size: 11px; letter-spacing: 1.5px; }
       .station-time { font-size: 18px; }
       .station-meta { font-size: 14px; gap: 4px; }
@@ -351,38 +375,32 @@
 
     <div class="footer-row">
       <div class="footer-col footer-col-left">
-        <div class="contact-block">
-          <span class="contact-label">Contact</span>
-          <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
-          <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
+        <div class="footer-col-scale">
+          <div class="contact-block">
+            <span class="contact-label">Contact</span>
+            <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
+            <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
+          </div>
         </div>
       </div>
 
       <div class="footer-col footer-col-right">
-        <table class="station" id="station" cellpadding="0" cellspacing="0">
-          <tbody>
-            <tr>
-              <td><span class="station-city">London</span></td>
-            </tr>
-            <tr class="station-spacer">
-              <td></td>
-            </tr>
-            <tr>
-              <td><span class="station-time" data-time>--:--</span></td>
-            </tr>
-            <tr class="station-spacer">
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <span class="station-meta">
-                  <span class="station-icon" data-icon></span>
-                  <span data-temp>--°C</span>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="footer-col-scale">
+          <div class="station" id="station">
+            <div class="station-row">
+              <span class="station-city">London</span>
+            </div>
+            <div class="station-row">
+              <span class="station-time" data-time>--:--</span>
+            </div>
+            <div class="station-row">
+              <span class="station-meta">
+                <span class="station-icon" data-icon></span>
+                <span data-temp>--°C</span>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
@@ -487,7 +505,24 @@
     }
 
     window.addEventListener('load', matchStationRowWidths);
-    window.addEventListener('resize', matchStationRowWidths);
+
+    // Debounced instead of running on every single resize tick — rotating
+    // a phone fires a burst of resize events while the viewport is still
+    // mid-transition, and measuring during that burst is what was causing
+    // the font-size calculation to drift/grow after rotating back.
+    let stationResizeTimer;
+    function scheduleMatchStationRowWidths() {
+      clearTimeout(stationResizeTimer);
+      stationResizeTimer = setTimeout(matchStationRowWidths, 250);
+    }
+    window.addEventListener('resize', scheduleMatchStationRowWidths);
+
+    // iOS in particular reports viewport dimensions that haven't fully
+    // settled yet right at the moment orientationchange fires, so give it
+    // a bit longer before remeasuring.
+    window.addEventListener('orientationchange', () => {
+      setTimeout(matchStationRowWidths, 300);
+    });
 
     // ── On mobile, centre the logo within the empty space between nav and footer ──
     function centreLogoInMainBlock() {
@@ -511,105 +546,39 @@
     window.addEventListener('resize', centreLogoInMainBlock);
     setTimeout(centreLogoInMainBlock, 100);
 
-    // ── Match total height of (description + contact) to the weather table,
-    //    by growing/shrinking the two invisible spacer rows (or the
-    //    description's margin). Runs at all widths now — mobile used to
-    //    rely on CSS height:100%/space-between for this, which is exactly
-    //    what caused the block to resize on rotation, so that's been
-    //    replaced with this JS-driven measurement.
-    //
-    //    NOTE: .footer-col-left/.footer-col-right both have transform:
-    //    scale(0.9) — .footer-desc does NOT. getBoundingClientRect() always
-    //    returns visual (post-scale) size, so a pixel adjustment made to the
-    //    (scaled) spacer rows needs dividing by 0.9 to land correctly, while
-    //    an adjustment to the (unscaled) description margin doesn't.
-    //
-    //    This is solved iteratively rather than in one shot, because the
-    //    weather column spans two grid rows on desktop/landscape, and the
-    //    browser's own grid track-sizing already redistributes some extra
-    //    height across those rows to fit it — a closed-form calculation
-    //    can't predict that, but a few rounds of "measure, nudge, remeasure"
-    //    converges on the right answer regardless. ──
+    // ── Desktop only: match total height of (description + contact) to the weather block ──
     function matchLeftColumnHeightToStation() {
-      const SCALE = 0.9;
+      if (window.innerWidth <= 760) return;
       const desc = document.querySelector('.footer-desc');
       const contact = document.querySelector('.footer-col-left');
       const station = document.querySelector('.station');
-      const spacers = document.querySelectorAll('.station-spacer td');
-      if (!desc || !contact || !station || spacers.length < 2) return;
+      if (!desc || !contact || !station) return;
 
-      // Reset both to CSS-defined base values before measuring/bailing
+      // Reset both to CSS-defined base values before measuring
       desc.style.marginBottom = '';
-      spacers.forEach(td => { td.style.height = ''; });
-
-      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
+      station.style.gap = '';
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
+      const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
 
-      // This match only makes sense on the layouts where the weather table
-      // sits beside BOTH the description and the contact block combined
-      // (desktop, and phone landscape — grid-template-areas "desc weather"
-      // "contact weather", i.e. weather spans both rows). On phone portrait
-      // the grid becomes "desc desc" / "contact weather", so weather only
-      // sits next to the contact block — so there it should match against
-      // the contact block alone, not desc+contact combined.
-      const isLandscapeShort = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
-      const isPortraitMobile = window.innerWidth <= 760 && !isLandscapeShort;
+      const stationHeight = station.getBoundingClientRect().height;
+      const descHeight = desc.getBoundingClientRect().height;
+      const contactHeight = contact.getBoundingClientRect().height;
+      const leftTotal = descHeight + baseMarginBottom + contactHeight;
 
-      const MAX_ITERATIONS = 6;
-      const TOLERANCE = 0.5; // px
+      const diff = leftTotal - stationHeight;
 
-      if (isPortraitMobile) {
-        let extra = 0;
-        for (let i = 0; i < MAX_ITERATIONS; i++) {
-          const stationHeight = station.getBoundingClientRect().height;
-          const contactHeight = contact.getBoundingClientRect().height;
-          const diffVisual = contactHeight - stationHeight;
-          if (diffVisual <= TOLERANCE) break;
-          extra += diffVisual / SCALE;
-          const perSpacer = extra / 2;
-          spacers.forEach(td => { td.style.height = (baseSpacerHeight + perSpacer) + 'px'; });
-        }
-        return;
-      }
-
-      // Desktop / landscape: decide once which side needs to grow (based on
-      // the first measurement), then only ever adjust that one side while
-      // iterating, so the two mechanisms can't fight each other.
-      const firstLeftTotal = desc.getBoundingClientRect().height + baseMarginBottom + contact.getBoundingClientRect().height;
-      const firstDiff = firstLeftTotal - station.getBoundingClientRect().height;
-
-      if (firstDiff > 0) {
-        let extra = 0;
-        for (let i = 0; i < MAX_ITERATIONS; i++) {
-          const stationHeight = station.getBoundingClientRect().height;
-          const leftTotal = desc.getBoundingClientRect().height + baseMarginBottom + contact.getBoundingClientRect().height;
-          const diffVisual = leftTotal - stationHeight;
-          if (diffVisual <= TOLERANCE) break;
-          extra += diffVisual / SCALE;
-          const perSpacer = extra / 2;
-          spacers.forEach(td => { td.style.height = (baseSpacerHeight + perSpacer) + 'px'; });
-        }
+      if (diff > 0) {
+        // Left column is taller — stretch the station's internal gaps to match
+        const extraPerGap = diff / 2; // 2 gaps between the 3 station rows
+        station.style.gap = (baseStationGap + extraPerGap) + 'px';
       } else {
-        let extraMargin = 0;
-        for (let i = 0; i < MAX_ITERATIONS; i++) {
-          const stationHeight = station.getBoundingClientRect().height;
-          const leftTotal = desc.getBoundingClientRect().height + (baseMarginBottom + extraMargin) + contact.getBoundingClientRect().height;
-          const diffVisual = stationHeight - leftTotal;
-          if (diffVisual <= TOLERANCE) break;
-          extraMargin += diffVisual; // .footer-desc is unscaled — 1:1 px
-          desc.style.marginBottom = (baseMarginBottom + extraMargin) + 'px';
-        }
+        // Station is taller or equal — grow the description's margin to match
+        desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
       }
     }
 
     window.addEventListener('load', matchLeftColumnHeightToStation);
     window.addEventListener('resize', matchLeftColumnHeightToStation);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-      });
-    }
 
   </script>
 </body>
