@@ -113,30 +113,13 @@
       flex-direction: column;
     }
 
-    /* Both columns stretch to the SAME shared row height first — this is
-       what makes top and bottom line up between the two columns, since
-       they're no longer scaling from two different natural heights. */
-    .footer-col-left,
-    .footer-col-right {
-      align-self: stretch;
-    }
-    .footer-col-left { align-items: flex-start; }
-    .footer-col-right { align-items: flex-end; }
-
-    /* The scale/cosmetic shrink now lives on this inner wrapper instead
-       of the aligned outer column, so scaling never disturbs the
-       top/bottom pinning set up above. */
-    .footer-col-scale {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    .footer-col-left .footer-col-scale {
+    .footer-col-left {
       align-items: flex-start;
       transform: scale(0.9);
       transform-origin: bottom left;
     }
-    .footer-col-right .footer-col-scale {
+
+    .footer-col-right {
       align-items: flex-end;
       transform: scale(0.9);
       transform-origin: bottom right;
@@ -147,8 +130,6 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      justify-content: space-between;
-      height: 100%;
       gap: 8px;
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -177,7 +158,6 @@
     .station-time {
       font-family: var(--font-body);
       font-size: 38px;
-      line-height: 1;
       letter-spacing: 1px;
       color: #000000;
       font-weight: 400;
@@ -189,7 +169,6 @@
       gap: 7px;
       font-family: var(--font-body);
       font-size: 30px;
-      line-height: 1;
       letter-spacing: 1px;
       color: #000000;
     }
@@ -223,8 +202,6 @@
 .contact-block {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
   gap: 11px;
   text-align: left;
 }
@@ -232,7 +209,6 @@
     .contact-label {
       font-family: var(--font-body);
       font-size: 15px;
-      line-height: 1;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text);
@@ -242,7 +218,6 @@
     .contact-line {
       font-family: var(--font-body);
       font-size: 16px;
-      line-height: 1;
       color: #000000;
       font-weight: 300;
     }
@@ -269,15 +244,13 @@
       .footer-row { display: contents; }
       .footer-col-left {
         align-items: flex-start;
+        transform: none;
         align-self: stretch;
       }
       .footer-col-right {
         align-items: flex-end;
-        align-self: stretch;
-      }
-      .footer-col-scale {
-        height: 100%;
         transform: none;
+        align-self: stretch;
       }
       .contact-block {
         height: 100%;
@@ -319,16 +292,14 @@
       .footer-col-left {
         grid-area: contact;
         align-items: flex-start;
+        transform: none;
         align-self: end;
       }
       .footer-col-right {
         grid-area: weather;
         align-items: flex-end;
-        align-self: end;
-      }
-      .footer-col-scale {
-        height: auto;
         transform: none;
+        align-self: end;
       }
 
       .footer-desc {
@@ -375,30 +346,26 @@
 
     <div class="footer-row">
       <div class="footer-col footer-col-left">
-        <div class="footer-col-scale">
-          <div class="contact-block">
-            <span class="contact-label">Contact</span>
-            <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
-            <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
-          </div>
+        <div class="contact-block">
+          <span class="contact-label">Contact</span>
+          <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
+          <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
         </div>
       </div>
 
       <div class="footer-col footer-col-right">
-        <div class="footer-col-scale">
-          <div class="station" id="station">
-            <div class="station-row">
-              <span class="station-city">London</span>
-            </div>
-            <div class="station-row">
-              <span class="station-time" data-time>--:--</span>
-            </div>
-            <div class="station-row">
-              <span class="station-meta">
-                <span class="station-icon" data-icon></span>
-                <span data-temp>--°C</span>
-              </span>
-            </div>
+        <div class="station" id="station">
+          <div class="station-row">
+            <span class="station-city">London</span>
+          </div>
+          <div class="station-row">
+            <span class="station-time" data-time>--:--</span>
+          </div>
+          <div class="station-row">
+            <span class="station-meta">
+              <span class="station-icon" data-icon></span>
+              <span data-temp>--°C</span>
+            </span>
           </div>
         </div>
       </div>
@@ -508,21 +475,14 @@
 
     // Debounced instead of running on every single resize tick — rotating
     // a phone fires a burst of resize events while the viewport is still
-    // mid-transition, and measuring during that burst is what was causing
-    // the font-size calculation to drift/grow after rotating back.
+    // mid-transition, and measuring during that burst risks writing an
+    // unstable font-size value.
     let stationResizeTimer;
     function scheduleMatchStationRowWidths() {
       clearTimeout(stationResizeTimer);
       stationResizeTimer = setTimeout(matchStationRowWidths, 250);
     }
     window.addEventListener('resize', scheduleMatchStationRowWidths);
-
-    // iOS in particular reports viewport dimensions that haven't fully
-    // settled yet right at the moment orientationchange fires, so give it
-    // a bit longer before remeasuring.
-    window.addEventListener('orientationchange', () => {
-      setTimeout(matchStationRowWidths, 300);
-    });
 
     // ── On mobile, centre the logo within the empty space between nav and footer ──
     function centreLogoInMainBlock() {
@@ -548,15 +508,23 @@
 
     // ── Desktop only: match total height of (description + contact) to the weather block ──
     function matchLeftColumnHeightToStation() {
-      if (window.innerWidth <= 760) return;
       const desc = document.querySelector('.footer-desc');
       const contact = document.querySelector('.footer-col-left');
       const station = document.querySelector('.station');
       if (!desc || !contact || !station) return;
 
-      // Reset both to CSS-defined base values before measuring
+      // Always clear any previously-written inline values FIRST, before the
+      // desktop-only check below. Rotating a phone to landscape can push its
+      // width over 760px, letting this function run and write a custom
+      // gap/margin for that wide layout — then rotating back to portrait
+      // (width <= 760) was hitting the early return below and leaving that
+      // leftover landscape-calculated spacing permanently baked in. This is
+      // the actual cause of the block appearing taller after rotating back.
       desc.style.marginBottom = '';
       station.style.gap = '';
+
+      if (window.innerWidth <= 760) return;
+
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
       const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
 
@@ -578,7 +546,21 @@
     }
 
     window.addEventListener('load', matchLeftColumnHeightToStation);
-    window.addEventListener('resize', matchLeftColumnHeightToStation);
+
+    let leftColumnResizeTimer;
+    function scheduleMatchLeftColumnHeightToStation() {
+      clearTimeout(leftColumnResizeTimer);
+      leftColumnResizeTimer = setTimeout(matchLeftColumnHeightToStation, 250);
+    }
+    window.addEventListener('resize', scheduleMatchLeftColumnHeightToStation);
+
+    // Settle delay after rotation, same reasoning as the station width matcher above.
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      }, 300);
+    });
 
   </script>
 </body>
