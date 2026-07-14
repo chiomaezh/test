@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
   
   <title>SABI</title>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -124,12 +125,13 @@
       transform-origin: bottom right;
     }
 
-    /* ── World clock / weather block ── */
+    /* ── World clock / weather block ──
+         Built as a 1-column table with invisible borders (same strategy
+         used on the About page) so the block's height comes purely from
+         its own rows/spacers, not from stretching to fill a parent whose
+         height can shift slightly when the phone rotates. ── */
     .station {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
+      border-collapse: collapse;
       opacity: 0;
       transition: opacity 0.35s ease;
     }
@@ -138,10 +140,16 @@
       opacity: 1;
     }
 
-    .station-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .station td {
+      padding: 0;
+      border: 1px solid transparent;
+      text-align: right;
+    }
+
+    .station-spacer td {
+      height: 8px;
+      line-height: 0;
+      font-size: 0;
     }
 
     .station-city {
@@ -152,6 +160,7 @@
       text-transform: uppercase;
       color: #000000;
       font-weight: 400;
+      white-space: nowrap;
     }
 
     .station-time {
@@ -160,16 +169,18 @@
       letter-spacing: 1px;
       color: #000000;
       font-weight: 400;
+      white-space: nowrap;
     }
 
     .station-meta {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 7px;
       font-family: var(--font-body);
       font-size: 30px;
       letter-spacing: 1px;
       color: #000000;
+      white-space: nowrap;
     }
 
     .station-icon {
@@ -257,17 +268,12 @@
         flex-direction: column;
         justify-content: space-between;
       }
-      .station {
-        height: 100%;
-        justify-content: space-between;
-      }
       .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
       .contact-block { text-align: left; }
       .station-city { font-size: 15px; letter-spacing: 2px; }
       .station-time { font-size: 28px; }
       .station-meta { font-size: 22px; }
       .station-icon { width: 22px; height: 22px; }
-      .station { width: auto; }
     }
 
     /* ── Phone landscape (short viewport): keep the compact single-row
@@ -314,7 +320,7 @@
       .contact-label { font-size: 10px; letter-spacing: 1.5px; }
       .contact-line { font-size: 11px; }
 
-      .station { gap: 3px; }
+      .station-spacer td { height: 3px; }
       .station-city { font-size: 11px; letter-spacing: 1.5px; }
       .station-time { font-size: 18px; }
       .station-meta { font-size: 14px; gap: 4px; }
@@ -353,20 +359,30 @@
       </div>
 
       <div class="footer-col footer-col-right">
-        <div class="station" id="station">
-          <div class="station-row">
-            <span class="station-city">London</span>
-          </div>
-          <div class="station-row">
-            <span class="station-time" data-time>--:--</span>
-          </div>
-          <div class="station-row">
-            <span class="station-meta">
-              <span class="station-icon" data-icon></span>
-              <span data-temp>--°C</span>
-            </span>
-          </div>
-        </div>
+        <table class="station" id="station" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td><span class="station-city">London</span></td>
+            </tr>
+            <tr class="station-spacer">
+              <td></td>
+            </tr>
+            <tr>
+              <td><span class="station-time" data-time>--:--</span></td>
+            </tr>
+            <tr class="station-spacer">
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="station-meta">
+                  <span class="station-icon" data-icon></span>
+                  <span data-temp>--°C</span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </footer>
@@ -495,19 +511,23 @@
     window.addEventListener('resize', centreLogoInMainBlock);
     setTimeout(centreLogoInMainBlock, 100);
 
-    // ── Desktop only: match total height of (description + contact) to the weather block ──
+    // ── Match total height of (description + contact) to the weather table,
+    //    by growing/shrinking the two invisible spacer rows. Runs at all
+    //    widths now — mobile used to rely on CSS height:100%/space-between
+    //    for this, which is exactly what caused the block to resize on
+    //    rotation, so that's been replaced with this JS-driven measurement. ──
     function matchLeftColumnHeightToStation() {
-      if (window.innerWidth <= 760) return;
       const desc = document.querySelector('.footer-desc');
       const contact = document.querySelector('.footer-col-left');
       const station = document.querySelector('.station');
-      if (!desc || !contact || !station) return;
+      const spacers = document.querySelectorAll('.station-spacer td');
+      if (!desc || !contact || !station || spacers.length < 2) return;
 
       // Reset both to CSS-defined base values before measuring
       desc.style.marginBottom = '';
-      station.style.gap = '';
+      spacers.forEach(td => { td.style.height = ''; });
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
-      const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
+      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
 
       const stationHeight = station.getBoundingClientRect().height;
       const descHeight = desc.getBoundingClientRect().height;
@@ -517,9 +537,9 @@
       const diff = leftTotal - stationHeight;
 
       if (diff > 0) {
-        // Left column is taller — stretch the station's internal gaps to match
-        const extraPerGap = diff / 2; // 2 gaps between the 3 station rows
-        station.style.gap = (baseStationGap + extraPerGap) + 'px';
+        // Left column is taller — grow the station's two spacer rows to match
+        const extraPerSpacer = diff / 2;
+        spacers.forEach(td => { td.style.height = (baseSpacerHeight + extraPerSpacer) + 'px'; });
       } else {
         // Station is taller or equal — grow the description's margin to match
         desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
