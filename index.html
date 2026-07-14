@@ -317,6 +317,21 @@
 
       .site-nav { padding: 14px 20px; }
 
+      /* Move Play to the top right for phone landscape only, same
+         technique used for desktop: keep the original inline Play
+         reserving its layout space (invisible) so About/Services don't
+         shift, and show a separate Play fixed to the top right. */
+      .nav-link-play-mobile { visibility: hidden; }
+      .nav-link-play-desktop {
+        display: inline-block;
+        position: fixed;
+        top: 14px;
+        right: 20px;
+        opacity: 0;
+        animation: fadeIn 1.8s ease forwards;
+        animation-delay: 0.4s;
+      }
+
       .site-footer {
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "desc weather" "contact weather";
