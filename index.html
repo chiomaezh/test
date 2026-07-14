@@ -198,6 +198,7 @@
       letter-spacing: 1px;
       color: #000000;
       font-weight: 400;
+      font-variant-numeric: tabular-nums;
     }
 
     .station-meta {
@@ -517,6 +518,18 @@
     }
 
     window.addEventListener('load', matchStationRowWidths);
+
+    // The very first measurement can run before the Typekit font
+    // ('owners-text') has actually finished loading — if it measures
+    // against the browser's fallback font instead, the font-size scale
+    // it calculates is wrong once the real font swaps in. Re-run once
+    // the real webfont is confirmed loaded to correct for that.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      });
+    }
 
     // Debounced instead of running on every single resize tick — rotating
     // a phone fires a burst of resize events while the viewport is still
