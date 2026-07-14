@@ -317,20 +317,11 @@
 
       .site-nav { padding: 14px 20px; }
 
-      /* Move Play to the top right for phone landscape only, same
-         technique used for desktop: keep the original inline Play
-         reserving its layout space (invisible) so About/Services don't
-         shift, and show a separate Play fixed to the top right. */
-      .nav-link-play-mobile { visibility: hidden; }
-      .nav-link-play-desktop {
-        display: inline-block;
-        position: fixed;
-        top: 14px;
-        right: 20px;
-        opacity: 0;
-        animation: fadeIn 1.8s ease forwards;
-        animation-delay: 0.4s;
-      }
+      /* The desktop-only negative margin on Services (used to halve the
+         gap on wide screens) is too aggressive on narrower landscape
+         phone widths and was collapsing into About. Reset it here so
+         Services keeps its natural, non-overlapping spacing. */
+      .nav-link-services { margin-left: 0; }
 
       .site-footer {
         grid-template-columns: 1fr 1fr;
