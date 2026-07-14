@@ -133,6 +133,12 @@
       gap: 8px;
       opacity: 0;
       transition: opacity 0.35s ease;
+      /* Small uniform nudge down to match the contact block's top/bottom —
+         purely visual (transform), doesn't touch layout, alignment, or
+         font-size, and applies consistently across every breakpoint since
+         it's on .station itself rather than a per-breakpoint wrapper.
+         Adjust this single value up/down if it needs to move further. */
+      transform: translateY(3px);
     }
 
     .station.is-ready {
