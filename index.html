@@ -42,10 +42,55 @@
       animation: fadeIn 1.8s ease forwards;
     }
 
+    /* ── Ticker strip (sits above the nav) ── */
+    .ticker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 36px;
+      background: var(--text);
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker-scroll 34s linear infinite;
+    }
+
+    .ticker-seq {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--bg);
+    }
+
+    .ticker-seq > span { padding: 0 20px; }
+
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+    }
+
     /* ── Top navigation ── */
     .site-nav {
       position: fixed;
-      top: 0;
+      top: 36px;
       left: 0;
       display: flex;
       justify-content: space-between;
@@ -72,42 +117,18 @@
     }
 
     @media (max-width: 560px) {
+      .ticker { height: 30px; }
+      .ticker-seq { font-size: 10px; letter-spacing: 1px; }
+      .ticker-seq > span { padding: 0 14px; }
+
       .site-nav {
+        top: 30px;
         width: auto;
         right: 0;
         padding: 20px;
         gap: 20px;
       }
       .nav-link { font-size: 13px; letter-spacing: 1px; }
-    }
-
-    /* ── Desktop only: move Play to the top right, mirroring About's
-         top-left position, without touching the About/Services layout.
-         The original Play link (inside .site-nav) is kept in place with
-         visibility:hidden so About and Services keep the exact same
-         flex space-between positions they have today; a separate Play
-         link is fixed to the top right instead. ── */
-    .nav-link-play-desktop {
-      display: none;
-    }
-
-    @media (min-width: 561px) {
-      .nav-link-play-mobile {
-        visibility: hidden;
-      }
-      .nav-link-play-desktop {
-        display: inline-block;
-        position: fixed;
-        top: 28px;
-        right: 32px;
-        opacity: 0;
-        animation: fadeIn 1.8s ease forwards;
-        animation-delay: 0.4s;
-      }
-      /* Halve the visual gap between About and Services (desktop only) */
-      .nav-link-services {
-        margin-left: -8.4vw;
-      }
     }
 
     @keyframes fadeIn {
@@ -316,13 +337,11 @@
     @media (orientation: landscape) and (max-height: 500px) {
       img { max-width: 110px; }
 
-      .site-nav { padding: 14px 20px; }
+      .ticker { height: 24px; }
+      .ticker-seq { font-size: 10px; letter-spacing: 1px; }
+      .ticker-seq > span { padding: 0 14px; }
 
-      /* The desktop-only negative margin on Services (used to halve the
-         gap on wide screens) is too aggressive on narrower landscape
-         phone widths and was collapsing into About. Reset it here so
-         Services keeps its natural, non-overlapping spacing. */
-      .nav-link-services { margin-left: 0; }
+      .site-nav { top: 24px; padding: 14px 20px; }
 
       .site-footer {
         grid-template-columns: 1fr 1fr;
@@ -377,13 +396,38 @@
 </script>
 </head>
 <body>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-seq">
+        <span>Brand Strategy</span>
+        <span>World Building</span>
+        <span>Copywriting</span>
+        <span>Community Strategy</span>
+        <span>&ldquo;No detail too casual&rdquo;</span>
+        <span>&ldquo;Signed, on and off paper&rdquo;</span>
+        <span>&ldquo;We know you know&rdquo;</span>
+        <span>&ldquo;In the business of better ways&rdquo;</span>
+        <span>&ldquo;We saw you see it first&rdquo;</span>
+      </div>
+      <div class="ticker-seq">
+        <span>Brand Strategy</span>
+        <span>World Building</span>
+        <span>Copywriting</span>
+        <span>Community Strategy</span>
+        <span>&ldquo;No detail too casual&rdquo;</span>
+        <span>&ldquo;Signed, on and off paper&rdquo;</span>
+        <span>&ldquo;We know you know&rdquo;</span>
+        <span>&ldquo;In the business of better ways&rdquo;</span>
+        <span>&ldquo;We saw you see it first&rdquo;</span>
+      </div>
+    </div>
+  </div>
+
   <nav class="site-nav">
     <a href="https://sabi.london/about" class="nav-link">About</a>
-    <a href="https://sabi.london/services/"class="nav-link nav-link-services">Services</a>
-    <a href="https://play.sabi.london/word-search" class="nav-link nav-link-play-mobile">Play</a>
+    <a href="https://sabi.london/services/"class="nav-link">Services</a>
+    <a href="https://play.sabi.london/word-search" class="nav-link">Play</a>
   </nav>
-
-  <a href="https://play.sabi.london/word-search" class="nav-link nav-link-play-desktop">Play</a>
 
   <img src="sabi-logo.png" alt="SABI">
 
@@ -549,10 +593,10 @@
       const footer = document.querySelector('.site-footer');
       if (!logo || !nav || !footer) return;
 
-      const navHeight = nav.getBoundingClientRect().height;
+      const navBottom = nav.getBoundingClientRect().bottom;
       const footerHeight = footer.getBoundingClientRect().height;
       const viewportHeight = window.innerHeight;
-      const availableMid = navHeight + (viewportHeight - navHeight - footerHeight) / 2;
+      const availableMid = navBottom + (viewportHeight - navBottom - footerHeight) / 2;
 
       logo.style.position = 'fixed';
       logo.style.left = '50%';
