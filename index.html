@@ -512,11 +512,26 @@
     setTimeout(centreLogoInMainBlock, 100);
 
     // ── Match total height of (description + contact) to the weather table,
-    //    by growing/shrinking the two invisible spacer rows. Runs at all
-    //    widths now — mobile used to rely on CSS height:100%/space-between
-    //    for this, which is exactly what caused the block to resize on
-    //    rotation, so that's been replaced with this JS-driven measurement. ──
+    //    by growing/shrinking the two invisible spacer rows (or the
+    //    description's margin). Runs at all widths now — mobile used to
+    //    rely on CSS height:100%/space-between for this, which is exactly
+    //    what caused the block to resize on rotation, so that's been
+    //    replaced with this JS-driven measurement.
+    //
+    //    NOTE: .footer-col-left/.footer-col-right both have transform:
+    //    scale(0.9) — .footer-desc does NOT. getBoundingClientRect() always
+    //    returns visual (post-scale) size, so a pixel adjustment made to the
+    //    (scaled) spacer rows needs dividing by 0.9 to land correctly, while
+    //    an adjustment to the (unscaled) description margin doesn't.
+    //
+    //    This is solved iteratively rather than in one shot, because the
+    //    weather column spans two grid rows on desktop/landscape, and the
+    //    browser's own grid track-sizing already redistributes some extra
+    //    height across those rows to fit it — a closed-form calculation
+    //    can't predict that, but a few rounds of "measure, nudge, remeasure"
+    //    converges on the right answer regardless. ──
     function matchLeftColumnHeightToStation() {
+      const SCALE = 0.9;
       const desc = document.querySelector('.footer-desc');
       const contact = document.querySelector('.footer-col-left');
       const station = document.querySelector('.station');
@@ -526,6 +541,9 @@
       // Reset both to CSS-defined base values before measuring/bailing
       desc.style.marginBottom = '';
       spacers.forEach(td => { td.style.height = ''; });
+
+      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
+      const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
 
       // This match only makes sense on the layouts where the weather table
       // sits beside BOTH the description and the contact block combined
@@ -537,40 +555,61 @@
       const isLandscapeShort = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
       const isPortraitMobile = window.innerWidth <= 760 && !isLandscapeShort;
 
-      const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
+      const MAX_ITERATIONS = 6;
+      const TOLERANCE = 0.5; // px
 
       if (isPortraitMobile) {
-        const stationHeight = station.getBoundingClientRect().height;
-        const contactHeight = contact.getBoundingClientRect().height;
-        const diff = contactHeight - stationHeight;
-        if (diff > 0) {
-          const extraPerSpacer = diff / 2;
-          spacers.forEach(td => { td.style.height = (baseSpacerHeight + extraPerSpacer) + 'px'; });
+        let extra = 0;
+        for (let i = 0; i < MAX_ITERATIONS; i++) {
+          const stationHeight = station.getBoundingClientRect().height;
+          const contactHeight = contact.getBoundingClientRect().height;
+          const diffVisual = contactHeight - stationHeight;
+          if (diffVisual <= TOLERANCE) break;
+          extra += diffVisual / SCALE;
+          const perSpacer = extra / 2;
+          spacers.forEach(td => { td.style.height = (baseSpacerHeight + perSpacer) + 'px'; });
         }
         return;
       }
 
-      const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
+      // Desktop / landscape: decide once which side needs to grow (based on
+      // the first measurement), then only ever adjust that one side while
+      // iterating, so the two mechanisms can't fight each other.
+      const firstLeftTotal = desc.getBoundingClientRect().height + baseMarginBottom + contact.getBoundingClientRect().height;
+      const firstDiff = firstLeftTotal - station.getBoundingClientRect().height;
 
-      const stationHeight = station.getBoundingClientRect().height;
-      const descHeight = desc.getBoundingClientRect().height;
-      const contactHeight = contact.getBoundingClientRect().height;
-      const leftTotal = descHeight + baseMarginBottom + contactHeight;
-
-      const diff = leftTotal - stationHeight;
-
-      if (diff > 0) {
-        // Left column is taller — grow the station's two spacer rows to match
-        const extraPerSpacer = diff / 2;
-        spacers.forEach(td => { td.style.height = (baseSpacerHeight + extraPerSpacer) + 'px'; });
+      if (firstDiff > 0) {
+        let extra = 0;
+        for (let i = 0; i < MAX_ITERATIONS; i++) {
+          const stationHeight = station.getBoundingClientRect().height;
+          const leftTotal = desc.getBoundingClientRect().height + baseMarginBottom + contact.getBoundingClientRect().height;
+          const diffVisual = leftTotal - stationHeight;
+          if (diffVisual <= TOLERANCE) break;
+          extra += diffVisual / SCALE;
+          const perSpacer = extra / 2;
+          spacers.forEach(td => { td.style.height = (baseSpacerHeight + perSpacer) + 'px'; });
+        }
       } else {
-        // Station is taller or equal — grow the description's margin to match
-        desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
+        let extraMargin = 0;
+        for (let i = 0; i < MAX_ITERATIONS; i++) {
+          const stationHeight = station.getBoundingClientRect().height;
+          const leftTotal = desc.getBoundingClientRect().height + (baseMarginBottom + extraMargin) + contact.getBoundingClientRect().height;
+          const diffVisual = stationHeight - leftTotal;
+          if (diffVisual <= TOLERANCE) break;
+          extraMargin += diffVisual; // .footer-desc is unscaled — 1:1 px
+          desc.style.marginBottom = (baseMarginBottom + extraMargin) + 'px';
+        }
       }
     }
 
     window.addEventListener('load', matchLeftColumnHeightToStation);
     window.addEventListener('resize', matchLeftColumnHeightToStation);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      });
+    }
 
   </script>
 </body>
