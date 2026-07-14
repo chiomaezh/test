@@ -523,9 +523,22 @@
       const spacers = document.querySelectorAll('.station-spacer td');
       if (!desc || !contact || !station || spacers.length < 2) return;
 
-      // Reset both to CSS-defined base values before measuring
+      // Reset both to CSS-defined base values before measuring/bailing
       desc.style.marginBottom = '';
       spacers.forEach(td => { td.style.height = ''; });
+
+      // This match only makes sense on the layouts where the weather table
+      // sits beside BOTH the description and the contact block combined
+      // (desktop, and phone landscape — grid-template-areas "desc weather"
+      // "contact weather", i.e. weather spans both rows). On phone portrait
+      // the grid becomes "desc desc" / "contact weather", so weather only
+      // sits next to the contact block — matching it against desc+contact
+      // combined was making the portrait footer way too tall. So on
+      // portrait mobile we just leave the CSS's fixed small spacer height.
+      const isLandscapeShort = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
+      const isPortraitMobile = window.innerWidth <= 760 && !isLandscapeShort;
+      if (isPortraitMobile) return;
+
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
       const baseSpacerHeight = parseFloat(getComputedStyle(spacers[0]).height) || 8;
 
