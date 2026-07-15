@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
+  
+  <title>Services — SABI</title>
+  <meta name="description" content="Strategy and design services from SABI, organised across Brand, Experience, and Production." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    :root {
+      --bg: #FAFBE3;
+      --surface: #FAFBE3;
+      --border: #423A3A;
+      --border-light: #423A3A;
+      --text: #211D1D;
+      --found-bg: #211D1D;
+      --found-text: #FAFBE3;
+      --select-bg: #E8E9C8;
+      --select-text: #211D1D;
+      --font-body: 'owners-text', sans-serif;
+      --font-mono: 'gemeli-mono', serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 350;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 0 5rem;
+    }
+
+    /* .page is full-bleed. .container is the narrow, centered wrapper —
+       the same convention used on every other page of the site. Only
+       By Appointment and the footer stay wide. */
+    .page { width: 100%; }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .container--footer {
+      max-width: 768px;
+    }
+
+    .container-wide {
+      width: 100%;
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+
+    /* Full-bleed horizontal rule, used between every section */
+    .full-divider {
+      width: 100%;
+      border-top: 0.5px solid var(--border);
+    }
+    .full-divider.light {
+      border-top-color: var(--bg);
+      opacity: 0.3;
+    }
+
+    /* Header divider reverts to the narrow, constrained width (not full-bleed) */
+    .header-divider-inset {
+      width: 100%;
+    }
+
+    /* Inset divider — same left/right padding as the row text and arrows,
+       used inside What We Do instead of the full-bleed .full-divider */
+    .wwd-divider {
+      margin-left: 2.5rem;
+      margin-right: 2.5rem;
+      border-top: 0.4px solid var(--bg);
+      opacity: 0.3;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      padding-top: 0;
+    }
+
+    .site-name {
+      font-family: "all-round-gothic", sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .site-tag {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ── Hamburger menu (accordion) ── */
+    .menu-btn {
+      position: relative;
+      width: 22px;
+      height: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .menu-btn span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--text);
+      transition: transform 0.25s ease, top 0.25s ease;
+    }
+    .menu-btn span:first-child { top: 2px; }
+    .menu-btn span:last-child { top: 12px; }
+    .menu-btn.open span { height: 1.8px; }
+    .menu-btn.open span:first-child { top: 7px; transform: rotate(45deg); }
+    .menu-btn.open span:last-child { top: 7px; transform: rotate(-45deg); }
+    .menu-accordion {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+    }
+    .menu-accordion.open { max-height: 220px; }
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1rem;
+    }
+    .menu-list a {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 0;
+    }
+    .menu-list a.active {
+      color: rgba(139, 140, 120, 0.5);
+      opacity: 0.35;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* ── Section title (was .page-title) ──
+       Reused as the small eyebrow heading for every section except the first. */
+    .section-title {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.1;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 2.2rem;
+    }
+    .section-title.light { color: var(--bg); }
+
+    .page-body {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 17.5px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 75%;
+    }
+    .page-body p { margin-bottom: 1.5rem; }
+    .page-body p:last-child { margin-bottom: 0; }
+
+    .wwt-body {
+      position: relative;
+    }
+
+    .industry-list {
+      list-style: none;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 75%;
+    }
+
+    .start-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    @media (max-width: 650px) {
+      .start-link {
+        position: static;
+        transform: none;
+        display: block;
+        text-align: right;
+        margin-top: 1.5rem;
+      }
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .section:first-of-type { padding-top: 0; }
+
+    /* Who We Work With gets extra breathing room top and bottom */
+    .section--wwt {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    /* About section: slightly reduced padding top and bottom */
+    .section--about {
+      padding-top: 2.25rem;
+      padding-bottom: 2.25rem;
+    }
+
+    /* Desktop only: nudge About's top padding back up by 0.4rem to
+       compensate for the manifesto-text upward shift (see
+       .manifesto-text margin-top), keeping the same amount of content
+       visible above the fold as before that change. Mobile is untouched. */
+    @media (min-width: 651px) {
+      .section--about {
+        padding-top: 2.65rem;
+      }
+    }
+
+    /* ── Manifesto ──
+       Same width as the About section (lives inside .container), so the
+       label and text naturally line up with the container's own left/
+       right edges — no viewport-width math needed anymore. */
+    .manifesto {
+      padding-bottom: 6rem;
+    }
+    .manifesto-inner {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+    }
+    .manifesto-label {
+      margin-bottom: 0;
+    }
+    .manifesto-text {
+      width: 400px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-top: -0.4rem;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text);
+      text-align: right;
+    }
+    .manifesto-text p {
+      margin-bottom: 1.5rem;
+    }
+    .manifesto-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 650px) {
+      .manifesto-inner {
+        display: block;
+      }
+      .manifesto-label {
+        margin-bottom: 1.5rem;
+        text-align: right;
+      }
+      .manifesto-text {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 0;
+      }
+    }
+
+    /* ── What We Do (dark, full-bleed) ── */
+    .what-we-do {
+      background: var(--text);
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .wwd-header { padding-bottom: 0.5rem; }
+    .wwd-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.8rem;
+      padding-bottom: 1.8rem;
+      padding-right: 3.5rem;
+      text-decoration: none;
+      color: var(--bg);
+    }
+    .wwd-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--bg);
+    }
+    .wwd-arrow {
+      font-size: 20px;
+      color: var(--bg);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+    .wwd-row:hover .wwd-arrow { transform: translateX(5px); }
+
+    /* ── Site footer ──
+         Three columns: About/copyright · Contact · Services */
+    .site-footer {
+      padding-top: 1.5rem;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1.4fr auto auto;
+      column-gap: 0.75rem;
+      align-items: start;
+    }
+
+    .footer-col {
+      display: flex;
+      flex-direction: column;
+      align-self: start;
+    }
+
+    .footer-desc {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+      margin-top: -0.2em;
+    }
+
+    .footer-copyright {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    .footer-heading {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .footer-links a {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+
+    .footer-col--services {
+      margin-left: 2rem;
+    }
+
+    .footer-col--services .footer-links a {
+      text-transform: uppercase;
+    }
+
+/* ── By Appointment (dark, full-bleed) ── */
+    .by-appointment {
+      background: var(--text);
+      padding-top: 5.5rem;
+      padding-bottom: 5.5rem;
+    }
+    .ba-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+    }
+    .ba-left {
+      flex: 0 0 33%;
+      max-width: 33%;
+    }
+    .ba-left .section-title {
+      margin-bottom: 3.4rem;
+    }
+    .ba-text {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--bg);
+      margin-bottom: 1.2rem;
+    }
+    .ba-text:last-child {
+      margin-bottom: 0;
+    }
+    .ba-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3.5rem;
+    }
+    .ooo-link {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--bg);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .ba-clocks-table {
+      border-collapse: collapse;
+      table-layout: fixed;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .ba-clocks-table.is-ready {
+      opacity: 1;
+    }
+    .ba-col {
+      /* width is set dynamically via JS to match the time row's actual
+         rendered width — see matchBaColumnWidths() */
+    }
+    .ba-col-spacer {
+      width: 38px;
+    }
+    .ba-clocks-table td {
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      padding: 7px 0;
+      text-align: center;
+      vertical-align: middle;
+      font-family: var(--font-body);
+      color: var(--bg);
+    }
+    .ba-clocks-table .ba-cell {
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    /* City name row — shared alignment rules only. Font size is set
+       per-city below so each one can be edited independently. */
+    .ba-clocks-table .ba-cell-city {
+      vertical-align: top;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .ba-clocks-table .ba-cell-city-london {
+      font-size: 12.4px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-clocks-table .ba-cell-city-ny {
+      font-size: 11px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-clocks-table .ba-cell-city-paris {
+      font-size: 12.2px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-city-inner {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .ba-clocks-table .ba-cell-time {
+      font-size: 25px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: none;
+      font-variant-numeric: tabular-nums;
+      vertical-align: bottom;
+      padding-top: 4px;
+      padding-bottom: 0;
+    }
+    .ba-time-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 100%;
+    }
+    .ba-clocks-table .ba-cell-weather {
+      font-size: 17px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: none;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      padding-bottom: 0;
+    }
+    .ba-icon {
+      display: inline-block;
+      width: 21px;
+      height: 21px;
+      vertical-align: text-bottom;
+      margin-right: 6px;
+    }
+    .ba-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--bg);
+      fill: none;
+      stroke-width: 1.3;
+    }
+
+    @media (max-width: 650px) {
+      .ba-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+      }
+      .ba-left { flex: 1 1 auto; max-width: 100%; }
+      .ba-right { align-items: flex-start; width: 100%; }
+      .ba-clocks-table td { padding: 8px 0; }
+    }
+
+@media (max-width: 500px) {
+  .site-footer {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1.75rem;
+  }
+  .footer-col:first-child {
+    grid-column: 1 / -1;
+  }
+  .footer-col--services {
+    margin-left: 0;
+  }
+  .footer-links a {
+    white-space: normal;
+  }
+  .footer-copyright {
+    font-size: 12px;
+  }
+}
+
+    /* ── Services page additions ── */
+
+    .services-hero {
+      padding-top: 4rem;
+      padding-bottom: 2rem;
+    }
+    .page-title {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(22px, 3.8vw, 27px);
+      line-height: 1.1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .services-hero .page-title {
+      max-width: 85%;
+      margin: 0 0 1.4rem;
+    }
+    .services-hero .page-body {
+      margin: 0;
+      text-align: left;
+    }
+    .services-hero .page-body {
+      max-width: 85%;
+      font-size: 17.5px;
+      font-weight: 400;
+    }
+    @media (max-width: 650px) {
+      .services-hero {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+      }
+      .services-hero .page-body {
+        max-width: 100%;
+        font-size: 17.5px;
+      }
+    }
+
+    .category-section {
+      padding-top: 2rem;
+      padding-bottom: 7rem;
+    }
+    /* Own class, styled like .section-title (mono, small, uppercase),
+       used specifically for the Brand / Experience / Production labels */
+    .category-heading {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.1;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 2.2rem;
+    }
+    .category-heading--spaced {
+      margin-top: 5.5rem;
+    }
+
+    .service-list {
+      list-style: none;
+      padding-left: 2.5rem;
+    }
+    .service-item {
+      margin-bottom: 3.25rem;
+    }
+    .service-item:last-child {
+      margin-bottom: 0;
+    }
+    .service-item summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .service-item summary::-webkit-details-marker { display: none; }
+    .service-item summary::marker { content: ""; }
+
+    .service-toggle {
+      position: relative;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    .service-toggle::before,
+    .service-toggle::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: var(--text);
+      transform: translate(-50%, -50%);
+    }
+    .service-toggle::before {
+      width: 15px;
+      height: 1px;
+    }
+    .service-toggle::after {
+      width: 1px;
+      height: 15px;
+      transition: transform 0.2s ease;
+    }
+    details[open] .service-toggle::after {
+      transform: translate(-50%, -50%) scaleY(0);
+    }
+    .service-item.inactive .service-toggle::before,
+    .service-item.inactive .service-toggle::after {
+      background: #8B8C78;
+      opacity: 0.7;
+    }
+    .service-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    a.service-name {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .service-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: var(--text);
+      max-width: 100%;
+      margin-top: 0.7rem;
+      padding-left: 1.5rem;
+    }
+    .service-item.inactive .service-name,
+    .service-item.inactive .service-desc {
+      color: #8B8C78;
+      opacity: 0.65;
+    }
+    .service-more-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-top: 0.9rem;
+      margin-left: 1.5rem;
+    }
+    @media (max-width: 650px) {
+      .service-list { padding-left: 1.25rem; }
+      .service-desc { max-width: 100%; }
+    }
+
+    .service-guide-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      margin-top: 1.5rem;
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9ZHK592471');
+</script>
+</head>
+<body>
+<div class="page">
+
+  <div class="container">
+    <header class="site-header">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+      <a href="https://sabi.london/" class="site-name">S A B I</a>
+    </header>
+
+    <nav class="menu-accordion" id="menuAccordion">
+      <div class="menu-list">
+        <a href="https://sabi.london/about">About</a>
+        <a class="active" aria-current="page" aria-disabled="true">Services</a>
+        <a href="https://play.sabi.london/word-search/">Play</a>
+      </div>
+    </nav>
+
+    <div class="full-divider header-divider-inset"></div>
+  </div>
+
+  <!-- ── Section: Services intro (tall, editorial) ── -->
+  <div class="container section services-hero">
+    <div class="page-body">
+      <p>
+        We see you. The niche-cool brands for the kind of consumer that finds things before everyone else does. The early adopters. The Particular.<br>Nothing gets past them, so we’ve got ideas for everything: End-to-end creative services from strategy to design.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Section: All services, grouped but not divided ── -->
+  <div class="container category-section">
+
+    <h3 class="category-heading">Brand</h3>
+    <ul class="service-list">
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Brand DNA</span></summary>
+          <p class="service-desc">Designing your brand identity from first principles: A full suite of assets and the guidelines that hold them together.
+</p>
+        </details>
+      </li>
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Brand Strategy</span></summary>
+          <p class="service-desc">Scouting unique opportunities for your intellectual property, content strategy, and market presence. </p>
+          <a href="https://sabi.london/services/brand-strategy/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">World Building</span></summary>
+          <p class="service-desc">Imagining a universe with your target customer at the centre of it; How do they live, and where is their attention?
+</p>
+          <a href="https://sabi.london/services/world-building/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+    </ul>
+
+    <h3 class="category-heading category-heading--spaced">Experience</h3>
+    <ul class="service-list">
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Community &amp; Partnerships</span></summary>
+          <p class="service-desc">50 first impressions – peers, partners, and platforms – for cultural currency.</p>
+          <a href="https://sabi.london/services/community-and-partnerships/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Events</span></summary>
+          <p class="service-desc">Designing and programming real-world occasions for your community; Social moments for brand legacy.
+</p>
+        </details>
+      </li>
+    </ul>
+
+    <h3 class="category-heading category-heading--spaced">Production</h3>
+    <ul class="service-list">
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Copy</span></summary>
+          <p class="service-desc">Scripting your brand voice and framing your message for emotional resonance.</p>
+          <a href="https://sabi.london/services/copy/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Campaign</span></summary>
+          <p class="service-desc">Concept development and direction for visual narratives.</p>
+        </details>
+      </li>
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Editions</span></summary>
+          <p class="service-desc">Your brand signature made tactile; merch, collateral and other special editions to remember you by.
+</p>
+        </details>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Section: By Appointment (dark, full-bleed) ── -->
+  <section class="by-appointment">
+    <div class="container-wide ba-inner">
+      <div class="ba-left">
+        <h2 class="section-title light">By Appointment</h2>
+        <p class="ba-text">London, anywhere. Out-of-Office.</p>
+        <p class="ba-text">Book a discovery call to explore general questions about creative strategy, communications, and design.</p>
+      </div>
+      <div class="ba-right">
+        <a href="https://calendar.app.google/bSuyD2e3U2jy2S786" class="ooo-link" target="_blank" rel="noopener">OOO Hours →</a>
+        <table class="ba-clocks-table">
+          <colgroup>
+            <col class="ba-col">
+            <col class="ba-col-spacer">
+            <col class="ba-col">
+            <col class="ba-col-spacer">
+            <col class="ba-col">
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="ba-cell ba-cell-city ba-cell-city-london" data-city="London"><span class="ba-city-inner"><span>L</span><span>o</span><span>n</span><span>d</span><span>o</span><span>n</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-city ba-cell-city-ny" data-city="NY"><span class="ba-city-inner"><span>N</span><span>e</span><span>w</span><span>&nbsp;</span><span>Y</span><span>o</span><span>r</span><span>k</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-city ba-cell-city-paris" data-city=" Paris "><span class="ba-city-inner"><span>P</span><span>a</span><span>r</span><span>i</span><span>s</span></span></td>
+            </tr>
+            <tr>
+              <td class="ba-cell ba-cell-time" data-city="London" id="time-London"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-time" data-city="NY" id="time-NY"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-time" data-city="Paris" id="time-Paris"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+            </tr>
+            <tr>
+              <td class="ba-cell ba-cell-weather" data-city="London" id="weather-London"><span class="ba-icon" data-icon></span><span data-temp>--°C</span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-weather" data-city="NY" id="weather-NY"><span class="ba-icon" data-icon></span><span data-temp>--°C</span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-weather" data-city="Paris" id="weather-Paris"><span class="ba-icon" data-icon></span><span data-temp>--°C</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="full-divider"></div>
+
+  <div class="container container--footer">
+    <footer class="site-footer">
+      <div class="footer-col">
+        <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
+        <p class="footer-copyright">© 2026 SABI London</p>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-heading">Contact</p>
+        <div class="footer-links">
+          <a href="mailto:office@sabi.london" target="_blank" rel="noopener">office@sabi.london</a>
+          <a href="tel:+447400192837">+44 7400 192837</a>
+          <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
+        </div>
+      </div>
+
+      <div class="footer-col footer-col--services">
+        <p class="footer-heading">Services</p>
+        <div class="footer-links">
+          <a href="https://sabi.london/services/brand-strategy/">Brand Strategy</a>
+          <a href="https://sabi.london/services/world-building/">World Building</a>
+          <a href="https://sabi.london/services/copy/">Copy</a>
+          <a href="https://sabi.london/services/community-and-partnerships/">Community &amp; Partnerships</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+</div>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const menuAccordion = document.getElementById('menuAccordion');
+
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = menuAccordion.classList.toggle('open');
+    menuBtn.classList.toggle('open', isOpen);
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+</script>
+
+<script>
+  // ── By Appointment: London / New York clocks + weather ──
+  const BA_ICONS = {
+    clear: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/></svg>',
+    moon: '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg>',
+    partlyCloudy: '<svg viewBox="0 0 24 24"><circle cx="16" cy="6" r="3.5"/><line x1="16" y1="1" x2="16" y2="2.5"/><line x1="16" y1="9.5" x2="16" y2="11"/><line x1="11" y1="6" x2="12.5" y2="6"/><line x1="19.5" y1="6" x2="21" y2="6"/><line x1="12.5" y1="2.5" x2="13.6" y2="3.6"/><line x1="18.4" y1="8.4" x2="19.5" y2="9.5"/><line x1="19.5" y1="2.5" x2="18.4" y2="3.6"/><path d="M5 19a3.5 3.5 0 1 1 .6-6.95A4.8 4.8 0 0 1 15 14h.5a3 3 0 0 1 0 6H5z"/></svg>',
+    partlyCloudyNight: '<svg viewBox="0 0 24 24"><path d="M18.3 3.3a4.6 4.6 0 1 0 3 6.9 3.7 3.7 0 0 1-3-6.9z"/><path fill="var(--text)" d="M5 19a3.5 3.5 0 1 1 .6-6.95A4.8 4.8 0 0 1 15 14h.5a3 3 0 0 1 0 6H5z"/></svg>',
+    cloud: '<svg viewBox="0 0 24 24"><path d="M6 18a4 4 0 1 1 .7-7.94A5.5 5.5 0 0 1 17.5 12H18a3.5 3.5 0 0 1 0 7H6z"/></svg>',
+    fog: '<svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="9" y2="18"/><line x1="7" y1="6" x2="13" y2="18"/><line x1="11" y1="6" x2="17" y2="18"/><line x1="15" y1="6" x2="21" y2="18"/></svg>',
+    rain: '<svg viewBox="0 0 24 24"><path d="M6 14a4 4 0 1 1 .7-7.94A5.5 5.5 0 0 1 17.5 8H18a3.5 3.5 0 0 1 0 7H6z"/><line x1="7" y1="18" x2="9.5" y2="24" stroke-dasharray="2 1.5"/><line x1="12" y1="18" x2="14.5" y2="24" stroke-dasharray="2 1.5"/><line x1="17" y1="18" x2="19.5" y2="24" stroke-dasharray="2 1.5"/></svg>',
+    snow: '<svg viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="14"/><line x1="7.1" y1="6.5" x2="16.9" y2="11.5"/><line x1="16.9" y1="6.5" x2="7.1" y2="11.5"/><line x1="5" y1="14" x2="5" y2="20"/><line x1="2.3" y1="15.5" x2="7.7" y2="18.5"/><line x1="7.7" y1="15.5" x2="2.3" y2="18.5"/><line x1="19" y1="15" x2="19" y2="19"/><line x1="17" y1="16" x2="21" y2="18"/><line x1="21" y1="16" x2="17" y2="18"/></svg>',
+    storm: '<svg viewBox="0 0 24 24"><path d="M6 13a4 4 0 1 1 .7-7.94A5.5 5.5 0 0 1 17.5 7H18a3.5 3.5 0 0 1 0 7H6z"/><polyline points="11 16 9 20 12 20 10 24"/></svg>'
+  };
+
+  function baIconForCode(code, isDay) {
+    if (code === 0) return isDay ? BA_ICONS.clear : BA_ICONS.moon;
+    if ([1, 2].includes(code)) return isDay ? BA_ICONS.partlyCloudy : BA_ICONS.partlyCloudyNight;
+    if (code === 3) return BA_ICONS.cloud;
+    if ([45, 48].includes(code)) return BA_ICONS.fog;
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return BA_ICONS.rain;
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return BA_ICONS.snow;
+    if ([95, 96, 99].includes(code)) return BA_ICONS.storm;
+    return BA_ICONS.cloud;
+  }
+
+  const BA_CITIES = [
+    { id: 'London', lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
+    { id: 'NY', lat: 40.7128, lon: -74.0060, tz: 'America/New_York' },
+    { id: 'Paris', lat: 48.8566, lon: 2.3522, tz: 'Europe/Paris' }
+  ];
+
+  function baUpdateClock(city) {
+    const timeCell = document.getElementById('time-' + city.id);
+    if (!timeCell) return;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', {
+      timeZone: city.tz,
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    const [hh, mm] = timeStr.split(':');
+    timeCell.querySelector('[data-h1]').textContent = hh[0];
+    timeCell.querySelector('[data-h2]').textContent = hh[1];
+    timeCell.querySelector('[data-m1]').textContent = mm[0];
+    timeCell.querySelector('[data-m2]').textContent = mm[1];
+  }
+
+  async function baUpdateWeather(city) {
+    const weatherCell = document.getElementById('weather-' + city.id);
+    if (!weatherCell) return;
+    try {
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code,is_day`);
+      const data = await res.json();
+      const temp = Math.round(data.current.temperature_2m);
+      const code = data.current.weather_code;
+      const isDay = data.current.is_day === 1;
+      weatherCell.querySelector('[data-temp]').textContent = `${temp}°C`;
+      weatherCell.querySelector('[data-icon]').innerHTML = baIconForCode(code, isDay);
+    } catch (e) {
+      weatherCell.querySelector('[data-temp]').textContent = '—';
+    }
+  }
+
+  // Size the three filled columns (London/New York/Paris) to exactly
+  // match the time row's actual rendered width, so those three come out
+  // identical. The two empty spacer columns are sized separately in CSS
+  // (.ba-col-spacer) and left untouched here. Measured live rather than
+  // hardcoded, since the real width depends on the page's actual
+  // font/letter-spacing. NARROW_BY trims a bit off that measured width
+  // so the time's hh/mm don't spread too far apart.
+  const BA_COL_NARROW_BY = 70; 
+
+  function matchBaColumnWidths() {
+    const table = document.querySelector('.ba-clocks-table');
+    const cols = table ? table.querySelectorAll('.ba-col') : [];
+    const timeCell = document.getElementById('time-London');
+    if (!table || !cols.length || !timeCell) return;
+
+    // Measure unconstrained first, so a previous run's fixed width
+    // doesn't distort this one.
+    cols.forEach((col) => { col.style.width = ''; });
+    table.style.tableLayout = 'auto';
+    const naturalWidth = timeCell.getBoundingClientRect().width;
+    table.style.tableLayout = 'fixed';
+
+    if (naturalWidth > 0) {
+      const narrowedWidth = Math.max(0, naturalWidth - BA_COL_NARROW_BY);
+      cols.forEach((col) => { col.style.width = narrowedWidth + 'px'; });
+    }
+  }
+
+  async function baInit() {
+    const weatherPromises = BA_CITIES.map((city) => {
+      baUpdateClock(city);
+      setInterval(() => baUpdateClock(city), 1000);
+      return baUpdateWeather(city).then(() => {
+        setInterval(() => baUpdateWeather(city), 15 * 60 * 1000);
+      });
+    });
+    await Promise.all(weatherPromises);
+    matchBaColumnWidths();
+    const table = document.querySelector('.ba-clocks-table');
+    if (table) table.classList.add('is-ready');
+  }
+
+  baInit();
+  window.addEventListener('resize', matchBaColumnWidths);
+</script>
+
+</body>
+</html>
