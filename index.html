@@ -80,7 +80,7 @@
 
     @keyframes ticker-scroll {
       from { transform: translateX(0); }
-      to { transform: translateX(var(--ticker-shift, -50%)); }
+      to { transform: translateX(-50%); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -655,25 +655,6 @@
         matchLeftColumnHeightToStation();
       }, 300);
     });
-
-    // Set the ticker's loop distance to the exact rendered pixel width of one
-    // sequence, rather than relying on 50% of the track. Two "identical" flex
-    // children can still land on slightly different sub-pixel widths depending
-    // on the browser's text layout rounding, and that tiny mismatch is what
-    // caused the stutter at the loop point.
-    function setTickerShift() {
-      const track = document.querySelector('.ticker-track');
-      const seq = document.querySelector('.ticker-seq');
-      if (!track || !seq) return;
-      const width = seq.getBoundingClientRect().width;
-      if (width > 0) {
-        track.style.setProperty('--ticker-shift', `-${width}px`);
-      }
-    }
-    setTickerShift();
-    window.addEventListener('load', setTickerShift);
-    window.addEventListener('resize', setTickerShift);
-    window.addEventListener('orientationchange', () => setTimeout(setTickerShift, 300));
 
   </script>
 </body>
