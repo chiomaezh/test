@@ -171,8 +171,6 @@
 
     .footer-col-right {
       align-items: flex-end;
-      transform: scale(0.9);
-      transform-origin: bottom right;
     }
 
     /* ── World clock / weather block ── */
@@ -203,20 +201,20 @@
 
     .station-city {
       font-family: var(--font-body);
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1;
-      letter-spacing: 3px;
+      letter-spacing: 2.7px;
       text-transform: uppercase;
       color: #000000;
       font-weight: 400;
       position: relative;
-      top: -1px;
+      top: -0.9px;
     }
 
     .station-time {
       font-family: var(--font-body);
-      font-size: 38px;
-      letter-spacing: 1px;
+      font-size: 34.2px;
+      letter-spacing: 0.9px;
       color: #000000;
       font-weight: 400;
       font-variant-numeric: tabular-nums;
@@ -225,16 +223,16 @@
     .station-meta {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6.3px;
       font-family: var(--font-body);
-      font-size: 30px;
-      letter-spacing: 1px;
+      font-size: 27px;
+      letter-spacing: 0.9px;
       color: #000000;
     }
 
     .station-icon {
-      width: 36px;
-      height: 36px;
+      width: 32.4px;
+      height: 32.4px;
       flex-shrink: 0;
     }
     .station-icon svg {
@@ -276,7 +274,7 @@
 
     .contact-line {
       font-family: var(--font-body);
-      font-size: 16.5px;
+      font-size: 16px;
       color: #000000;
       font-weight: 300;
     }
@@ -655,61 +653,6 @@
         matchLeftColumnHeightToStation();
       }, 300);
     });
-
-    // ── Desktop/tablet only: tighten the space between the nav links to
-    //    ~0.6x their natural (space-between-derived) spacing. Phone portrait
-    //    (<=560px, its own explicit gap:20px) and phone landscape (short
-    //    viewport, which inherits the base space-between layout) are both
-    //    left completely untouched — this only kicks in outside both of
-    //    those cases, matching how the rest of the page already draws that
-    //    line between "phone" and "everything else".
-    function isPhoneNavLayout() {
-      return window.innerWidth <= 560 ||
-        window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
-    }
-
-    function adjustNavGap() {
-      const nav = document.querySelector('.site-nav');
-      const links = document.querySelectorAll('.nav-link');
-      if (!nav || links.length < 2) return;
-
-      // Always clear any previous override first. This keeps phone layouts
-      // exactly as authored in CSS, and makes sure the measurement below
-      // starts from the natural space-between layout rather than a
-      // previously-shrunk one (same reset-before-measure pattern used above).
-      nav.style.justifyContent = '';
-      nav.style.gap = '';
-
-      if (isPhoneNavLayout()) return;
-
-      const rects = Array.from(links).map(el => el.getBoundingClientRect());
-      let totalGap = 0;
-      for (let i = 1; i < rects.length; i++) {
-        totalGap += rects[i].left - rects[i - 1].right;
-      }
-      const avgGap = totalGap / (rects.length - 1);
-      if (avgGap <= 0) return;
-
-      nav.style.justifyContent = 'flex-start';
-      nav.style.gap = (avgGap * 0.6) + 'px';
-    }
-
-    window.addEventListener('load', adjustNavGap);
-
-    // Webfont swap can change link widths (and so the natural gap) after the
-    // first measurement — recheck once it's actually loaded, same reasoning
-    // as the station row-width matcher above.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(adjustNavGap);
-    }
-
-    let navGapResizeTimer;
-    function scheduleAdjustNavGap() {
-      clearTimeout(navGapResizeTimer);
-      navGapResizeTimer = setTimeout(adjustNavGap, 250);
-    }
-    window.addEventListener('resize', scheduleAdjustNavGap);
-    window.addEventListener('orientationchange', () => setTimeout(adjustNavGap, 300));
 
   </script>
 </body>
