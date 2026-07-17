@@ -222,6 +222,32 @@
       transform: translateY(-50%);
     }
 
+    /* Header row (logo + hamburger) only: stretch to the full page width
+       with small side padding on desktop/tablet, instead of being capped
+       to the shared 720px .container. Left as a separate class so the
+       body-text sections (which reuse plain .container) are untouched. */
+    @media (min-width: 721px) {
+      .site-header-wrap {
+        max-width: none;
+        width: 100%;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+    }
+
+    /* Phone landscape can exceed 720px in width too (e.g. ~844px), which
+       would otherwise get caught by the rule above. Reset it back to the
+       original constrained/centered layout so landscape phone is pixel-for-
+       pixel unchanged, same as portrait. */
+    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
+      .site-header-wrap {
+        max-width: 720px;
+        width: auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
     @media (max-width: 650px) {
       .start-link {
         position: static;
@@ -415,7 +441,6 @@
 
 /* ── By Appointment (dark, full-bleed) ── */
     .by-appointment {
-      --text: #2E000D;
       background: var(--text);
       padding-top: 5.5rem;
       padding-bottom: 5.5rem;
@@ -770,7 +795,7 @@
 <body>
 <div class="page">
 
-  <div class="container">
+  <div class="container site-header-wrap">
     <header class="site-header">
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
         <span></span>
