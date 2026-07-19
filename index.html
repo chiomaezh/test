@@ -54,7 +54,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 20px 0 32px;
       opacity: 0;
       animation: fadeIn 1.8s ease forwards;
     }
@@ -104,7 +104,7 @@
       .ticker-cursor { animation: none; }
     }
 
-    /* ── Icons in the ticker strip: text icon (left, decorative), send icon (right, links out) ── */
+    /* ── Send icon, top right of the strip, links to Substack ── */
     .ticker-icon-btn {
       flex: 0 0 auto;
       display: flex;
@@ -112,19 +112,12 @@
       justify-content: center;
       width: 32px;
       height: 32px;
+      margin-left: 12px;
       padding: 0;
       background: none;
       border: none;
       color: var(--bg);
       text-decoration: none;
-    }
-
-    .ticker-icon-btn.left {
-      margin-right: 12px;
-    }
-
-    .ticker-icon-btn.right {
-      margin-left: 12px;
       cursor: pointer;
     }
 
@@ -504,16 +497,10 @@
 </head>
 <body>
   <div class="ticker">
-    <span class="ticker-icon-btn left" id="tickerIconBtn" aria-hidden="true">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M6.24,3.36 H17.76 A3.84,3.84 0 0 1 21.6,7.2 V12.0 A3.84,3.84 0 0 1 17.76,15.84 H6.24 A3.84,3.84 0 0 1 2.4,12.0 V7.2 A3.84,3.84 0 0 1 6.24,3.36 Z"/>
-        <path d="M4.8,15.12 L9.6,15.12 L4.08,20.16 Z"/>
-      </svg>
-    </span>
     <div class="ticker-quote-wrap">
       <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
     </div>
-    <a class="ticker-icon-btn right" href="https://offpaper.substack.com/" target="_blank" rel="noopener noreferrer" aria-label="Subscribe on Substack">
+    <a class="ticker-icon-btn" href="https://offpaper.substack.com/" target="_blank" rel="noopener noreferrer" aria-label="Subscribe on Substack">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M3,6 L21,12 L3,18 L9.5,12 Z"/>
       </svg>
