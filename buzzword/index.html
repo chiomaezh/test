@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="/favicon-play.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +11,13 @@
   <meta name="description" content="Buzzword, a marketing acronym game by SABI. These marketing acronyms describe the core business functions that every founder or creative needs to understand" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::selection {
+      background: var(--select-bg);
+    }
+    ::-moz-selection {
+      background: var(--select-bg);
+    }
 
     html {
       -webkit-text-size-adjust: 100%;
@@ -26,8 +32,8 @@
       --text: #211D1D;
       --found-bg: #2E000D;
       --found-text: #FAFBE3;
-      --select-bg: #E8E9C8;
-      --select-text: #211D1D;
+      --select-bg: rgba(183, 184, 168, 0.4);
+      --select-text: var(--text);
       --wrong-fill: rgba(182, 175, 169, 0.5);
       --font-body: 'owners-text', sans-serif;
       --font-mono: 'gemeli-mono', serif;
@@ -120,7 +126,7 @@
       padding: 0.5rem 0;
     }
     .menu-list a.active {
-      color: rgba(139, 140, 120, 0.6);
+      color: rgba(139, 140, 120, 0.5);
       pointer-events: none;
       cursor: default;
     }
@@ -373,6 +379,31 @@
       margin-bottom: 3rem;
     }
 
+    /* ── Directional page transition overlay ──
+       Used only by the game-nav (Game 01/02/03, Next/Previous) links.
+       Right-side links swipe in from the right; left-side links swipe
+       in from the left. The reveal half continues in the same rotational
+       direction on the next page's load, reading as one continuous swipe. */
+    .page-transition-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      transform: translateX(100%);
+      z-index: 9999;
+      pointer-events: none;
+      transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .page-transition-overlay.no-transition { transition: none !important; }
+    .page-transition-overlay.pos-left  { transform: translateX(-100%); }
+    .page-transition-overlay.pos-right { transform: translateX(100%); }
+    .page-transition-overlay.covering  { transform: translateX(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .page-transition-overlay { transition: none; }
+    }
+
     /* ── Site footer ── */
 .site-footer {
   border-top: 0.5px solid var(--border);
@@ -472,6 +503,43 @@
 </script>
 </head>
 <body>
+<div class="page-transition-overlay" id="pageTransitionOverlay"></div>
+<script>
+  (function () {
+    var overlay = document.getElementById('pageTransitionOverlay');
+    if (!overlay) return;
+    var STORAGE_KEY = 'sabiSwipeDirection';
+    var incomingDir = 'right';
+    try {
+      incomingDir = sessionStorage.getItem(STORAGE_KEY) || 'right';
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+
+    function setInstant(cls) {
+      overlay.classList.add('no-transition');
+      overlay.classList.remove('pos-left', 'pos-right', 'covering');
+      overlay.classList.add(cls);
+      void overlay.offsetWidth;
+      overlay.classList.remove('no-transition');
+    }
+    function animateTo(cls) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          overlay.classList.remove('pos-left', 'pos-right', 'covering');
+          overlay.classList.add(cls);
+        });
+      });
+    }
+    function reveal() {
+      setInstant('covering');
+      animateTo(incomingDir === 'left' ? 'pos-right' : 'pos-left');
+    }
+    reveal();
+    window.addEventListener('pageshow', function (e) { if (e.persisted) reveal(); });
+
+    window.__sabiSwipe = { setInstant: setInstant, animateTo: animateTo, STORAGE_KEY: STORAGE_KEY };
+  })();
+</script>
 <div class="page">
 
   <header class="site-header">
@@ -495,7 +563,7 @@
 
   <main>
     <div class="game-nav game-nav-top">
-      <a href="https://play.sabi.london/word-search/">← Game 01</a>
+      <a href="https://play.sabi.london/word-search/" data-swipe-dir="left">← Game 01</a>
       <a class="inactive" aria-disabled="true" tabindex="-1">Game 03 →</a>
     </div>
 
@@ -537,7 +605,7 @@
         or pitches.
       </p>
       <div class="game-nav">
-        <a href="https://play.sabi.london/word-search/">← Previous Game</a>
+        <a href="https://play.sabi.london/word-search/" data-swipe-dir="left">← Previous Game</a>
         <a class="inactive" aria-disabled="true" tabindex="-1">Next Game →</a>
       </div>
     </div>
@@ -720,6 +788,25 @@ document.getElementById('mode-toggle').addEventListener('click', () => {
 document.getElementById('next-btn').addEventListener('click', nextQuestion);
 
 init();
+</script>
+
+<script>
+  (function () {
+    var s = window.__sabiSwipe;
+    if (!s) return;
+    document.querySelectorAll('.game-nav a[href][data-swipe-dir]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var dir = link.dataset.swipeDir === 'left' ? 'left' : 'right';
+        var dest = link.href;
+        e.preventDefault();
+        try { sessionStorage.setItem(s.STORAGE_KEY, dir); } catch (err) {}
+        s.setInstant(dir === 'left' ? 'pos-left' : 'pos-right');
+        s.animateTo('covering');
+        setTimeout(function () { window.location.href = dest; }, 550);
+      });
+    });
+  })();
 </script>
 </body>
 </html>
