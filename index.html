@@ -249,6 +249,7 @@
     .form-row {
       display: flex;
       gap: 16px;
+      align-items: flex-end;
     }
 
     .form-field {
@@ -407,9 +408,9 @@
       outline-offset: 2px;
     }
 
-    /* ── Desktop only: split the lightbox into two columns — form fields
-         on the left, heading + copy on the right — both confined to the
-         centre three-fifths (60%) of the page ── */
+    /* ── Desktop only: split the lightbox into two columns — heading + copy
+         on the left, form fields on the right — both confined to the
+         centre three-fifths (60%) of the page, bottoms aligned ── */
     @media (min-width: 761px) {
       .lightbox-box {
         justify-content: center;
@@ -418,8 +419,8 @@
 
       .lightbox-content {
         display: flex;
-        flex-direction: row-reverse;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: flex-end;
         justify-content: center;
         gap: 80px;
         width: 60vw;
@@ -431,6 +432,7 @@
       .lightbox-copy {
         flex: 1 1 0;
         max-width: 380px;
+        text-align: right;
       }
 
       .lightbox-form {
@@ -802,7 +804,7 @@
             <label class="consent-label">
               <input type="checkbox" name="consent" required>
               <span class="consent-box" aria-hidden="true"></span>
-              <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompts by SMS. I understand I can unsubscribe anytime by texting STOP.</span>
+              <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompts by SMS. I understand that I can unsubscribe anytime by texting STOP.</span>
             </label>
             <div class="form-error-msg">Please confirm to continue.</div>
           </div>
