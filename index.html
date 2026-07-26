@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +11,21 @@
   <style>
     * { box-sizing: border-box; }
 
+    ::selection {
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
+    }
+    ::-moz-selection {
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
+    }
+
     :root {
       --bg: #FAFBE3;
       --text: #211D1D;
       --border: #423A3A;
+      --text-select-bg: #170006;
+      --text-select-text: #FFFFFF;
       --font-body: 'owners-text', sans-serif;
       --font-mono: 'gemeli-mono', serif;
     }
@@ -49,13 +59,13 @@
       left: 0;
       width: 100%;
       height: 36px;
-      background: var(--text);
+      background: #170006;
       overflow: hidden;
       z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 20px 0 32px;
+      padding: 0 24px 0 32px;
       opacity: 0;
       animation: fadeIn 1.8s ease forwards;
     }
@@ -70,7 +80,7 @@
       overflow: hidden;
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 13.5px;
+      font-size: 14.5px;
       letter-spacing: 1.8px;
       line-height: 1;
       color: var(--bg);
@@ -89,7 +99,7 @@
     .ticker-cursor {
       display: inline-block;
       align-self: center;
-      width: 0.13em;
+      width: 0.12em;
       height: 1.35em;
       margin-left: 3px;
       background: currentColor;
@@ -135,11 +145,11 @@
       outline-offset: 2px;
     }
 
-    /* ── Lightbox (blank shell — wire up Klaviyo or a form here later) ── */
+    /* ── Lightbox (blank shell, full page — wire up content here later) ── */
     .lightbox-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(33, 29, 29, 0.75);
+      background: rgba(23, 0, 6, 0.8);
       z-index: 100;
       display: flex;
       align-items: center;
@@ -156,41 +166,32 @@
 
     .lightbox-box {
       position: relative;
-      width: min(480px, 88vw);
-      min-height: 320px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 48px 32px 32px;
-      transform: translateY(12px);
-      transition: transform 0.3s ease;
-    }
-
-    .lightbox-overlay.is-open .lightbox-box {
-      transform: translateY(0);
+      width: 100%;
+      height: 100%;
     }
 
     .lightbox-close {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 24px;
+      right: 24px;
       width: 28px;
       height: 28px;
       border: none;
       background: none;
       cursor: pointer;
-      color: var(--text);
+      color: var(--bg);
       font-family: var(--font-body);
-      font-size: 20px;
+      font-size: 24px;
       line-height: 1;
     }
 
-    /* Placeholder content — swap this inner markup for the Klaviyo embed */
+    /* Placeholder content — blank for now */
     .lightbox-placeholder {
       font-family: var(--font-mono);
       font-size: 12px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: var(--border);
+      color: var(--bg);
     }
 
     /* ── Top navigation ── */
@@ -501,14 +502,14 @@
     <div class="ticker-quote-wrap">
       <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
     </div>
-    <a class="ticker-icon-btn" href="https://offpaper.substack.com/" target="_blank" rel="noopener noreferrer" aria-label="Subscribe on Substack">
+    <button type="button" class="ticker-icon-btn" id="tickerLightboxTrigger" aria-label="Open lightbox">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M3,6 L21,12 L3,18 L6.2,12 Z"/>
       </svg>
-    </a>
+    </button>
   </div>
 
-  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Text prompt sign up">
+  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
     <div class="lightbox-box">
       <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
       <!-- Blank on purpose — drop the Klaviyo SMS sign-up embed (or your own form) in here -->
@@ -558,11 +559,12 @@
   <script>
     // ── Typewriter quote reel (replaces the old scrolling ticker) ──
     const TICKER_QUOTES = [
+      'All the good ideas are outside',
       'No detail too casual',
       'Signed, on and off paper',
       'We saw you see it first',
       'Tuesday afternoons are cancelled',
-      'The business of good impressions'
+      'The business of good impressions'      
       // Add a 6th quote here as another string in the array, if needed.
     ];
 
@@ -605,10 +607,10 @@
       typewriterLoop(0);
     }
 
-    // ── Lightbox (currently unused — text icon is just an image for now.
-    //    Wire openLightbox() up to a trigger again whenever you're ready.) ──
+    // ── Lightbox, triggered by the ticker's arrow icon ──
     const smsLightbox = document.getElementById('smsLightbox');
     const lightboxClose = document.getElementById('lightboxClose');
+    const tickerLightboxTrigger = document.getElementById('tickerLightboxTrigger');
 
     function openLightbox() {
       smsLightbox.classList.add('is-open');
@@ -620,6 +622,7 @@
       document.body.style.overflow = '';
     }
 
+    tickerLightboxTrigger.addEventListener('click', openLightbox);
     lightboxClose.addEventListener('click', closeLightbox);
 
     smsLightbox.addEventListener('click', (e) => {
@@ -683,9 +686,16 @@
       } catch (e) {
         panel.querySelector('[data-temp]').textContent = '—';
       } finally {
-        // Now that the real temperature text is in place, size everything once,
-        // then reveal the block — instead of resizing on a blind timer while it's
-        // already visible (which is what caused the glitch/rearrange).
+        // Wait for the real webfont ('owners-text') to finish loading before
+        // measuring anything. The weather fetch usually resolves faster than
+        // Typekit delivers the font, so measuring here against the browser's
+        // fallback font produced a wrong (too-small) scale that only got
+        // corrected later, causing a visible size jump right after reveal.
+        // Waiting on document.fonts.ready first means we only ever measure
+        // and reveal once against the real font metrics.
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
         matchStationRowWidths();
         matchLeftColumnHeightToStation();
         panel.classList.add('is-ready');
