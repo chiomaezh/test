@@ -213,6 +213,7 @@
       padding-top: 0;
       padding-bottom: 0;
       font-family: var(--font-body);
+      font-weight: 300;
       font-size: 17px;
       line-height: 1.5;
       color: var(--bg);
@@ -222,7 +223,7 @@
     .lightbox-heading {
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 15px;
+      font-size: 22px;
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--bg);
@@ -235,6 +236,51 @@
 
     .lightbox-content p:last-child {
       margin-bottom: 0;
+    }
+
+    /* ── Sign-up form (Name + phone number, underline style) ── */
+    .lightbox-form {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin: 24px 0;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .form-field {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .form-field--code {
+      flex: 0 0 64px;
+    }
+
+    .lightbox-form input {
+      width: 100%;
+      display: block;
+      background: none;
+      border: none;
+      border-bottom: 2px solid var(--bg);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.4;
+      padding: 6px 2px;
+      margin: 0;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+
+    .lightbox-form input::placeholder {
+      color: rgba(250, 251, 227, 0.55);
     }
 
     /* ── Top navigation ── */
@@ -575,6 +621,19 @@
         <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
         <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
         <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
+        <form class="lightbox-form" onsubmit="return false;">
+          <div class="form-field">
+            <input type="text" name="name" placeholder="Name" autocomplete="name">
+          </div>
+          <div class="form-row">
+            <div class="form-field form-field--code">
+              <input type="tel" name="areaCode" placeholder="+44" autocomplete="tel-country-code" inputmode="tel">
+            </div>
+            <div class="form-field form-field--number">
+              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="tel">
+            </div>
+          </div>
+        </form>
         <p>Text STOP anytime to unsubscribe.</p>
       </div>
     </div>
