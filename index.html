@@ -227,7 +227,7 @@
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--bg);
-      margin: 0 0 36px 0;
+      margin: 0 0 44px 0;
     }
 
     .lightbox-content p {
@@ -257,7 +257,7 @@
     }
 
     .form-field--code {
-      flex: 0 0 64px;
+      flex: 0 0 72px;
     }
 
     .lightbox-form input {
@@ -265,7 +265,7 @@
       display: block;
       background: none;
       border: none;
-      border-bottom: 2px solid var(--bg);
+      border-bottom: 1.6px solid var(--bg);
       color: var(--bg);
       font-family: var(--font-mono);
       font-weight: 300;
@@ -278,10 +278,133 @@
       -webkit-appearance: none;
       appearance: none;
       border-radius: 0;
+      transition: border-color 0.2s ease;
     }
 
     .lightbox-form input::placeholder {
       color: rgba(250, 251, 227, 0.55);
+    }
+
+    /* Area code field: fixed "+" prefix that can't be deleted, only the
+       digits are part of the editable input */
+    .code-input-wrap {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1.6px solid var(--bg);
+      padding-bottom: 6px;
+      transition: border-color 0.2s ease;
+    }
+
+    .code-prefix {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--bg);
+      flex: 0 0 auto;
+    }
+
+    .code-input-wrap input {
+      border-bottom: none;
+      padding: 0 0 0 2px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    /* Error state — only shown after a failed submit attempt */
+    .form-field.has-error input,
+    .code-input-wrap.has-error {
+      border-color: #E8674F;
+    }
+
+    .form-error-msg {
+      display: none;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: #E8674F;
+      margin-top: 6px;
+    }
+
+    .form-field.has-error .form-error-msg {
+      display: block;
+    }
+
+    /* ── Consent checkbox + small print ── */
+    .form-consent {
+      margin: 4px 0 28px;
+    }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .consent-label input[type="checkbox"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .consent-box {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+      margin-top: 2px;
+      border: 1.6px solid var(--bg);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .consent-label input[type="checkbox"]:checked ~ .consent-box {
+      background-color: var(--bg);
+    }
+
+    .consent-label.has-error .consent-box {
+      border-color: #E8674F;
+    }
+
+    .consent-text {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12.5px;
+      letter-spacing: 0.3px;
+      line-height: 1.5;
+      color: var(--bg);
+      opacity: 0.85;
+    }
+
+    /* ── Submit button — hairline arrow, more to come later ── */
+    .lightbox-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin-left: auto;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .lightbox-submit svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 1.2;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    .lightbox-submit:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
     }
 
     /* ── Top navigation ── */
@@ -622,20 +745,39 @@
         <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
         <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
         <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
-        <form class="lightbox-form" onsubmit="return false;">
-          <div class="form-field">
-            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false">
+        <form class="lightbox-form" id="lightboxForm" novalidate>
+          <div class="form-field" data-field="name">
+            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
+            <div class="form-error-msg">Please enter your name.</div>
           </div>
           <div class="form-row">
-            <div class="form-field form-field--code">
-              <input type="tel" name="areaCode" value="+" placeholder="00" autocomplete="tel-country-code" inputmode="tel" maxlength="3">
+            <div class="form-field form-field--code" data-field="areaCode">
+              <div class="code-input-wrap">
+                <span class="code-prefix" aria-hidden="true">+</span>
+                <input type="text" name="areaCode" placeholder="000" autocomplete="tel-country-code" inputmode="numeric" pattern="[0-9]*" maxlength="3" required>
+              </div>
+              <div class="form-error-msg">Required.</div>
             </div>
-            <div class="form-field form-field--number">
-              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="tel">
+            <div class="form-field form-field--number" data-field="number">
+              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
+              <div class="form-error-msg">Please enter your number.</div>
             </div>
           </div>
+          <div class="form-consent" data-field="consent">
+            <label class="consent-label">
+              <input type="checkbox" name="consent" required>
+              <span class="consent-box" aria-hidden="true"></span>
+              <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompt by SMS. I understand I can unsubscribe anytime by texting STOP.</span>
+            </label>
+            <div class="form-error-msg">Please confirm to continue.</div>
+          </div>
+          <button type="submit" class="lightbox-submit" aria-label="Submit">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <line x1="3" y1="12" x2="19" y2="12"/>
+              <polyline points="13 6 19 12 13 18"/>
+            </svg>
+          </button>
         </form>
-        <p>Text STOP anytime to unsubscribe.</p>
       </div>
     </div>
   </div>
@@ -756,6 +898,70 @@
       if (e.key === 'Escape' && smsLightbox.classList.contains('is-open')) {
         closeLightbox();
       }
+    });
+
+    // ── Sign-up form: digits-only area code, and custom validation that
+    //    only flags a field once a submit attempt has actually failed ──
+    const lightboxForm = document.getElementById('lightboxForm');
+    const areaCodeInput = lightboxForm.querySelector('input[name="areaCode"]');
+
+    areaCodeInput.addEventListener('input', () => {
+      areaCodeInput.value = areaCodeInput.value.replace(/\D/g, '').slice(0, 3);
+    });
+
+    function fieldWrapper(field) {
+      return field.closest('[data-field]');
+    }
+
+    function clearError(field) {
+      const wrapper = fieldWrapper(field);
+      if (!wrapper) return;
+      wrapper.classList.remove('has-error');
+      const codeWrap = wrapper.querySelector('.code-input-wrap');
+      if (codeWrap) codeWrap.classList.remove('has-error');
+      if (wrapper.classList.contains('consent-label')) wrapper.classList.remove('has-error');
+    }
+
+    lightboxForm.querySelectorAll('input').forEach((input) => {
+      const evt = input.type === 'checkbox' ? 'change' : 'input';
+      input.addEventListener(evt, () => clearError(input));
+    });
+
+    lightboxForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let firstInvalid = null;
+
+      lightboxForm.querySelectorAll('[required]').forEach((input) => {
+        const isCheckbox = input.type === 'checkbox';
+        const invalid = isCheckbox ? !input.checked : input.value.trim() === '';
+        const wrapper = fieldWrapper(input);
+        if (!wrapper) return;
+
+        if (invalid) {
+          wrapper.classList.add('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.add('has-error');
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          wrapper.classList.remove('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.remove('has-error');
+        }
+      });
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      // All valid — assemble the phone number as +XX... for export.
+      // No backend wired up yet, so this just logs the payload for now.
+      const payload = {
+        name: lightboxForm.querySelector('input[name="name"]').value.trim(),
+        phone: '+' + areaCodeInput.value + lightboxForm.querySelector('input[name="number"]').value.trim(),
+        consent: true
+      };
+      console.log('Sign-up payload', payload);
     });
 
     // ── Hairline weather icons, matched to Open-Meteo WMO weather codes ──
