@@ -334,7 +334,7 @@
 
     /* ── Consent checkbox + small print ── */
     .form-consent {
-      margin: 4px 0 28px;
+      margin: 4px 0 12px;
     }
 
     .consent-label {
@@ -383,10 +383,11 @@
     .lightbox-submit {
       display: flex;
       align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
+      justify-content: flex-end;
+      width: 32px;
+      height: 32px;
       margin-left: auto;
+      margin-right: -2px;
       padding: 0;
       border: none;
       background: none;
@@ -398,7 +399,7 @@
       height: 100%;
       display: block;
       stroke: var(--bg);
-      stroke-width: 1.2;
+      stroke-width: 1.4;
       fill: none;
       shape-rendering: geometricPrecision;
     }
@@ -421,10 +422,9 @@
         display: flex;
         flex-direction: row;
         align-items: flex-end;
-        justify-content: center;
         gap: 80px;
-        width: 60vw;
-        max-width: 900px;
+        width: auto;
+        max-width: none;
         padding-left: 0;
         padding-right: 0;
       }
@@ -686,7 +686,7 @@
         padding-right: 0;
       }
       .lightbox-content {
-        padding-bottom: 36px;
+        padding-bottom: 25px;
       }
     }
 
@@ -810,8 +810,8 @@
           </div>
           <button type="submit" class="lightbox-submit" aria-label="Submit">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <line x1="3" y1="12" x2="19" y2="12"/>
-              <polyline points="13 6 19 12 13 18"/>
+              <line x1="4" y1="12" x2="22" y2="12"/>
+              <polyline points="16 6 22 12 16 18"/>
             </svg>
           </button>
         </form>
