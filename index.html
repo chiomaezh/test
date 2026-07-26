@@ -227,7 +227,7 @@
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--bg);
-      margin: 0 0 20px 0;
+      margin: 0 0 36px 0;
     }
 
     .lightbox-content p {
@@ -243,7 +243,7 @@
       display: flex;
       flex-direction: column;
       gap: 22px;
-      margin: 24px 0;
+      margin: 40px 0 40px;
     }
 
     .form-row {
@@ -269,7 +269,8 @@
       color: var(--bg);
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 17px;
+      font-size: 20px;
+      letter-spacing: 1px;
       line-height: 1.4;
       padding: 6px 2px;
       margin: 0;
@@ -623,11 +624,11 @@
         <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
         <form class="lightbox-form" onsubmit="return false;">
           <div class="form-field">
-            <input type="text" name="name" placeholder="Name" autocomplete="name">
+            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false">
           </div>
           <div class="form-row">
             <div class="form-field form-field--code">
-              <input type="tel" name="areaCode" placeholder="+00" autocomplete="tel-country-code" inputmode="tel">
+              <input type="tel" name="areaCode" value="+" placeholder="00" autocomplete="tel-country-code" inputmode="tel" maxlength="3">
             </div>
             <div class="form-field form-field--number">
               <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="tel">
