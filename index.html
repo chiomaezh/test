@@ -315,7 +315,7 @@
     /* Error state — only shown after a failed submit attempt */
     .form-field.has-error input,
     .code-input-wrap.has-error {
-      border-color: #E8674F;
+      border-color: #ae0700;
     }
 
     .form-error-msg {
@@ -324,7 +324,7 @@
       font-weight: 300;
       font-size: 12px;
       letter-spacing: 0.5px;
-      color: #E8674F;
+      color: #e68b87;
       margin-top: 6px;
     }
 
@@ -366,7 +366,7 @@
     }
 
     .consent-label.has-error .consent-box {
-      border-color: #E8674F;
+      border-color: #ae0700;
     }
 
     .consent-text {
@@ -388,6 +388,7 @@
       height: 32px;
       margin-left: auto;
       margin-right: -2px;
+      margin-top: -8px;
       padding: 0;
       border: none;
       background: none;
@@ -786,7 +787,7 @@
         <form class="lightbox-form" id="lightboxForm" novalidate>
           <div class="form-field" data-field="name">
             <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
-            <div class="form-error-msg">Please enter your name.</div>
+            <div class="form-error-msg">Required.</div>
           </div>
           <div class="form-row">
             <div class="form-field form-field--code" data-field="areaCode">
@@ -798,7 +799,7 @@
             </div>
             <div class="form-field form-field--number" data-field="number">
               <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
-              <div class="form-error-msg">Please enter your number.</div>
+              <div class="form-error-msg">Required.</div>
             </div>
           </div>
           <div class="form-consent" data-field="consent">
@@ -807,7 +808,7 @@
               <span class="consent-box" aria-hidden="true"></span>
               <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompts by SMS. I understand that I can unsubscribe anytime by texting STOP.</span>
             </label>
-            <div class="form-error-msg">Please confirm to continue.</div>
+            <div class="form-error-msg">Required.</div>
           </div>
           <button type="submit" class="lightbox-submit" aria-label="Submit">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
