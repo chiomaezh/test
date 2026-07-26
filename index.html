@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -169,30 +168,59 @@
       position: relative;
       width: 100%;
       height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .lightbox-close {
       position: absolute;
       top: 24px;
       right: 24px;
-      width: 28px;
-      height: 28px;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border: none;
       background: none;
       cursor: pointer;
       color: var(--bg);
-      font-family: var(--font-body);
-      font-size: 24px;
-      line-height: 1;
+      padding: 0;
     }
 
-    /* Placeholder content — blank for now */
-    .lightbox-placeholder {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+    .lightbox-close svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 0.6;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    .lightbox-close:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Lightbox copy ── */
+    .lightbox-content {
+      max-width: 380px;
+      padding: 0 24px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
       color: var(--bg);
+      text-align: left;
+    }
+
+    .lightbox-content p {
+      margin: 0 0 16px 0;
+    }
+
+    .lightbox-content p:last-child {
+      margin-bottom: 0;
     }
 
     /* ── Top navigation ── */
@@ -512,9 +540,19 @@
 
   <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
     <div class="lightbox-box">
-      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-      <!-- Blank on purpose — drop the Klaviyo SMS sign-up embed (or your own form) in here -->
-      <div class="lightbox-placeholder"></div>
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+      </button>
+      <div class="lightbox-content">
+        <p>A creative prompt subscription.<br>A bite of incentive by SMS.</p>
+        <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
+        <p>Hypotheticals about culture, enterprise, trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
+        <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
+        <p>Text STOP anytime to unsubscribe.</p>
+      </div>
     </div>
   </div>
 
