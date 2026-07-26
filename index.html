@@ -223,7 +223,7 @@
     .lightbox-heading {
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 30px;
+      font-size: 24px;
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--bg);
@@ -291,7 +291,7 @@
       display: flex;
       align-items: baseline;
       border-bottom: 1.6px solid var(--bg);
-      padding-bottom: 6px;
+      padding: 6px 2px;
       transition: border-color 0.2s ease;
     }
 
@@ -405,6 +405,39 @@
     .lightbox-submit:focus-visible {
       outline: 1px solid var(--bg);
       outline-offset: 2px;
+    }
+
+    /* ── Desktop only: split the lightbox into two columns — form fields
+         on the left, heading + copy on the right — both confined to the
+         centre three-fifths (60%) of the page ── */
+    @media (min-width: 761px) {
+      .lightbox-box {
+        justify-content: center;
+        padding-right: 0;
+      }
+
+      .lightbox-content {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 80px;
+        width: 60vw;
+        max-width: 900px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .lightbox-copy {
+        flex: 1 1 0;
+        max-width: 380px;
+      }
+
+      .lightbox-form {
+        flex: 1 1 0;
+        max-width: 320px;
+        margin: 0;
+      }
     }
 
     /* ── Top navigation ── */
@@ -740,11 +773,13 @@
         </svg>
       </button>
       <div class="lightbox-content">
-        <p class="lightbox-heading">Thoughtline</p>
-        <p>A creative prompt subscription.<br>A bite of incentive by SMS.</p>
-        <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
-        <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
-        <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
+        <div class="lightbox-copy">
+          <p class="lightbox-heading">Thoughtline</p>
+          <p>A creative prompt subscription.<br>A bite of incentive by SMS.</p>
+          <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
+          <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
+          <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
+        </div>
         <form class="lightbox-form" id="lightboxForm" novalidate>
           <div class="form-field" data-field="name">
             <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
@@ -767,7 +802,7 @@
             <label class="consent-label">
               <input type="checkbox" name="consent" required>
               <span class="consent-box" aria-hidden="true"></span>
-              <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompt by SMS. I understand I can unsubscribe anytime by texting STOP.</span>
+              <span class="consent-text">I agree to receive SABI&rsquo;s weekly creative prompts by SMS. I understand I can unsubscribe anytime by texting STOP.</span>
             </label>
             <div class="form-error-msg">Please confirm to continue.</div>
           </div>
