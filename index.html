@@ -170,7 +170,8 @@
       height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
+      padding-right: 64px;
     }
 
     .lightbox-close {
@@ -207,12 +208,25 @@
     /* ── Lightbox copy ── */
     .lightbox-content {
       max-width: 380px;
-      padding: 0 24px;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-top: 0;
+      padding-bottom: 0;
       font-family: var(--font-body);
-      font-size: 14px;
+      font-size: 17px;
       line-height: 1.5;
       color: var(--bg);
       text-align: left;
+    }
+
+    .lightbox-heading {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 15px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--bg);
+      margin: 0 0 20px 0;
     }
 
     .lightbox-content p {
@@ -460,6 +474,15 @@
       .station-meta { font-size: 22px; }
       .station-icon { width: 22px; height: 22px; }
       .station { width: auto; }
+
+      .lightbox-box {
+        align-items: flex-end;
+        justify-content: center;
+        padding-right: 0;
+      }
+      .lightbox-content {
+        padding-bottom: 36px;
+      }
     }
 
     /* ── Phone landscape (short viewport): keep the compact single-row
@@ -547,9 +570,10 @@
         </svg>
       </button>
       <div class="lightbox-content">
+        <p class="lightbox-heading">Thoughtline</p>
         <p>A creative prompt subscription.<br>A bite of incentive by SMS.</p>
         <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
-        <p>Hypotheticals about culture, enterprise, trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
+        <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
         <p>Just thoughts. No wrong answers.<br>No replies at all, actually &ndash; it&rsquo;s one-way.</p>
         <p>Text STOP anytime to unsubscribe.</p>
       </div>
