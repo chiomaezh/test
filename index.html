@@ -63,15 +63,6 @@
       padding-right: 1.5rem;
     }
 
-    /* The footer's own reference layout gives it the full 720px of usable
-       width (no padding eating into that box) — our shared .container
-       bakes 1.5rem of padding into its 720px max-width, leaving only
-       672px. Bump just the footer's wrapper back up so it matches,
-       without affecting the About text or Who We Work With sections. */
-    .container--footer {
-      max-width: 768px;
-    }
-
     .container-wide {
       width: 100%;
       padding-left: 2.5rem;
@@ -388,13 +379,20 @@
     .wwd-row:hover .wwd-arrow { transform: translateX(5px); }
 
     /* ── Site footer ──
-         Three columns: About/copyright · Contact · Services */
+         Two groups: About/copyright on the left · Contact + Services
+         grouped together on the right. The row spans the full width of
+         the shared .container, so its outer edges land exactly under
+         the header divider. */
     .site-footer {
       padding-top: 1.5rem;
       margin-top: 1rem;
-      display: grid;
-      grid-template-columns: 1.4fr auto auto;
-      column-gap: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .footer-right {
+      display: flex;
       align-items: start;
     }
 
@@ -453,34 +451,6 @@
 
     .footer-col--services .footer-links a {
       text-transform: uppercase;
-    }
-
-    /* ── Footer logo (mirrors .site-name exactly) ──
-         Rendered twice — once for the desktop position (under the
-         copyright line) and once for the mobile position (under the
-         Contact block) — visibility toggled per breakpoint below.
-         The parent column is stretched to the row's full height and
-         margin-top: auto pushes the logo down so its baseline lines
-         up with the bottom of the Services column's last link. */
-    .footer-col:first-child {
-      align-self: stretch;
-    }
-
-    .footer-logo {
-      font-family: "all-round-gothic", sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0px;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-      margin-top: auto;
-      padding-top: 0.9rem;
-    }
-
-    .footer-logo--mobile {
-      display: none;
     }
 
 /* ── By Appointment (dark, full-bleed) ── */
@@ -638,12 +608,12 @@
 
 @media (max-width: 500px) {
   .site-footer {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 1rem;
-    row-gap: 1.75rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.75rem;
   }
-  .footer-col:first-child {
-    grid-column: 1 / -1;
+  .footer-right {
+    justify-content: space-between;
   }
   .footer-col--services {
     margin-left: 0;
@@ -653,15 +623,6 @@
   }
   .footer-copyright {
     font-size: 12px;
-  }
-  .footer-logo--desktop {
-    display: none;
-  }
-  .footer-logo--mobile {
-    display: block;
-  }
-  .footer-col:nth-child(2) {
-    align-self: stretch;
   }
 }
   </style>
@@ -836,31 +797,31 @@
 
   <div class="full-divider"></div>
 
-  <div class="container container--footer">
+  <div class="container">
     <footer class="site-footer">
       <div class="footer-col">
         <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
         <p class="footer-copyright">© 2026 SABI London</p>
-        <a href="https://sabi.london/" class="footer-logo footer-logo--desktop">S A B I</a>
       </div>
 
-      <div class="footer-col">
-        <p class="footer-heading">Contact</p>
-        <div class="footer-links">
-          <a href="mailto:office@sabi.london" target="_blank" rel="noopener">office@sabi.london</a>
-          <a href="tel:+447400192837">+44 7400 192837</a>
-          <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
+      <div class="footer-right">
+        <div class="footer-col">
+          <p class="footer-heading">Contact</p>
+          <div class="footer-links">
+            <a href="mailto:office@sabi.london" target="_blank" rel="noopener">office@sabi.london</a>
+            <a href="tel:+447400192837">+44 7400 192837</a>
+            <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
+          </div>
         </div>
-        <a href="https://sabi.london/" class="footer-logo footer-logo--mobile">S A B I</a>
-      </div>
 
-      <div class="footer-col footer-col--services">
-        <p class="footer-heading">Services</p>
-        <div class="footer-links">
-          <a href="https://sabi.london/services/brand-strategy/">Brand Strategy</a>
-          <a href="https://sabi.london/services/world-building/">World Building</a>
-          <a href="https://sabi.london/services/copy/">Copy</a>
-          <a href="https://sabi.london/services/community-and-partnerships/">Community &amp; Partnerships</a>
+        <div class="footer-col footer-col--services">
+          <p class="footer-heading">Services</p>
+          <div class="footer-links">
+            <a href="https://sabi.london/services/brand-strategy/">Brand Strategy</a>
+            <a href="https://sabi.london/services/world-building/">World Building</a>
+            <a href="https://sabi.london/services/copy/">Copy</a>
+            <a href="https://sabi.london/services/community-and-partnerships/">Community &amp; Partnerships</a>
+          </div>
         </div>
       </div>
     </footer>
