@@ -968,15 +968,22 @@
     /* Progress bar: same drag pattern as the weather-reel scrollbar,
        but sharp (no border-radius) and in the cream card's dark-on-
        cream palette instead of the wine card's cream-on-wine one. */
-    .wr-progress-hit {
+    .wr-progress-row {
+      display: none;
+      align-items: center;
+      gap: 0.85rem;
       width: 100%;
-      padding: 12px 0 4px;
       margin-top: 0.5rem;
+    }
+    .wr-progress-row.is-visible { display: flex; }
+
+    .wr-progress-hit {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 12px 0 4px;
       cursor: pointer;
       touch-action: none;
-      display: none;
     }
-    .wr-progress-hit.is-visible { display: block; }
     .wr-progress-track {
       position: relative;
       width: 100%;
@@ -992,6 +999,16 @@
       width: 0%;
       background: var(--wine);
       pointer-events: none;
+    }
+    .wr-timer {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+      white-space: nowrap;
     }
 
     .wr-controls {
@@ -1200,10 +1217,13 @@
                     </a>
                   </div>
 
-                  <div class="wr-progress-hit" id="wrProgressHit">
-                    <div class="wr-progress-track">
-                      <div class="wr-progress-thumb" id="wrProgressThumb"></div>
+                  <div class="wr-progress-row" id="wrProgressRow">
+                    <div class="wr-progress-hit" id="wrProgressHit">
+                      <div class="wr-progress-track">
+                        <div class="wr-progress-thumb" id="wrProgressThumb"></div>
+                      </div>
                     </div>
+                    <span class="wr-timer" id="wrTimer">-00:00</span>
                   </div>
 
                   <ol class="wr-tracklist" id="wrTracklist">
@@ -1683,8 +1703,19 @@
       const playIcon = document.getElementById('wrPlayIcon');
       const prevBtn = document.getElementById('wrPrevBtn');
       const nextBtn = document.getElementById('wrNextBtn');
+      const progressRow = document.getElementById('wrProgressRow');
       const progressHit = document.getElementById('wrProgressHit');
       const progressThumb = document.getElementById('wrProgressThumb');
+      const timerEl = document.getElementById('wrTimer');
+
+      // "-MM:SS" counting down to a plain "00:00" (no minus) at the end.
+      function formatCountdown(ms) {
+        const totalSeconds = Math.max(0, Math.round(ms / 1000));
+        const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+        const ss = String(totalSeconds % 60).padStart(2, '0');
+        const sign = totalSeconds > 0 ? '-' : '';
+        return `${sign}${mm}:${ss}`;
+      }
 
       const ICON_PLAY = 'music-icons/icon-play.png';
       const ICON_PAUSE = 'music-icons/icon-pause.png';
@@ -1707,8 +1738,9 @@
         function loadTrack(index, autoplay) {
           currentIndex = (index + trackEls.length) % trackEls.length;
           setActiveTrack(currentIndex);
-          progressHit.classList.remove('is-visible');
+          progressRow.classList.remove('is-visible');
           progressThumb.style.width = '0%';
+          timerEl.textContent = '-00:00';
           EmbedController.loadUri(trackEls[currentIndex].dataset.uri);
           if (autoplay) EmbedController.play();
         }
@@ -1722,10 +1754,11 @@
 
           currentDurationMs = duration;
           const isPreview = !duration || duration <= PREVIEW_MAX_MS;
-          progressHit.classList.toggle('is-visible', !isPreview);
+          progressRow.classList.toggle('is-visible', !isPreview);
 
           if (!dragging && !isPreview && duration > 0) {
             progressThumb.style.width = Math.min(100, (position / duration) * 100) + '%';
+            timerEl.textContent = formatCountdown(duration - position);
           }
         });
 
@@ -1749,16 +1782,18 @@
         }
 
         progressHit.addEventListener('pointerdown', (e) => {
-          if (!progressHit.classList.contains('is-visible')) return;
+          if (!progressRow.classList.contains('is-visible')) return;
           dragging = true;
           progressHit.setPointerCapture(e.pointerId);
           const ratio = ratioFromClientX(e.clientX);
           progressThumb.style.width = (ratio * 100) + '%';
+          if (currentDurationMs > 0) timerEl.textContent = formatCountdown(currentDurationMs * (1 - ratio));
         });
         progressHit.addEventListener('pointermove', (e) => {
           if (!dragging) return;
           const ratio = ratioFromClientX(e.clientX);
           progressThumb.style.width = (ratio * 100) + '%';
+          if (currentDurationMs > 0) timerEl.textContent = formatCountdown(currentDurationMs * (1 - ratio));
         });
         progressHit.addEventListener('pointerup', (e) => {
           if (!dragging) return;
