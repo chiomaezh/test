@@ -889,12 +889,18 @@
        since fully-hidden iframes can get their audio paused by the
        browser. Our own UI below drives it via the iFrame API. */
     .spotify-embed-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      contain: strict;
+      z-index: -1;
+    }
+    .spotify-embed-hidden iframe {
+      width: 1px !important;
+      height: 1px !important;
     }
 
     /* ── Custom player UI (replaces the visible Spotify widget) ── */
@@ -983,6 +989,9 @@
       cursor: pointer;
       touch-action: none;
     }
+    .wr-progress-hit:not(.is-seekable) {
+      cursor: default;
+    }
     .wr-progress-track {
       position: relative;
       width: 100%;
@@ -1016,7 +1025,7 @@
       justify-content: space-between;
       width: 100%;
       margin-top: 1.1rem;
-      margin-bottom: 4rem;
+      margin-bottom: 0.8rem;
     }
     .wr-ctrl-btn {
       appearance: none;
@@ -1735,24 +1744,6 @@
       }
 
       const callback = (EmbedController) => {
-        // Belt-and-braces: hide the actual <iframe> Spotify injects,
-        // directly, in addition to the wrapper div's CSS. Forces it
-        // fully off-screen so nothing Spotify-branded can ever be
-        // visible, regardless of how Spotify's own internal markup
-        // is structured.
-        const injectedIframe = element.querySelector('iframe');
-        if (injectedIframe) {
-          Object.assign(injectedIframe.style, {
-            position: 'fixed',
-            top: '-9999px',
-            left: '-9999px',
-            width: '1px',
-            height: '1px',
-            opacity: '0',
-            pointerEvents: 'none'
-          });
-        }
-
         function loadTrack(index, autoplay) {
           currentIndex = (index + trackEls.length) % trackEls.length;
           setActiveTrack(currentIndex);
@@ -1772,9 +1763,10 @@
 
           currentDurationMs = duration;
           const isPreview = !duration || duration <= PREVIEW_MAX_MS;
-          progressRow.classList.toggle('is-visible', !isPreview);
+          progressRow.classList.toggle('is-visible', duration > 0);
+          progressHit.classList.toggle('is-seekable', !isPreview);
 
-          if (!dragging && !isPreview && duration > 0) {
+          if (!dragging && duration > 0) {
             progressThumb.style.width = Math.min(100, (position / duration) * 100) + '%';
             timerEl.textContent = formatCountdown(duration - position);
           }
@@ -1800,7 +1792,7 @@
         }
 
         progressHit.addEventListener('pointerdown', (e) => {
-          if (!progressRow.classList.contains('is-visible')) return;
+          if (!progressHit.classList.contains('is-seekable')) return;
           dragging = true;
           progressHit.setPointerCapture(e.pointerId);
           const ratio = ratioFromClientX(e.clientX);
