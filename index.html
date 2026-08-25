@@ -940,12 +940,13 @@
     .wr-track-num {
       flex-shrink: 0;
       width: 1.1rem;
-      font-size: 12px;
+      font-size: 13px;
       opacity: 0.55;
     }
     .wr-track-info {
       display: flex;
       flex-direction: column;
+      flex: 1 1 auto;
       min-width: 0;
       gap: 0.1rem;
     }
@@ -960,12 +961,20 @@
       text-overflow: ellipsis;
     }
     .wr-track-artist {
+      font-family: var(--font-body);
       font-size: 11px;
       opacity: 0.55;
       letter-spacing: 1px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .wr-track-thumb {
+      flex-shrink: 0;
+      width: 2.6rem;
+      height: 2.6rem;
+      object-fit: cover;
+      display: block;
     }
     .wr-track.is-active { color: var(--wine); }
     .wr-track.is-active .wr-track-num { opacity: 1; }
@@ -985,7 +994,7 @@
     .wr-progress-hit {
       flex: 1 1 auto;
       min-width: 0;
-      padding: 12px 0 4px;
+      padding: 12px 0 10px;
       cursor: pointer;
       touch-action: none;
     }
@@ -1024,7 +1033,7 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      margin-top: 1.1rem;
+      margin-top: 0.55rem;
       margin-bottom: 0.64rem;
     }
     .wr-ctrl-btn {
@@ -1037,7 +1046,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 1.9rem;
+      height: 1.71rem;
       color: var(--text);
       cursor: pointer;
       text-decoration: none;
@@ -1244,6 +1253,7 @@
                         <span class="wr-track-title">In The Waiting Line</span>
                         <span class="wr-track-artist">Zero 7, Sophie Barker</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273e79a1017901613837ea0fca9" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:3ZzhV6JIDKWvWR7wiKWD0C" tabindex="0" role="button">
                       <span class="wr-track-num">02</span>
@@ -1251,6 +1261,7 @@
                         <span class="wr-track-title">La femme d&rsquo;argent</span>
                         <span class="wr-track-artist">Air</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273f175f7e9aa80290164db00a3" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:7DBBuzCuZQaWNRix9ys6UB" tabindex="0" role="button">
                       <span class="wr-track-num">03</span>
@@ -1258,6 +1269,7 @@
                         <span class="wr-track-title">Suzuki</span>
                         <span class="wr-track-artist">Tosca</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273253a1b35c8c2995bebe300af" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:53VS3tjssARzYcVoyG5vXE" tabindex="0" role="button">
                       <span class="wr-track-num">04</span>
@@ -1265,6 +1277,7 @@
                         <span class="wr-track-title">All That We Perceive</span>
                         <span class="wr-track-artist">Thievery Corporation</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273943b30cf86f0edd3fc5a3221" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:7l7Z0eHAZ4uoNho7moZlTv" tabindex="0" role="button">
                       <span class="wr-track-num">05</span>
@@ -1272,6 +1285,7 @@
                         <span class="wr-track-title">Modular Mix</span>
                         <span class="wr-track-artist">Air</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273345d6b305ba4e618ce86749a" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:0KVNBXWdsyZs5dicoOTUyq" tabindex="0" role="button">
                       <span class="wr-track-num">06</span>
@@ -1279,6 +1293,7 @@
                         <span class="wr-track-title">Lebanese Blonde</span>
                         <span class="wr-track-artist">Thievery Corporation</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273976bc2ace1672ba9400a0662" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:0VcvKN17fqyvbznfwypjDB" tabindex="0" role="button">
                       <span class="wr-track-num">07</span>
@@ -1286,6 +1301,7 @@
                         <span class="wr-track-title">Da Du Dah</span>
                         <span class="wr-track-artist">Korokoro</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b27395ee9ba6913b82d4724ec1f7" alt="">
                     </li>
                     <li class="wr-track" data-uri="spotify:track:5lMugQF80AuN6uukFJLT58" tabindex="0" role="button">
                       <span class="wr-track-num">08</span>
@@ -1293,6 +1309,7 @@
                         <span class="wr-track-title">Junie</span>
                         <span class="wr-track-artist">Solange</span>
                       </span>
+                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b2735fbf6306df238e6b7356ac03" alt="">
                     </li>
                   </ol>
                 </div>
@@ -1710,6 +1727,7 @@
       const cdImage = document.getElementById('cdImage');
 
       const trackEls = Array.from(document.querySelectorAll('#wrTracklist .wr-track'));
+      const tracklistEl = document.getElementById('wrTracklist');
       const playBtn = document.getElementById('wrPlayBtn');
       const playIcon = document.getElementById('wrPlayIcon');
       const prevBtn = document.getElementById('wrPrevBtn');
@@ -1740,14 +1758,25 @@
       let currentIndex = 0;
       let currentDurationMs = 0;
       let dragging = false;
+      let trackEnded = false;
+
+      function scrollActiveIntoView(index) {
+        const track = trackEls[index];
+        const listRect = tracklistEl.getBoundingClientRect();
+        const trackRect = track.getBoundingClientRect();
+        const offset = (trackRect.top - listRect.top) + tracklistEl.scrollTop;
+        tracklistEl.scrollTop = offset;
+      }
 
       function setActiveTrack(index) {
         trackEls.forEach((el, i) => el.classList.toggle('is-active', i === index));
+        scrollActiveIntoView(index);
       }
 
       const callback = (EmbedController) => {
         function loadTrack(index, autoplay) {
           currentIndex = (index + trackEls.length) % trackEls.length;
+          trackEnded = false;
           setActiveTrack(currentIndex);
           progressThumb.style.width = '0%';
           timerEl.textContent = '-00:00';
@@ -1769,6 +1798,17 @@
           if (!dragging && duration > 0) {
             progressThumb.style.width = Math.min(100, (position / duration) * 100) + '%';
             timerEl.textContent = formatCountdown(duration - position);
+          }
+
+          // The iFrame API has no explicit "ended" event, so infer it:
+          // paused with the position sitting at (or past) the very end
+          // of the track means it finished on its own, rather than the
+          // person pausing mid-way through.
+          if (!trackEnded && duration > 0 && isPaused && position >= duration - 750) {
+            trackEnded = true;
+            loadTrack(currentIndex + 1, true);
+          } else if (!isPaused) {
+            trackEnded = false;
           }
         });
 
