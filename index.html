@@ -888,7 +888,7 @@
        playback — it's just shrunk to invisible rather than display:none,
        since fully-hidden iframes can get their audio paused by the
        browser. Our own UI below drives it via the iFrame API. */
-    .spotify-embed-hidden {
+    .spotify-embed-cage {
       position: absolute !important;
       width: 1px !important;
       height: 1px !important;
@@ -898,7 +898,7 @@
       contain: strict;
       z-index: -1;
     }
-    .spotify-embed-hidden iframe {
+    .spotify-embed-cage * {
       width: 1px !important;
       height: 1px !important;
     }
@@ -975,12 +975,12 @@
        but sharp (no border-radius) and in the cream card's dark-on-
        cream palette instead of the wine card's cream-on-wine one. */
     .wr-progress-row {
-      display: none;
+      display: flex;
       align-items: center;
       gap: 0.85rem;
       width: 100%;
+      margin-bottom: 0.64rem;
     }
-    .wr-progress-row.is-visible { display: flex; }
 
     .wr-progress-hit {
       flex: 1 1 auto;
@@ -995,7 +995,7 @@
     .wr-progress-track {
       position: relative;
       width: 100%;
-      height: 2px;
+      height: 4px;
       background: rgba(33, 29, 29, 0.25);
       pointer-events: none;
     }
@@ -1012,7 +1012,7 @@
       flex-shrink: 0;
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 0.5px;
       font-variant-numeric: tabular-nums;
       color: var(--text);
@@ -1025,7 +1025,7 @@
       justify-content: space-between;
       width: 100%;
       margin-top: 1.1rem;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.64rem;
     }
     .wr-ctrl-btn {
       appearance: none;
@@ -1208,7 +1208,9 @@
                 <img src="blank_CD.png" alt="" class="cd-image cd-image--spin" id="cdImage" />
               </div>
               <div class="player-wrap">
-                <div id="spotify-embed" class="spotify-embed-hidden"></div>
+                <div class="spotify-embed-cage">
+                  <div id="spotify-embed"></div>
+                </div>
 
                 <div class="wr-player">
                   <div class="wr-controls">
@@ -1747,7 +1749,6 @@
         function loadTrack(index, autoplay) {
           currentIndex = (index + trackEls.length) % trackEls.length;
           setActiveTrack(currentIndex);
-          progressRow.classList.remove('is-visible');
           progressThumb.style.width = '0%';
           timerEl.textContent = '-00:00';
           EmbedController.loadUri(trackEls[currentIndex].dataset.uri);
@@ -1763,7 +1764,6 @@
 
           currentDurationMs = duration;
           const isPreview = !duration || duration <= PREVIEW_MAX_MS;
-          progressRow.classList.toggle('is-visible', duration > 0);
           progressHit.classList.toggle('is-seekable', !isPreview);
 
           if (!dragging && duration > 0) {
