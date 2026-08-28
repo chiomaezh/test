@@ -211,7 +211,7 @@
       color: var(--bg);
       white-space: nowrap;
     }
-    /* Error state: retry button + "RELOAD / WEATHER" label pushed to the
+    /* Error state: retry button + "UPDATE / WEATHER" label pushed to the
        right edge of the cell, both bottom-aligned with each other. */
     .wr-city-weather.is-error {
       justify-content: space-between;
@@ -231,7 +231,7 @@
       font-size: 10px;
       line-height: 1.15;
       letter-spacing: 0.5px;
-      text-transform: uppercase;
+      text-transform: lowercase;
       text-align: left;
       color: var(--bg);
       white-space: normal;
@@ -356,6 +356,14 @@
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
     }
+    /* Paused while the tracklist is expanded and overflowing, so
+       mandatory snap doesn't fight the user trying to scroll through
+       the extra tracks (there's no snap point partway down the
+       overflow region — see trackOverflowSpacer). Restored once the
+       tracklist collapses again. */
+    .cream-col.tracklist-scroll-active {
+      scroll-snap-type: none;
+    }
 
     /* Pinned window onto the horizontal track: stays put at the top of
        the scrollport for the whole scrollable range, so scrolling
@@ -394,6 +402,17 @@
       height: 100%;
       scroll-snap-align: start;
       scroll-snap-stop: always;
+    }
+
+    /* Height is set in px by JS, only while the tracklist is expanded
+       and taller than the viewport — see updateCreamTrack(). Zero
+       otherwise, so it's a no-op the rest of the time. Intentionally
+       has no scroll-snap-align: it's scrolled through freely rather
+       than snapped to (scroll-snap-type is paused for the same span —
+       see .cream-col.tracklist-scroll-active). */
+    .cream-track-overflow-spacer {
+      width: 100%;
+      height: 0;
     }
 
     .cream-track {
@@ -860,8 +879,8 @@
 
     @media (min-width: 651px) {
       .music-stack {
-        margin-top: 8.459375rem;
-        padding-bottom: 6.125rem;
+        margin-top: calc(8.459375rem + 3px);
+        padding-bottom: calc(6.125rem - 3px);
       }
       .music-heading {
         top: calc(min(276px, 44.6vw) / 2);
@@ -870,6 +889,66 @@
         /* 0.9x the original 307px / 49.6vw */
         width: min(276px, 44.6vw);
         height: min(276px, 44.6vw);
+      }
+    }
+
+    /* ── Desktop only: expanding the tracklist slides the whole stack
+       (heading, CD, controls, progress bar, tracklist) up together as
+       one rigid block — no separate fade-outs or height-collapses on
+       the heading/CD anymore. JS (see updateMusicStackOffset) measures
+       how far to move it so the progress bar's bottom edge lines up
+       with the top of the hero text on the wine side, then sets that
+       as a transform on .music-stack; the transition below eases it
+       into place. */
+    @media (min-width: 651px) {
+      .cream-card--music.is-expanded {
+        /* The base rule above clips its own content with
+           overflow:hidden — needed normally so the CD/heading don't
+           bleed past the card, but it also clips the slid-up stack and
+           the expanded tracklist. Switching to visible here means only
+           the outer .cream-viewport clips it, which is what actually
+           lets the translateY reveal everything as the user scrolls.
+           No overflow-y:auto here on purpose: giving the card its own
+           scroll context creates a second, nested scrollbar next to
+           the cream column's real one. Instead, when the tracklist is
+           too tall to fit, the JS scroll handler below (see
+           updateCreamTrack) translates this card up in sync with the
+           cream column's own scroll — same "one real scrollbar drives
+           everything" pattern already used for the card-swap slide. */
+        overflow: visible;
+      }
+
+      /* Separate from .is-expanded on purpose: this needs to stay
+         applied for the whole ~0.35s the tracklist takes to collapse,
+         not just switch off the instant collapsing starts. The base
+         rule's align-items:center recalculates live on every frame the
+         tracklist's height changes — held through the collapse, it
+         was fighting the single .music-stack transform already easing
+         things into place, reading as a bounce. setTracklistExpanded
+         keeps this class applied until the collapse settles, then
+         releases it with its own small FLIP so switching back to
+         centered is itself smooth rather than a snap. Collapsed,
+         resting appearance is completely unaffected — this only ever
+         applies transiently during the expand/collapse motion. */
+      .cream-card--music.is-top-anchored {
+        align-items: flex-start;
+      }
+
+      .music-stack {
+        transition: transform 0.4s ease;
+      }
+
+      /* Heading + CD disappear the instant the tracklist expands (and
+         reappear the instant it collapses) — no fade, just gone, same
+         as everything else in this codebase's phone-mode "no special
+         transition" philosophy. The FLIP logic in setTracklistExpanded
+         already measures whatever layout jump this causes (on top of
+         the align-items switch above) and folds it into the same
+         one-frame cancel-then-release, so nothing extra is needed here
+         to keep it smooth. */
+      .music-stack.is-expanded .music-heading,
+      .music-stack.is-expanded .cd-stack {
+        display: none;
       }
     }
 
@@ -912,13 +991,8 @@
 
     .wr-tracklist {
       list-style: none;
-      max-height: 9.75rem;
-      overflow-y: auto;
       border-top: 1px solid rgba(33, 29, 29, 0.25);
-      scrollbar-width: none;
-      -ms-overflow-style: none;
     }
-    .wr-tracklist::-webkit-scrollbar { display: none; }
     .wr-track {
       display: flex;
       align-items: center;
@@ -936,6 +1010,31 @@
       border-left: none;
       border-right: none;
       text-align: left;
+      overflow: hidden;
+      max-height: 6rem;
+      opacity: 1;
+      transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease, border-color 0.35s ease;
+    }
+    /* Collapsed state: only the currently active track stays visible —
+       everything else shrinks to nothing rather than being removed
+       from the DOM, so the swap between tracks (and the reveal of the
+       full list) can animate smoothly instead of popping. */
+    .wr-tracklist:not(.is-expanded) .wr-track:not(.is-active) {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom-color: transparent;
+      pointer-events: none;
+    }
+
+    /* Phone: no animated reveal. On phone this should behave like the
+       hamburger nav: press the arrow, the list is just immediately
+       there, and the card grows to fit it — no easing to feel glitchy. */
+    @media (max-width: 650px) {
+      .wr-track {
+        transition: none;
+      }
     }
     .wr-track-main {
       display: flex;
@@ -988,6 +1087,11 @@
     .wr-track.is-active { color: var(--wine); }
     .wr-track.is-active .wr-track-num { opacity: 1; }
     .wr-track:hover { opacity: 0.7; }
+    /* The currently-playing track shouldn't be selectable — clicking it
+       would just reload/restart the same track it already is. Disabling
+       pointer events also stops the hover dim above from applying. */
+    .wr-track.is-playing { pointer-events: none; cursor: default; }
+    .wr-track.is-playing:hover { opacity: 1; }
 
     /* Progress bar: same drag pattern as the weather-reel scrollbar,
        but sharp (no border-radius) and in the cream card's dark-on-
@@ -1067,6 +1171,40 @@
     }
     .wr-ctrl-btn:hover { opacity: 0.7; }
 
+    .wr-ctrl-btn--expand svg {
+      height: 100%;
+      width: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .wr-ctrl-btn--expand.is-expanded svg {
+      transform: rotate(180deg);
+    }
+
+    .wr-spotify-link {
+      /* Only shown once the tracklist is expanded (see the sibling
+         rule below) — it has no reason to appear above the single
+         collapsed/active track. */
+      display: none;
+      align-items: center;
+      align-self: flex-end;
+      gap: 0.4rem;
+      margin-top: 1.5rem;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .wr-tracklist.is-expanded ~ .wr-spotify-link {
+      display: inline-flex;
+    }
+    .wr-spotify-link svg { flex-shrink: 0; }
+    .wr-spotify-link:hover { opacity: 0.7; }
+
 
     /* ── Small screens: stack panels, page scrolls, logo turns white ── */
     @media (max-width: 650px) {
@@ -1111,7 +1249,8 @@
         display: contents;
       }
       .cream-snap-top,
-      .cream-snap-spacer {
+      .cream-snap-spacer,
+      .cream-track-overflow-spacer {
         display: none;
       }
       .cream-card {
@@ -1124,11 +1263,20 @@
         grid-area: right;
         min-height: 70vh;
         padding-bottom: 3.5rem;
+        /* Top-anchored (not centered) specifically so expanding the
+           tracklist can't shift the CD/controls above it — with
+           align-items:center, growing the card's content would have
+           re-centered everything each time, making the CD appear to
+           "move" as the list opened. Anchoring from the top means
+           expanding only ever adds height below the existing content,
+           never repositions it. */
+        align-items: flex-start;
       }
       .cream-card--games {
         grid-area: games;
-        /* Same length as the music card above it (JS enforces exact
-           equality below; this is the layout default before JS runs). */
+        /* No longer forced to match the music card's height — it
+           sizes to its own content, independent of whether the
+           tracklist above it is expanded. */
         min-height: 70vh;
         padding: 1.75rem 1.5rem 1.75rem;
       }
@@ -1241,13 +1389,15 @@
                     <button type="button" class="wr-ctrl-btn wr-ctrl-btn--play" id="wrPlayBtn" aria-label="Play">
                       <img id="wrPlayIcon" src="music-icons/icon-play.png" alt="">
                     </button>
-                    <a class="wr-ctrl-btn wr-ctrl-btn--plus" href="https://open.spotify.com/playlist/0XXOJH57JlfsukZGkiRdKz?si=GlIWVbt0RDirn-0_BI6dfg" target="_blank" rel="noopener noreferrer" aria-label="Open full playlist on Spotify">
-                      <img src="music-icons/icon-plus.png" alt="">
-                    </a>
+                    <button type="button" class="wr-ctrl-btn wr-ctrl-btn--expand" id="wrExpandBtn" aria-expanded="false" aria-controls="wrTracklist" aria-label="Show full tracklist">
+                      <svg viewBox="0 0 16 16" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
                   </div>
 
                   <div class="wr-progress-row" id="wrProgressRow">
-                    <div class="wr-progress-hit" id="wrProgressHit">
+                    <div class="wr-progress-hit is-seekable" id="wrProgressHit">
                       <div class="wr-progress-track">
                         <div class="wr-progress-thumb" id="wrProgressThumb"></div>
                       </div>
@@ -1337,6 +1487,13 @@
                       <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b2735fbf6306df238e6b7356ac03" alt="">
                     </li>
                   </ol>
+
+                  <a class="wr-spotify-link" href="https://open.spotify.com/playlist/0XXOJH57JlfsukZGkiRdKz?si=GlIWVbt0RDirn-0_BI6dfg" target="_blank" rel="noopener noreferrer">
+                    Listen on Spotify
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M4 12L12 4M12 4H5.5M12 4V10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
                 </div>
               </div>
             </div>
@@ -1394,6 +1551,12 @@
           </div>
         </div>
       </div>
+      <!-- Extra scroll room added on the fly (desktop only) whenever the
+           expanded tracklist is taller than the viewport — see
+           updateCreamTrack(). Keeps the cream column's own scrollbar as
+           the single scrollbar for reading the full tracklist, instead
+           of giving the music card a second, nested one. -->
+      <div class="cream-track-overflow-spacer" id="trackOverflowSpacer" aria-hidden="true"></div>
       <div class="cream-snap-spacer" aria-hidden="true"></div>
       <div class="cream-snap-spacer" aria-hidden="true"></div>
     </div>
@@ -1403,47 +1566,47 @@
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>L</span><span>o</span><span>n</span><span>d</span><span>o</span><span>n</span></span></span>
             <span class="wr-city-time" id="clock-London"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-London"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-London"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>N</span><span>e</span><span>w</span><span>&nbsp;</span><span>Y</span><span>o</span><span>r</span><span>k</span></span></span>
             <span class="wr-city-time" id="clock-New York"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-New York"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-New York"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>P</span><span>a</span><span>r</span><span>i</span><span>s</span></span></span>
             <span class="wr-city-time" id="clock-Paris"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Paris"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Paris"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>T</span><span>o</span><span>k</span><span>y</span><span>o</span></span></span>
             <span class="wr-city-time" id="clock-Tokyo"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Tokyo"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Tokyo"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>M</span><span>i</span><span>l</span><span>a</span><span>n</span></span></span>
             <span class="wr-city-time" id="clock-Milan"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Milan"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Milan"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>L</span><span>o</span><span>s</span><span>&nbsp;</span><span>A</span><span>n</span><span>g</span><span>e</span><span>l</span><span>e</span><span>s</span></span></span>
             <span class="wr-city-time" id="clock-Los Angeles"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Los Angeles"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Los Angeles"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>S</span><span>e</span><span>o</span><span>u</span><span>l</span></span></span>
             <span class="wr-city-time" id="clock-Seoul"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Seoul"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Seoul"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>C</span><span>o</span><span>p</span><span>e</span><span>n</span><span>h</span><span>a</span><span>g</span><span>e</span><span>n</span></span></span>
             <span class="wr-city-time" id="clock-Copenhagen"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Copenhagen"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Copenhagen"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
           <div class="wr-block">
             <span class="wr-city-name"><span class="wr-city-inner"><span>B</span><span>e</span><span>r</span><span>l</span><span>i</span><span>n</span></span></span>
             <span class="wr-city-time" id="clock-Berlin"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Berlin"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>RELOAD<br>WEATHER</span></span>
+            <span class="wr-city-weather" id="weather-Berlin"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
           </div>
         </div>
         <div class="weather-scrollbar-hit" id="weatherScrollbarTrack">
@@ -1744,6 +1907,166 @@
     wrUpdateThumb();
   </script>
 
+  <!-- ── Tracklist expand/collapse: independent of the Spotify controller,
+       so it works even before the iFrame API finishes loading ── -->
+  <script>
+    const wrExpandBtn = document.getElementById('wrExpandBtn');
+    const wrTracklistEl = document.getElementById('wrTracklist');
+    const musicCardEl = document.querySelector('.cream-card--music');
+    const musicStackEl = document.querySelector('.music-stack');
+    const wrControlsEl = document.querySelector('.wr-controls');
+    let topAnchorReleaseTimeout = null;
+
+    // Desktop only: computes how far .music-stack needs to move so the
+    // top of the controls row (prev/play/next/expand) lines up with the
+    // top of the hero paragraph on the wine side. Must be called with
+    // .music-stack's own transform cleared first (see callers below) so
+    // the measurement reflects its untransformed, flex-start-anchored
+    // position rather than compounding on top of a previous shift.
+    function computeHeroAlignDelta() {
+      const heroLeadEl = document.querySelector('.hero-lead');
+      if (!heroLeadEl || !wrControlsEl) return 0;
+      const targetY = heroLeadEl.getBoundingClientRect().top;
+      const currentTop = wrControlsEl.getBoundingClientRect().top;
+      return targetY - currentTop;
+    }
+
+    // Recomputes and re-applies the hero-alignment transform without
+    // any FLIP animation — used on resize, where there's no discrete
+    // class-toggle jump to compensate for, just a target position that
+    // may have moved.
+    function updateMusicStackOffset() {
+      if (!musicStackEl) return;
+
+      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
+      if (!isDesktop || !musicStackEl.classList.contains('is-expanded')) {
+        musicStackEl.style.transform = '';
+        return;
+      }
+
+      musicStackEl.style.transform = '';
+      void musicStackEl.getBoundingClientRect(); // force reflow before measuring
+      musicStackEl.style.transform = `translateY(${computeHeroAlignDelta()}px)`;
+    }
+
+    function setTracklistExpanded(expanded) {
+      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
+
+      // FLIP: toggling .is-expanded here causes a discrete,
+      // non-animatable layout jump — the heading + CD instantly
+      // disappear (see .music-stack.is-expanded CSS). Rather than
+      // choreograph that separately, this just measures the effect:
+      // capture the position right before toggling the classes, then
+      // right after (with .music-stack's transform cleared, so this
+      // reflects pure layout, not a previous transform), and use the
+      // difference as a one-frame instant transform that cancels the
+      // jump — released on the very next frame so only the *real*
+      // move (to the hero-aligned target, or back to 0 on collapse)
+      // animates via .music-stack's own transform transition.
+      //
+      // .cream-card--music also carries its own transform — set
+      // directly by the scroll handler (updateCreamTrack) to reveal
+      // tracklist overflow as the user scrolls, with no transition of
+      // its own. If that's left at a nonzero value here (e.g. the user
+      // had scrolled down before collapsing), it snaps back to 0
+      // separately and instantly once updateCreamTrack recalculates —
+      // reading as a second, disconnected motion on top of
+      // .music-stack's smooth one. Clearing it before "last" is
+      // captured folds that snap into the same FLIP measurement, so
+      // the whole thing cancels and releases as a single move.
+      const first = isDesktop && musicStackEl ? musicStackEl.getBoundingClientRect() : null;
+
+      // Cancel any pending release-from-top-anchor left over from a
+      // previous collapse, in case the user re-expands before it's
+      // fired (see the bottom of this function).
+      if (topAnchorReleaseTimeout) {
+        clearTimeout(topAnchorReleaseTimeout);
+        topAnchorReleaseTimeout = null;
+      }
+
+      wrExpandBtn.classList.toggle('is-expanded', expanded);
+      wrExpandBtn.setAttribute('aria-expanded', String(expanded));
+      wrTracklistEl.classList.toggle('is-expanded', expanded);
+      musicCardEl.classList.toggle('is-expanded', expanded);
+      musicStackEl.classList.toggle('is-expanded', expanded);
+
+      // .is-top-anchored is added immediately on expand, but
+      // deliberately *not* removed immediately on collapse — see the
+      // release step below.
+      if (expanded && musicCardEl) {
+        musicCardEl.classList.add('is-top-anchored');
+      }
+
+      if (!isDesktop) return; // Phone: normal document flow, nothing else to do.
+
+      musicStackEl.style.transform = '';
+      if (musicCardEl) musicCardEl.style.transform = '';
+      void musicStackEl.getBoundingClientRect(); // force reflow before measuring "last"
+      const last = musicStackEl.getBoundingClientRect();
+      const flipDelta = first ? first.top - last.top : 0;
+      const targetDelta = expanded ? computeHeroAlignDelta() : 0;
+
+      if (flipDelta) {
+        musicStackEl.style.transition = 'none';
+        musicStackEl.style.transform = `translateY(${flipDelta}px)`;
+        musicStackEl.getBoundingClientRect(); // force reflow before releasing
+        requestAnimationFrame(() => {
+          musicStackEl.style.transition = '';
+          musicStackEl.style.transform = `translateY(${targetDelta}px)`;
+        });
+      } else {
+        musicStackEl.style.transform = `translateY(${targetDelta}px)`;
+      }
+
+      // Re-syncs the scroll-driven overflow transform on .cream-card
+      // --music for the tracklist's new (settled) height. Harmless to
+      // run right away even mid-FLIP: collapsing always resolves to 0
+      // overflow, and expanding starts from a scrollTop of 0, so this
+      // won't reintroduce the jump just cancelled above.
+      if (window.wrUpdateCreamTrack) {
+        window.wrUpdateCreamTrack();
+        setTimeout(window.wrUpdateCreamTrack, 400);
+      }
+
+      if (!expanded && musicCardEl) {
+        // .is-top-anchored has been held through the collapse (see
+        // above and its CSS comment) so the browser doesn't
+        // live-recenter while the tracklist is shrinking. Once that's
+        // had time to settle, release it back to the default
+        // align-items:center — with its own small FLIP, so that
+        // switch is smooth too, rather than a final snap.
+        topAnchorReleaseTimeout = setTimeout(() => {
+          topAnchorReleaseTimeout = null;
+          const beforeRelease = musicStackEl.getBoundingClientRect();
+          musicCardEl.classList.remove('is-top-anchored');
+          void musicStackEl.getBoundingClientRect(); // force reflow
+          const afterRelease = musicStackEl.getBoundingClientRect();
+          const releaseDelta = beforeRelease.top - afterRelease.top;
+          if (releaseDelta) {
+            musicStackEl.style.transition = 'none';
+            musicStackEl.style.transform = `translateY(${releaseDelta}px)`;
+            musicStackEl.getBoundingClientRect(); // force reflow before releasing
+            requestAnimationFrame(() => {
+              musicStackEl.style.transition = '';
+              musicStackEl.style.transform = '';
+            });
+          }
+        }, 400);
+      }
+    }
+
+    wrExpandBtn.addEventListener('click', () => {
+      setTracklistExpanded(!wrTracklistEl.classList.contains('is-expanded'));
+    });
+
+    window.addEventListener('resize', () => {
+      if (wrTracklistEl.classList.contains('is-expanded')) {
+        updateMusicStackOffset();
+      }
+    });
+  </script>
+
+
   <!-- ── Spotify IFrame API: drives the custom player UI + CD spin ── -->
   <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
   <script>
@@ -1774,18 +2097,97 @@
       const ICON_PLAY = 'music-icons/icon-play.png';
       const ICON_PAUSE = 'music-icons/icon-pause.png';
 
-      // A preview clip (no Premium session logged into Spotify in this
-      // browser) always plays a fixed ~30s snippet, so any duration at
-      // or under that is treated as preview mode and the progress bar
-      // (which needs a real, seekable duration) stays hidden.
-      const PREVIEW_MAX_MS = 31000;
-
       let currentIndex = 0;
       let currentDurationMs = 0;
       let dragging = false;
       let trackEnded = false;
       let lastPlayingPosition = 0;
       let lastPlayingDuration = 0;
+
+      // The iFrame API only fires playback_update roughly once a second,
+      // which made the bar visibly "step" forward instead of gliding.
+      // To smooth it out, we keep a local (position, timestamp) pair
+      // from the most recent update and interpolate every animation
+      // frame based on elapsed real time, only snapping back to the
+      // API's real position whenever a fresh update arrives (which also
+      // corrects any drift).
+      let progressPlaying = false;
+      let basePosition = 0;
+      let baseTimestamp = 0;
+      let isPausedState = true;
+      let playRequestToken = 0;
+
+      // Right after a track loads (skip/select, or the auto-advance on
+      // natural end below), the iFrame API can still deliver one or two
+      // playback_update events describing the track we just moved away
+      // from — a known Spotify quirk where position/duration briefly lag
+      // behind the real, newly-loaded track. Left unchecked, those stale
+      // events stomp the fresh 0:00 state loadTrack() just set. The
+      // genuine first update for a freshly-loaded track always reports a
+      // position at/near 0, so that's what's waited for below.
+      let expectingFreshTrack = false;
+
+      // A seek issued while the track is paused/not-yet-playing (e.g.
+      // dragging the bar right after loading a new track, before ever
+      // hitting play) — Spotify's embed silently ignores EmbedController
+      // .seek() called before playback has actually started, so it would
+      // otherwise still start from 0 the moment play is pressed. This
+      // remembers the target position so it can be re-issued once
+      // playback_update confirms audio has genuinely begun. See the
+      // pointerup handler (where it's set) and the playback_update
+      // listener (where it's consumed) below.
+      let pendingSeekMs = null;
+
+      // Right after issuing EmbedController.seek() (pointerup below), the
+      // very next playback_update event(s) can still report the
+      // pre-seek position — the iFrame API's periodic update was already
+      // "in flight" before the seek landed. Left unchecked, that stale
+      // update would stomp the bar back to where it was, and then the
+      // *following* update (once the seek has actually taken effect)
+      // would snap it forward again — the visible "snap back, then
+      // forward" glitch. This mirrors the expectingFreshTrack pattern
+      // above: ignore position updates until one arrives close to the
+      // seek target, with a short timeout as a safety net in case
+      // Spotify never reports a matching position.
+      let expectingSeekMs = null;
+      let expectingSeekAt = 0;
+
+      // Set once loadTrack() exists (inside the createController
+      // callback below); tickProgress needs a way to trigger the next
+      // track without being nested inside that closure itself.
+      let trackAdvanceHandler = null;
+
+      function renderProgress(positionMs, durationMs) {
+        if (durationMs > 0) {
+          progressThumb.style.width = Math.min(100, (positionMs / durationMs) * 100) + '%';
+          timerEl.textContent = formatCountdown(durationMs - positionMs);
+        }
+      }
+
+      function tickProgress() {
+        if (progressPlaying && !dragging && currentDurationMs > 0) {
+          const elapsed = performance.now() - baseTimestamp;
+          const position = Math.min(currentDurationMs, basePosition + elapsed);
+          renderProgress(position, currentDurationMs);
+
+          // Fallback "ended" detection, driven by our own interpolated
+          // clock rather than waiting on another playback_update from
+          // Spotify. The iFrame API doesn't reliably fire a final
+          // isPaused:true update once a track (especially a preview
+          // clip) actually finishes — when that happens the
+          // listener-based check below never runs, and the track just
+          // sits there: CD still spinning, timer frozen at 00:00, next
+          // track never selected. Advancing here as soon as our own
+          // clock reaches the track's duration fixes that regardless of
+          // whether Spotify ever tells us it stopped.
+          if (!trackEnded && trackAdvanceHandler && (currentDurationMs - position) <= 250) {
+            trackEnded = true;
+            trackAdvanceHandler();
+          }
+        }
+        requestAnimationFrame(tickProgress);
+      }
+      tickProgress();
 
       function scrollActiveIntoView(index) {
         const track = trackEls[index];
@@ -1800,33 +2202,156 @@
         scrollActiveIntoView(index);
       }
 
+      // Keeps the currently-playing track non-clickable in the list (see
+      // .wr-track.is-playing above) — only the active track while it's
+      // actually playing, not merely loaded/paused. Re-run whenever
+      // isPausedState or currentIndex changes: from loadTrack (new track
+      // loaded, always starts paused) and from the playback_update
+      // listener (play/pause actually toggling on the loaded track).
+      function updatePlayingTrackState() {
+        trackEls.forEach((el, i) => {
+          const playing = i === currentIndex && !isPausedState;
+          el.classList.toggle('is-playing', playing);
+          el.setAttribute('aria-disabled', playing ? 'true' : 'false');
+        });
+      }
+
       const callback = (EmbedController) => {
+        // Calling EmbedController.play() immediately after loadUri() is
+        // unreliable — the embed sometimes silently ignores it (a known
+        // quirk of Spotify's iframe player), so a track can advance but
+        // then just sit there paused instead of continuing to play. To
+        // work around it, we keep re-issuing play() a few times, a
+        // little further apart each time, until playback actually
+        // starts — but only for the track that requested it, and only
+        // until the user does something else (manual play/pause, skip,
+        // seek) which invalidates the request.
+        function requestAutoplay(index) {
+          const token = ++playRequestToken;
+          const tryPlay = (attempt) => {
+            if (token !== playRequestToken || currentIndex !== index || !isPausedState) return;
+            EmbedController.play();
+            if (attempt < 4) setTimeout(() => tryPlay(attempt + 1), 300 + attempt * 250);
+          };
+          tryPlay(0);
+        }
+
         function loadTrack(index, autoplay) {
           currentIndex = (index + trackEls.length) % trackEls.length;
           trackEnded = false;
           lastPlayingPosition = 0;
           lastPlayingDuration = 0;
+          expectingFreshTrack = true;
+          pendingSeekMs = null;
+          expectingSeekMs = null;
           setActiveTrack(currentIndex);
+          progressPlaying = false;
+          basePosition = 0;
+          baseTimestamp = performance.now();
           progressThumb.style.width = '0%';
           timerEl.textContent = '-00:00';
+          // A freshly loaded URI has nothing playing yet — reset this
+          // now rather than waiting for the API's own playback_update.
+          // Without it, isPausedState is still whatever the *previous*
+          // track reported, and if that was "playing" (false),
+          // requestAutoplay's very first check below reads it as
+          // "already playing" and never calls play() on the new track
+          // at all — leaving it loaded but silent until the pause
+          // button is clicked (which then actually starts it).
+          isPausedState = true;
+          updatePlayingTrackState();
+          // Reflect "not playing" immediately on a non-autoplaying
+          // skip/select, rather than waiting on the API's own
+          // playback_update to report it — without this the pause
+          // icon/spinning CD would hang over from the previous track
+          // until that event arrives. Skipped whenever autoplay is true
+          // (natural end-of-track, or a manual skip/select made while
+          // something was already playing) since the icon/CD are
+          // already correctly showing "playing" from the track that
+          // just finished/was playing, and resetting then immediately
+          // flipping back would just flicker.
+          if (!autoplay) {
+            cdImage.classList.remove('playing');
+            playIcon.src = ICON_PLAY;
+            playBtn.setAttribute('aria-label', 'Play');
+          }
           EmbedController.loadUri(trackEls[currentIndex].dataset.uri);
-          if (autoplay) EmbedController.play();
+          if (autoplay) requestAutoplay(currentIndex);
         }
+        trackAdvanceHandler = () => loadTrack(currentIndex + 1, true);
 
         EmbedController.addListener('playback_update', (e) => {
           const { isPaused, position, duration } = e.data;
 
+          // Discard updates that still belong to the track we just
+          // navigated away from — see the expectingFreshTrack comment
+          // above. Wait for the first update whose position is close to
+          // 0 (the genuine signature of a just-loaded track) before
+          // trusting anything it says.
+          if (expectingFreshTrack) {
+            if (position > 1500) return;
+            expectingFreshTrack = false;
+          }
+
           cdImage.classList.toggle('playing', !isPaused);
           playIcon.src = isPaused ? ICON_PLAY : ICON_PAUSE;
           playBtn.setAttribute('aria-label', isPaused ? 'Play' : 'Pause');
+          const wasPaused = isPausedState;
+          isPausedState = isPaused;
+          updatePlayingTrackState();
 
-          currentDurationMs = duration;
-          const isPreview = !duration || duration <= PREVIEW_MAX_MS;
-          progressHit.classList.toggle('is-seekable', !isPreview);
+          // Some updates — particularly the one where isPaused flips to
+          // true — report duration as 0/undefined even mid-track (see
+          // the "ended" comment below for the same quirk with
+          // position). Only trust duration when it's a real value, so a
+          // pause doesn't wipe out currentDurationMs.
+          //
+          // Seeking itself is always available now (.is-seekable is set
+          // permanently in markup) — previews used to be blocked below
+          // on the assumption Spotify couldn't seek within a preview
+          // clip, but that assumption doesn't hold and just left the
+          // bar dead for anyone not logged into Spotify.
+          if (duration > 0) {
+            currentDurationMs = duration;
+          }
+
+          progressPlaying = !isPaused;
+
+          // Swallow stale updates left over from just before a seek (see
+          // expectingSeekMs above) — unless the target position was
+          // reached, or the timeout has passed, in which case stop
+          // waiting and trust the API again as normal.
+          if (expectingSeekMs != null) {
+            const closeEnough = Math.abs(position - expectingSeekMs) < 1000;
+            const timedOut = (performance.now() - expectingSeekAt) > 2000;
+            if (closeEnough || timedOut) {
+              expectingSeekMs = null;
+            } else {
+              return;
+            }
+          }
 
           if (!dragging && duration > 0) {
-            progressThumb.style.width = Math.min(100, (position / duration) * 100) + '%';
-            timerEl.textContent = formatCountdown(duration - position);
+            basePosition = position;
+            baseTimestamp = performance.now();
+            renderProgress(position, duration);
+          }
+
+          // Playback has just genuinely started (as opposed to a
+          // periodic update while already playing) — if the person
+          // dragged the bar while the track was paused, this is the
+          // moment to actually apply that seek. Spotify ignored the
+          // seek() call issued back when they dragged (it silently
+          // no-ops before playback begins), so without this the track
+          // would otherwise start over from 0 despite the bar already
+          // showing the dragged-to position.
+          if (wasPaused && !isPaused && pendingSeekMs != null) {
+            const seekMs = pendingSeekMs;
+            pendingSeekMs = null;
+            EmbedController.seek(seekMs / 1000);
+            basePosition = seekMs;
+            baseTimestamp = performance.now();
+            renderProgress(seekMs, currentDurationMs);
           }
 
           // The iFrame API has no explicit "ended" event, so infer it.
@@ -1850,16 +2375,39 @@
           }
         });
 
-        playBtn.addEventListener('click', () => EmbedController.togglePlay());
-        prevBtn.addEventListener('click', () => loadTrack(currentIndex - 1, true));
-        nextBtn.addEventListener('click', () => loadTrack(currentIndex + 1, true));
+        playBtn.addEventListener('click', () => {
+          playRequestToken++;
+          EmbedController.togglePlay();
+        });
+        // Manual skip/select never autoplays — loading a new URI and
+        // then trying to force playback on it isn't reliable across
+        // browsers (some report themselves as playing — right track,
+        // real advancing position — while never actually starting the
+        // audio; there's no way to detect that mismatch from here). To
+        // avoid ever showing that false "playing" state, a manual skip
+        // or track selection just loads the track and waits for the
+        // person to hit play. Only a track finishing on its own (see
+        // the "ended" handling above) autoplays the next one, since
+        // that path doesn't have this problem.
+        prevBtn.addEventListener('click', () => loadTrack(currentIndex - 1, false));
+        nextBtn.addEventListener('click', () => loadTrack(currentIndex + 1, false));
+
+        // Selecting a track from the list. The currently-playing track
+        // itself is excluded via .wr-track.is-playing's pointer-events:
+        // none (so this never even fires for it from a click), but the
+        // guard below also covers the keydown path, which isn't blocked
+        // by pointer-events.
+        function selectTrack(i) {
+          if (i === currentIndex && !isPausedState) return;
+          loadTrack(i, false);
+        }
 
         trackEls.forEach((el, i) => {
-          el.addEventListener('click', () => loadTrack(i, true));
+          el.addEventListener('click', () => selectTrack(i));
           el.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              loadTrack(i, true);
+              selectTrack(i);
             }
           });
         });
@@ -1870,7 +2418,6 @@
         }
 
         progressHit.addEventListener('pointerdown', (e) => {
-          if (!progressHit.classList.contains('is-seekable')) return;
           dragging = true;
           progressHit.setPointerCapture(e.pointerId);
           const ratio = ratioFromClientX(e.clientX);
@@ -1889,12 +2436,30 @@
           progressHit.releasePointerCapture(e.pointerId);
           const ratio = ratioFromClientX(e.clientX);
           if (currentDurationMs > 0) {
-            EmbedController.seek((ratio * currentDurationMs) / 1000);
+            const seekMs = ratio * currentDurationMs;
+            basePosition = seekMs;
+            baseTimestamp = performance.now();
+            EmbedController.seek(seekMs / 1000);
+            // Paused/not-yet-playing: Spotify ignores that seek() call
+            // above until playback actually starts, so remember the
+            // target and re-issue it once the playback_update listener
+            // sees play actually begin (see there for why).
+            pendingSeekMs = isPausedState ? seekMs : null;
+            // Only while already playing does the next playback_update
+            // risk arriving with the stale pre-seek position (see
+            // expectingSeekMs above) — while paused, nothing ticks until
+            // playback resumes, and that resume is handled entirely by
+            // pendingSeekMs instead.
+            if (!isPausedState) {
+              expectingSeekMs = seekMs;
+              expectingSeekAt = performance.now();
+            }
           }
         });
         progressHit.addEventListener('pointercancel', () => { dragging = false; });
 
         setActiveTrack(currentIndex);
+        updatePlayingTrackState();
       };
 
       const options = {
@@ -1906,45 +2471,6 @@
       IFrameAPI.createController(element, options, callback);
     };
   </script>
-  <!-- ── Cream cards: force music, Brain Games & blank sections to match height on phone ── -->
-  <script>
-    function matchCreamCardHeights() {
-      const musicCard = document.querySelector('.cream-card--music');
-      const gamesCard = document.querySelector('.cream-card--games');
-      const blankCard = document.querySelector('.cream-card--blank');
-      if (!musicCard || !gamesCard || !blankCard) return;
-
-      const isMobile = window.matchMedia('(max-width: 650px)').matches;
-      if (!isMobile) {
-        musicCard.style.height = '';
-        gamesCard.style.height = '';
-        blankCard.style.height = '';
-        return;
-      }
-
-      // Reset to auto first so we measure each card's true natural
-      // height (top to bottom, padding and content included), not a
-      // stale height left over from a previous measurement.
-      musicCard.style.height = 'auto';
-      gamesCard.style.height = 'auto';
-      // The footer card is intentionally left out of this — it sizes
-      // to its own content (divider gap + footer + the 5rem bottom
-      // padding matching About.html), not stretched to match the
-      // other two sections.
-      blankCard.style.height = '';
-
-      const tallest = Math.max(
-        musicCard.getBoundingClientRect().height,
-        gamesCard.getBoundingClientRect().height
-      );
-
-      musicCard.style.height = tallest + 'px';
-      gamesCard.style.height = tallest + 'px';
-    }
-
-    window.addEventListener('load', matchCreamCardHeights);
-    window.addEventListener('resize', matchCreamCardHeights);
-  </script>
 
   <!-- ── Cream column: vertical scroll drives an L-shaped card slide (PC only) ──
        Music → Brain Games slides horizontally; Brain Games → blank card
@@ -1953,18 +2479,54 @@
     (function () {
       const creamCol = document.getElementById('creamCol');
       const creamTrack = document.getElementById('creamTrack');
+      const creamViewportEl = document.querySelector('.cream-viewport');
+      const musicCardEl = document.querySelector('.cream-card--music');
+      const overflowSpacer = document.getElementById('trackOverflowSpacer');
       if (!creamCol || !creamTrack) return;
+
+      // How much taller the music card is than the viewport right now
+      // — only non-zero on desktop, while the tracklist is expanded,
+      // and only when it genuinely doesn't fit.
+      function getTrackOverflow() {
+        const isDesktop = window.matchMedia('(min-width: 651px)').matches;
+        if (!isDesktop || !musicCardEl || !creamViewportEl) return 0;
+        if (!musicCardEl.classList.contains('is-expanded')) return 0;
+        return Math.max(0, musicCardEl.scrollHeight - creamViewportEl.clientHeight);
+      }
 
       function updateCreamTrack() {
         const isDesktop = window.matchMedia('(min-width: 651px)').matches;
         if (!isDesktop) {
           creamTrack.style.transform = '';
+          if (musicCardEl) musicCardEl.style.transform = '';
+          if (overflowSpacer) overflowSpacer.style.height = '0px';
+          creamCol.classList.remove('tracklist-scroll-active');
           return;
         }
+
+        const overflowPx = getTrackOverflow();
+        if (overflowSpacer) overflowSpacer.style.height = overflowPx + 'px';
+        // Mandatory scroll-snap only has a snap point at the very top
+        // and at the start of the next card, so while there's overflow
+        // room to scroll through, snapping is paused — otherwise it
+        // fights the user reading down the tracklist.
+        creamCol.classList.toggle('tracklist-scroll-active', overflowPx > 0);
+
         const pageHeight = creamCol.clientHeight;
+        const scrollTop = creamCol.scrollTop;
+
+        // First, consume the tracklist's own overflow: the music card
+        // slides up in place, revealing the rest of the tracklist,
+        // before any card-to-card progress is allowed to start.
+        const musicPhase = Math.min(scrollTop, overflowPx);
+        if (musicCardEl) {
+          musicCardEl.style.transform = musicPhase ? `translateY(-${musicPhase}px)` : '';
+        }
+
         // 0 = music card, 1 = games card, 2 = blank card.
+        const remainingScroll = Math.max(0, scrollTop - overflowPx);
         const pageFloat = pageHeight > 0
-          ? Math.min(2, Math.max(0, creamCol.scrollTop / pageHeight))
+          ? Math.min(2, Math.max(0, remainingScroll / pageHeight))
           : 0;
         const xProgress = Math.min(1, pageFloat);           // music → games
         const yProgress = Math.max(0, Math.min(1, pageFloat - 1)); // games → blank
@@ -1974,6 +2536,10 @@
       creamCol.addEventListener('scroll', updateCreamTrack, { passive: true });
       window.addEventListener('resize', updateCreamTrack);
       updateCreamTrack();
+
+      // Exposed so the tracklist expand/collapse handler can trigger a
+      // recalculation as soon as the card's height changes.
+      window.wrUpdateCreamTrack = updateCreamTrack;
     })();
   </script>
 
