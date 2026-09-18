@@ -1,271 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon-play.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#170006" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A London-based creative consultancy offering strategy, communications, and design for culture-shaping presence and storytelling.">
+
+  <meta property="og:title" content="SABI">
+  <meta property="og:description" content="A creative consultancy for conceptually ambitious brands.">
+  <meta property="og:image" content="/favicon.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SABI">
+  <meta name="twitter:description" content="A creative consultancy for conceptually ambitious brands.">
+  <meta name="twitter:image" content="/favicon.png">
 
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
-
-  <title>PLAY — Games for Brand People</title>
-  <meta name="description" content="A London-based creative consultancy offering strategy, production, and design for culture-shaping presence and storytelling." />
-
+  
+  <title>SABI | Brand Therapy</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      overscroll-behavior: none;
-      /* Safari's chrome-tinting (status bar, the bottom URL pill)
-         only reliably reads a flat background-color — a gradient
-         here doesn't get picked up and falls back to white. A solid
-         color still bleeds correctly at each edge because Safari
-         also samples the actual solid-colored sections underneath as
-         you scroll (wine hero at the top, cream footer card at the
-         bottom), so this alone is enough to get wine-top/cream-
-         bottom without needing a gradient. */
-      background-color: var(--wine);
+    ::selection {
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
     }
-
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
+    ::-moz-selection {
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
     }
 
     :root {
       --bg: #FAFBE3;
       --text: #211D1D;
-      --wine: #170006;
       --border: #423A3A;
+      --text-select-bg: #170006;
+      --text-select-text: #FFFFFF;
       --font-body: 'owners-text', sans-serif;
       --font-mono: 'gemeli-mono', serif;
     }
 
-    ::selection { background: rgba(183, 184, 168, 0.4); }
-    ::-moz-selection { background: rgba(183, 184, 168, 0.4); }
-
     body {
+      margin: 0;
+      height: 100vh;
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
       font-family: var(--font-body);
-      font-weight: 350;
       color: var(--text);
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
     }
 
-    /* ── Fixed viewfinder: grid of wine-top / wine-bottom / cream ── */
-    .viewfinder {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      grid-template-areas:
-        "top    right"
-        "bottom right";
-    }
-
-    .wine-block {
-      background: var(--wine);
-      height: 100%;
-      min-height: 0;
-      position: relative;
-    }
-    .wine-block--top { grid-area: top; }
-    .wine-block--bottom {
-      grid-area: bottom;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-direction: column;
-      padding-bottom: 1.5rem;
-      min-width: 0;
-    }
-
-    /* ── Hero copy, top wine block ── */
-    .hero-text {
-      padding: 6.5rem 1.5rem 2rem;
-      max-width: 480px;
-      margin-left: auto;
-      margin-top: 0;
-      text-align: right;
-      transition: margin-top 0.25s ease;
-    }
-    .hero-lead,
-    .hero-body {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 17.5px;
-      line-height: 1.7;
-      color: var(--bg);
-    }
-    .hero-lead { margin-bottom: 0.75rem; }
-
-    /* Desktop: the accordion push uses a transform instead of
-       margin-top. Margin forces the grid row to grow to fit the
-       content, and since the cream column spans both rows, growing the
-       top row drags the cream side down with it (and clipping the
-       overflow instead just cuts the hero text off). A transform never
-       affects layout/track sizing, so it only visually shifts the wine
-       side. The weather reel below gets the same transform so it moves
-       down in sync and never gets covered by the hero text. */
-    @media (min-width: 651px) {
-      .hero-text {
-        padding: 9rem 2.5rem 2rem;
-        transition: transform 0.25s ease;
-        transform: translateY(0);
-      }
-      .clocks-wrap {
-        transition: transform 0.25s ease;
-        transform: translateY(0);
-      }
-    }
-
-    /* ── World clocks, bottom wine block: sideways-scrolling reel ── */
-    .clocks-wrap {
+    img {
+      max-width: 220px;
       width: 100%;
-      min-width: 0;
-      padding: 3rem 1.5rem 1rem;
-    }
-
-    .weather-reel {
-      display: flex;
-      min-width: 0;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+      height: auto;
+      margin: 0 auto;
+      display: block;
       opacity: 0;
-      transition: opacity 0.35s ease;
+      animation: fadeIn 1.8s ease forwards;
     }
-    .weather-reel::-webkit-scrollbar { display: none; }
-    .weather-reel.is-ready { opacity: 1; }
 
-    /* Each block: city / time / weather, stacked — same font-family,
-       weights, letter-spacing and colour as the .ba-* weather blocks
-       on the About page. Width is set via JS to the widest natural
-       content across all cards, so every card is the same fixed
-       "card" size and nothing overflows. */
-    .wr-block {
-      flex: 0 0 auto;
-      box-sizing: border-box;
-      padding: 0 10px;
+    /* ── Ticker strip (sits above the nav) ── */
+    .ticker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 36px;
+      background: #170006;
+      overflow: hidden;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
+      justify-content: space-between;
+      padding: 0 24px 0 32px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
     }
-    .wr-city-name {
-      display: block;
-      width: 100%;
-      font-family: var(--font-body);
+
+    /* ── Typewriter quote (replaces the old scrolling reel) ── */
+    .ticker-quote-wrap {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+      font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 9.8px;
-      letter-spacing: 1px;
+      font-size: 14.5px;
+      letter-spacing: 1.8px;
+      line-height: 1;
+      color: var(--bg);
+    }
+
+    .ticker-quote {
+      font: inherit;
+      letter-spacing: inherit;
+      color: inherit;
       text-transform: uppercase;
-      color: var(--bg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
     }
-    .wr-city-inner {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
+
+    .ticker-cursor {
+      display: inline-block;
+      align-self: center;
+      width: 0.12em;
+      height: 1.35em;
+      margin-left: 3px;
+      background: currentColor;
+      animation: cursor-blink 0.9s step-end infinite;
     }
-    .wr-city-name--small {
-      font-size: 9.3px !important;
+
+    @keyframes cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
-    .wr-city-time {
-      display: block;
-      width: 100%;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 31px;
-      letter-spacing: 1px;
-      font-variant-numeric: tabular-nums;
-      color: var(--bg);
-      margin-top: 8px;
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-cursor { animation: none; }
     }
-    .wr-time-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      width: 100%;
-    }
-    .wr-city-weather {
+
+    /* ── Send icon, top right of the strip, links to Substack ── */
+    .ticker-icon-btn {
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      width: 32px;
+      height: 32px;
+      margin-left: 12px;
+      padding: 0;
+      background: none;
+      border: none;
+      color: var(--bg);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .ticker-icon-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      fill: var(--bg);
+      shape-rendering: geometricPrecision;
+    }
+
+    .ticker-icon-btn:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Lightbox (blank shell, full page — wire up content here later) ── */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 0, 6, 0.95);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-box {
+      position: relative;
       width: 100%;
-      margin-top: 8px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 64px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--bg);
+      padding: 0;
+    }
+
+    .lightbox-close svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 0.6;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    .lightbox-close:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Lightbox copy ── */
+    .lightbox-content {
+      max-width: 380px;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-top: 0;
+      padding-bottom: 0;
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 22px;
-      letter-spacing: 1px;
-      font-variant-numeric: tabular-nums;
+      font-size: 17px;
+      line-height: 1.5;
       color: var(--bg);
-      white-space: nowrap;
+      text-align: left;
     }
-    /* Error state: retry button + "UPDATE / WEATHER" label pushed to the
-       right edge of the cell, both bottom-aligned with each other. */
-    .wr-city-weather.is-error {
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .wr-city-weather.is-error [data-icon] {
-      order: 2;
-    }
-    .wr-city-weather.is-error .wr-refresh-text {
-      order: 1;
-    }
-    .wr-refresh-text {
-      display: none;
-      flex-direction: column;
+
+    .lightbox-heading {
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 10px;
-      line-height: 1.15;
-      letter-spacing: 0.5px;
-      text-transform: lowercase;
-      text-align: left;
+      font-size: 22px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
       color: var(--bg);
-      white-space: normal;
+      margin: 0 0 44px 0;
     }
-    .wr-city-weather.is-error .wr-refresh-text {
+
+    .lightbox-content p {
+      margin: 0 0 16px 0;
+    }
+
+    .lightbox-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-success {
+      display: none;
+    }
+
+    /* Needs to out-specificity ".lightbox-content p:last-child" above,
+       otherwise its margin-top gets silently reset to 0 and the success
+       message loses its gap above where the Name field used to sit. */
+    .lightbox-content .form-success {
+      margin: 60px 0 0;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .form-success.is-visible {
+      display: block;
+    }
+
+    /* ── Sign-up form (Name + phone number, underline style) ── */
+    .lightbox-form {
       display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 40px 0 40px;
     }
-    .wr-icon {
-      display: inline-block;
-      width: 25px;
-      height: 25px;
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      margin-top: 12px;
     }
-    .wr-icon img {
+
+    .form-field {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .form-field--code {
+      flex: 0 0 72px;
+    }
+
+    .lightbox-form input {
       width: 100%;
-      height: 100%;
       display: block;
-      object-fit: contain;
+      background: none;
+      border: none;
+      border-bottom: 1.6px solid var(--bg);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 18.5px;
+      letter-spacing: 1px;
+      line-height: 1.4;
+      padding: 6px 2px;
+      margin: 0;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+      transition: border-color 0.2s ease;
     }
-    /* Clickable retry — only appears in place of the icon when the weather
-       fetch has failed. Same pattern as the Home page's station-refresh-btn:
-       sized to fill .wr-icon exactly, hairline stroke, no fill. Uses
-       var(--bg) rather than var(--text) here since this section's icons
-       sit on the wine background, not the cream one. */
-    .wr-refresh-btn {
-      display: block;
-      width: 100%;
-      height: 100%;
+
+    .lightbox-form input::placeholder {
+      color: rgba(250, 251, 227, 0.55);
+    }
+
+    /* Area code field: fixed "+" prefix that can't be deleted, only the
+       digits are part of the editable input */
+    .code-input-wrap {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1.6px solid var(--bg);
+      padding: 6px 2px;
+      transition: border-color 0.2s ease;
+    }
+
+    .code-prefix {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 18.5px;
+      letter-spacing: 1px;
+      color: var(--bg);
+      flex: 0 0 auto;
+    }
+
+    .code-input-wrap input {
+      border-bottom: none;
+      padding: 0 0 0 2px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    /* Error state — only shown after a failed submit attempt */
+    .form-field.has-error input,
+    .code-input-wrap.has-error {
+      border-color: rgba(80, 41, 47, 0.85);
+    }
+
+    .form-error-msg {
+      visibility: hidden;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 10px;
+      letter-spacing: 0.5px;
+      color: #cb9593;
+      margin-top: 10px;
+    }
+
+    .form-field.has-error .form-error-msg,
+    .form-consent.has-error .form-error-msg {
+      visibility: visible;
+    }
+
+    /* ── Consent checkbox + small print ── */
+    .form-consent {
+      margin: 24px 0 0;
+    }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .consent-label input[type="checkbox"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .consent-box {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+      margin-top: 2px;
+      border: 1.6px solid var(--bg);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .consent-label input[type="checkbox"]:checked ~ .consent-box {
+      background-color: var(--bg);
+    }
+
+    .form-consent.has-error .consent-box {
+      border-color: rgb(80, 41, 47);
+    }
+
+    .consent-error-msg {
+      /* Indent to line up with the paragraph text, not the checkbox —
+         matches the checkbox width (15px) + the label's gap (10px). */
+      margin-left: 25px;
+    }
+
+    .consent-link {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .consent-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12.5px;
+      letter-spacing: 0.3px;
+      line-height: 1.5;
+      color: var(--bg);
+      opacity: 0.85;
+    }
+
+    /* ── Submit button — hairline arrow, more to come later ── */
+    .lightbox-submit {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 53px;
+      height: 30px;
+      margin-left: auto;
+      margin-right: -2px;
+      margin-top: -13.7px;
       padding: 0;
       border: none;
       background: none;
       cursor: pointer;
     }
-    .wr-refresh-btn svg {
+
+    .lightbox-submit svg {
       width: 100%;
       height: 100%;
       display: block;
@@ -277,1417 +451,727 @@
       shape-rendering: geometricPrecision;
     }
 
-    /* Typeform-style progress bar: thin track + filled thumb showing
-       scroll position, draggable to scroll the reel. The visible bar
-       stays 3px, but a padded, invisible "hit" wrapper around it is
-       what actually receives clicks/drags, so it's easy to grab
-       without changing how thin it looks. */
-    .weather-scrollbar-hit {
-      width: 100%;
-      padding: 14px 0;
-      margin-top: 0.8rem;
-      cursor: pointer;
-      touch-action: none;
-    }
-    .weather-scrollbar-track {
-      position: relative;
-      width: 100%;
-      height: 3px;
-      background: rgba(250, 251, 227, 0.25);
-      border-radius: 2px;
-      pointer-events: none;
-    }
-    .weather-scrollbar-thumb {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      background: var(--bg);
-      border-radius: 2px;
-      pointer-events: none;
+    .lightbox-submit:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
     }
 
-    @media (min-width: 651px) {
-      .clocks-wrap { padding: 2.5rem; }
-      .wr-block { padding: 0 14px; }
-      .wr-city-name { font-size: 9.7px; }
-      .wr-city-name--small { font-size: 9.2px !important; }
-      .wr-city-time { font-size: 26.5px; }
-      .wr-city-weather { font-size: 18px; }
-      .wr-icon { width: 22px; height: 22px; }
-      .weather-scrollbar-hit { margin-top: 1rem; }
-    }
+    /* ── Desktop only: split the lightbox into two columns — heading + copy
+         on the left, form fields on the right — both confined to the
+         centre three-fifths (60%) of the page, bottoms aligned ── */
+    @media (min-width: 761px) {
+      .lightbox-box {
+        justify-content: center;
+        padding-right: 0;
+      }
 
-    /* ── Tagline row, below the scrollbar ── */
-    .weather-tagline {
-      display: flex;
-      justify-content: center;
-      align-items: baseline;
-      width: 100%;
-      margin-top: 0.8rem;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.1;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      color: var(--bg);
-    }
+      .lightbox-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 80px;
+        width: auto;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
 
-    @media (min-width: 651px) {
-      .weather-tagline { margin-top: 1rem; }
-    }
+      .lightbox-copy {
+        flex: 1 1 0;
+        max-width: 380px;
+        text-align: right;
+      }
 
-    /* ── Cream column: vertical scroller, horizontal card animation ──
-       The scroll interaction (wheel, trackbar, scrollbar) is vertical,
-       same as a normal scrollable panel. Visually though, the two
-       "pages" of scrollable height are just invisible snap targets —
-       the actual cards live in a sticky, pinned viewport and slide
-       left/right as you scroll down, so the transition itself reads as
-       horizontal. On phone it's unwrapped (see max-width query below)
-       so each card can be placed independently, stacked vertically, in
-       the mobile stack. */
-    .cream-col {
-      grid-area: right;
-      height: 100%;
-      background: var(--bg);
-      position: relative;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
-    }
-    /* Paused while the tracklist is expanded and overflowing, so
-       mandatory snap doesn't fight the user trying to scroll through
-       the extra tracks (there's no snap point partway down the
-       overflow region — see trackOverflowSpacer). Restored once the
-       tracklist collapses again. */
-    .cream-col.tracklist-scroll-active {
-      scroll-snap-type: none;
-    }
-
-    /* Pinned window onto the horizontal track: stays put at the top of
-       the scrollport for the whole scrollable range, so scrolling
-       vertically doesn't move it up/down — only the track inside it
-       slides. NOTE: this element intentionally does NOT carry
-       scroll-snap-align — sticky elements make unreliable snap targets
-       (their box appears "already in place" once stuck, which is what
-       was preventing scrolling back up to the music card). The actual
-       snap points are the plain, non-sticky markers below. */
-    .cream-viewport {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    /* Zero-footprint marker for the very first snap point (top of the
-       column). Plain and non-sticky, so it's an unambiguous snap
-       target. */
-    .cream-snap-top {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1px;
-      height: 1px;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      pointer-events: none;
-    }
-
-    /* Invisible spacers: each gives the column one more "page" of
-       scrollable height with its own plain (non-sticky) snap target. */
-    .cream-snap-spacer {
-      width: 100%;
-      height: 100%;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-    }
-
-    /* Height is set in px by JS, only while the tracklist is expanded
-       and taller than the viewport — see updateCreamTrack(). Zero
-       otherwise, so it's a no-op the rest of the time. Intentionally
-       has no scroll-snap-align: it's scrolled through freely rather
-       than snapped to (scroll-snap-type is paused for the same span —
-       see .cream-col.tracklist-scroll-active). */
-    .cream-track-overflow-spacer {
-      width: 100%;
-      height: 0;
-    }
-
-    .cream-track {
-      display: grid;
-      grid-template-columns: 50% 50%;
-      grid-template-rows: 50% 50%;
-      width: 200%;
-      height: 200%;
-    }
-
-    .cream-card {
-      width: 100%;
-      height: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      position: relative;
-    }
-
-    .cream-card--music { grid-column: 1; grid-row: 1; }
-    .cream-card--games { grid-column: 2; grid-row: 1; }
-    .cream-card--blank { grid-column: 2; grid-row: 2; }
-
-    .cream-card--music {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* ── Brain Games card ── */
-    .cream-card--games {
-      display: flex;
-      padding: 2rem 1.5rem 4rem;
-    }
-    @media (min-width: 651px) {
-      .cream-card--games {
-        /* Matches .hero-text's desktop padding-top exactly, so the top
-           of "Brain Games" lines up with the top of the hero paragraph.
-           Bottom padding is 0.75x that, so the list sits a bit further
-           down toward the bottom of the card. */
-        padding: 9rem 2.5rem 6.75rem;
+      .lightbox-form {
+        flex: 1 1 0;
+        max-width: 320px;
+        margin: 0;
       }
     }
 
-    .games-inner {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .games-header {
-      display: flex;
-      flex-direction: column;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.3;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      text-align: left;
-    }
-    @media (min-width: 651px) {
-      .games-header {
-        /* Compensates for .hero-lead's much larger line-height (1.7 vs
-           1.3), which pushes its visible glyphs down further within
-           its own line box than games-header's tighter line-height
-           does — without this nudge the two titles' padding-top
-           matches but their visible text doesn't. */
-        margin-top: 4px;
-      }
-    }
-
-    .games-header .tm {
-      font-size: 1.5em;
-      display: inline-block;
-      vertical-align: top;
-      line-height: 1;
-      margin-left: 3px;
-      text-transform: none;
-    }
-
-    /* Sits centered in the gap between the section header and the game
-       list — a third flex child alongside them, so justify-content:
-       space-between on .games-inner naturally centers it in whatever
-       space remains between the two. Works the same on phone and PC. */
-    .games-hero {
-      margin: 0;
-      text-align: center;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 16px;
-      color: var(--text);
-    }
-
-    /* Forces a break after "games" / before "reimagined" on phone
-       portrait only; on PC the sentence runs as a single line. */
-    .hero-linebreak {
-      display: none;
-    }
-    @media (max-width: 650px) {
-      .hero-linebreak {
-        display: block;
-      }
-    }
-
-    .games-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 0rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(33, 29, 29, 0.25);
-    }
-    @media (min-width: 651px) {
-      .games-list { margin-top: 0; }
-    }
-
-    .games-list-item {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(33, 29, 29, 0.25);
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 15px;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .games-list-item:hover {
-      opacity: 0.7;
-    }
-
-    /* "Game 01" / "Game 02" labels switch to owners-text; the values
-       (Word Search, Buzzword) stay in gemeli mono like the rest of the
-       list. Size/spacing/case stay identical between the two. */
-    .games-list-label {
-      font-family: var(--font-body);
-      font-size: 14.5px;
-    }
-
-    /* ── Third card: page footer, in the About page's phone-mode format ── */
-    .cream-card--blank {
-      background: var(--bg);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 2rem 1.5rem 2rem;
-    }
-    @media (min-width: 651px) {
-      .cream-card--blank {
-        /* Matches the other two cards' desktop padding. */
-        padding: 9rem 2.5rem 6.75rem;
-      }
-    }
-
-    /* Phone only — matches the About page's .full-divider treatment
-       above its footer. The footer now follows it directly in normal
-       flow (not bottom-anchored), so the divider sits a small, fixed
-       distance from the top of the card, and the gap beneath it to the
-       footer content matches About.html's spacing exactly. Not shown
-       on PC at all. */
-    .footer-divider-mobile {
-      display: none;
-    }
-    @media (max-width: 650px) {
-      .cream-card--blank {
-        justify-content: flex-start;
-        padding-top: 0;
-        /* Matches About.html's body padding-bottom (5rem) — the space
-           below the footer content, no longer forced to a taller
-           height by the card-matching script (see JS below). */
-        padding-bottom: 5rem;
-      }
-      .footer-divider-mobile {
-        display: block;
-        margin-top: 2cm;
-        /* Cancels the card's own 1.5rem left/right padding so the line
-           reaches the true edges of the page, not just the card's
-           content box. */
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-        border-top: 0.5px solid var(--border);
-      }
-    }
-
-    /* Footer grid: same 2-column, stacked format used on the About
-       page's phone layout — description + copyright span the full
-       width, Contact and Services sit side by side underneath. */
-    .site-footer {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 1rem;
-      row-gap: 1.75rem;
-      align-items: start;
-    }
-    @media (max-width: 650px) {
-      .site-footer {
-        /* Matches About.html's gap under its divider exactly:
-           .site-footer's own margin-top(1rem) + padding-top(1.5rem). */
-        margin-top: 2.5rem;
-      }
-    }
-
-    .footer-col {
-      display: flex;
-      flex-direction: column;
-      align-self: start;
-    }
-    .footer-col:first-child {
-      grid-column: 1 / -1;
-    }
-
-    /* Desktop only: the description + copyright move up and out of the
-       bottom-anchored footer grid, pinned instead to the top of the
-       card so their top edge lines up with the top of the hero
-       paragraph — same reference point (9rem) used for "Brain Games"
-       earlier. Contact/Services stay put at the bottom. */
-    @media (min-width: 651px) {
-      .footer-col:first-child {
-        position: absolute;
-        top: 9rem;
-        left: 2.5rem;
-        right: 2.5rem;
-      }
-    }
-
-    .footer-desc {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 1.5;
-      color: var(--text);
-      margin-bottom: 0.9rem;
-    }
-    @media (min-width: 651px) {
-      .footer-desc {
-        /* Compensates for .hero-lead's taller line-height (1.7 vs 1.5
-           here), same trick used for the games-header nudge. */
-        margin-top: 2px;
-      }
-    }
-
-    .footer-copyright {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 12px;
-      color: var(--text);
-      letter-spacing: 0.5px;
-    }
-
-    .footer-heading {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 0.7rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .footer-links a {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 13px;
-      color: var(--text);
-      text-decoration: underline;
-      white-space: normal;
-    }
-
-    .footer-col--services .footer-links a {
-      text-transform: uppercase;
-    }
-
-    /* Desktop only: nudge "Contact" right, roughly halfway toward
-       "Services" — Services itself stays exactly where it was. */
-    @media (min-width: 651px) {
-      .footer-col--contact {
-        margin-left: 9.5rem;
-      }
-    }
-
-    /* ── Header (overlaid, no divider, positions unchanged) ── */
-    .header-wrap {
+    /* ── Top navigation ── */
+    .site-nav {
       position: fixed;
-      top: 0;
+      top: 36px;
       left: 0;
-      right: 0;
-      z-index: 30;
-      padding: 1.6rem 1.5rem 0;
-    }
-    @media (min-width: 651px) {
-      .header-wrap {
-        padding: 2.25rem calc(2.5rem + var(--scrollbar-w, 0px)) 0 2.5rem;
-      }
-    }
-
-    .site-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      position: relative;
+      width: calc(20vw + 96px); /* was 33.33vw — narrower container = ~0.6x the space-between gap, same on both sides by construction */
+      padding: 28px 32px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
+      animation-delay: 0.4s;
     }
 
-    .site-name {
-      font-family: "all-round-gothic", sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0px;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    /* Hamburger — recoloured to the standard bg colour so it reads
-       against the wine panel underneath it */
-    .menu-btn-wrap { position: relative; }
-    .menu-btn {
-      position: relative;
-      width: 22px;
-      height: 16px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .menu-btn span {
-      position: absolute;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--bg);
-      transition: transform 0.25s ease, top 0.25s ease;
-    }
-    .menu-btn span:first-child { top: 1.75px; }
-    .menu-btn span:last-child { top: 12.25px; }
-    .menu-btn.open span { height: 1.8px; }
-    .menu-btn.open span:first-child { top: 7px; transform: rotate(45deg); }
-    .menu-btn.open span:last-child { top: 7px; transform: rotate(-45deg); }
-
-    .menu-accordion {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 0.75rem;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.25s ease;
-    }
-    .menu-accordion.open { max-height: 220px; }
-    .menu-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .menu-list a {
+    .nav-link {
       font-family: var(--font-body);
       font-weight: 500;
       font-size: 13px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: var(--bg);
+      color: var(--text);
       text-decoration: none;
-      padding: 0.5rem 0;
-      white-space: nowrap;
     }
-    .menu-list a.active {
-      color: rgba(250, 251, 227, 0.45);
-      pointer-events: none;
-      cursor: default;
-    }
-    .menu-list a.menu-link--disabled {
-      opacity: 0.5;
-      pointer-events: none;
-      cursor: default;
-    }
-
-    /* ── CD + player, right panel ── */
-    .music-stack {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.8375rem;
-      margin-top: 2rem;
-    }
-
-    /* CD aligns to the right edge of the player below it — since
-       .music-stack shrink-wraps to its widest child (the player, which
-       is wider than the CD), aligning the CD to the flex column's own
-       end edge lines it up with the player's right edge.
-
-       "Curated Sounds" is anchored to .music-stack itself (not the CD),
-       at left:0 — which is the player's left edge, since .music-stack
-       shrink-wraps to the player's width. Its vertical position is
-       tied to the CD's own height at each breakpoint, so it stays
-       centered on the CD regardless of where the CD sits horizontally. */
-    .music-heading {
-      position: absolute;
-      left: 0;
-      top: calc(min(384px, 62vw) / 2);
-      transform: translateY(-50%) rotate(180deg);
-      writing-mode: vertical-rl;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+    .nav-link:visited,
+    .nav-link:active,
+    .nav-link:hover {
       color: var(--text);
-      white-space: nowrap;
-    }
-    /* A single unbroken rule standing in for "———" (3 em dashes), since
-       repeated dash characters were creating a break opportunity and
-       wrapping inside the vertical heading. Same overall length as 4
-       em dashes, same stroke weight as one normal em dash glyph. */
-    .em-rule {
-      display: inline-block;
-      width: 1px;
-      height: 3em;
-      background: currentColor;
-      vertical-align: 0em;
     }
 
-    .cd-stack {
-      align-self: flex-end;
-      position: relative;
-      width: min(384px, 62vw);
-      height: min(384px, 62vw);
+    @media (max-width: 560px) {
+      .ticker { height: 42px; padding: 0 12px 0 20px; }
+      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
+
+      .site-nav {
+        top: 30px;
+        width: auto;
+        right: 0;
+        padding: 26px 20px 20px 20px;
+        gap: 20px;
+      }
+      .nav-link { font-size: 13px; letter-spacing: 1px; }
+
+      .site-footer {
+        padding-bottom: 26px;
+      }
     }
 
-    .cd-image {
-      position: absolute;
-      top: 0;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      position: fixed;
+      bottom: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      transform: rotate(0deg);
-      opacity: 0.45;
-      pointer-events: none;
-      user-select: none;
-    }
-    .cd-image--spin {
-      animation: spin-cd 9s linear infinite;
-      animation-play-state: paused;
-    }
-    .cd-image--spin.playing {
-      animation-play-state: running;
-    }
-
-    @media (min-width: 651px) {
-      .music-stack {
-        margin-top: calc(8.459375rem + 3px);
-        padding-bottom: calc(6.125rem - 3px);
-      }
-      .music-heading {
-        top: calc(min(276px, 44.6vw) / 2);
-      }
-      .cd-stack {
-        /* 0.9x the original 307px / 49.6vw */
-        width: min(276px, 44.6vw);
-        height: min(276px, 44.6vw);
-      }
-    }
-
-    /* ── Desktop only: expanding the tracklist slides the whole stack
-       (heading, CD, controls, progress bar, tracklist) up together as
-       one rigid block — no separate fade-outs or height-collapses on
-       the heading/CD anymore. JS (see updateMusicStackOffset) measures
-       how far to move it so the progress bar's bottom edge lines up
-       with the top of the hero text on the wine side, then sets that
-       as a transform on .music-stack; the transition below eases it
-       into place. */
-    @media (min-width: 651px) {
-      .cream-card--music.is-expanded {
-        /* The base rule above clips its own content with
-           overflow:hidden — needed normally so the CD/heading don't
-           bleed past the card, but it also clips the slid-up stack and
-           the expanded tracklist. Switching to visible here means only
-           the outer .cream-viewport clips it, which is what actually
-           lets the translateY reveal everything as the user scrolls.
-           No overflow-y:auto here on purpose: giving the card its own
-           scroll context creates a second, nested scrollbar next to
-           the cream column's real one. Instead, when the tracklist is
-           too tall to fit, the JS scroll handler below (see
-           updateCreamTrack) translates this card up in sync with the
-           cream column's own scroll — same "one real scrollbar drives
-           everything" pattern already used for the card-swap slide. */
-        overflow: visible;
-      }
-
-      /* Separate from .is-expanded on purpose: this needs to stay
-         applied for the whole ~0.35s the tracklist takes to collapse,
-         not just switch off the instant collapsing starts. The base
-         rule's align-items:center recalculates live on every frame the
-         tracklist's height changes — held through the collapse, it
-         was fighting the single .music-stack transform already easing
-         things into place, reading as a bounce. setTracklistExpanded
-         keeps this class applied until the collapse settles, then
-         releases it with its own small FLIP so switching back to
-         centered is itself smooth rather than a snap. Collapsed,
-         resting appearance is completely unaffected — this only ever
-         applies transiently during the expand/collapse motion. */
-      .cream-card--music.is-top-anchored {
-        align-items: flex-start;
-      }
-
-      .music-stack {
-        transition: transform 0.4s ease;
-      }
-
-      /* Heading + CD disappear the instant the tracklist expands (and
-         reappear the instant it collapses) — no fade, just gone, same
-         as everything else in this codebase's phone-mode "no special
-         transition" philosophy. The FLIP logic in setTracklistExpanded
-         already measures whatever layout jump this causes (on top of
-         the align-items switch above) and folds it into the same
-         one-frame cancel-then-release, so nothing extra is needed here
-         to keep it smooth. */
-      .music-stack.is-expanded .music-heading,
-      .music-stack.is-expanded .cd-stack {
-        display: none;
-      }
-    }
-
-    @keyframes spin-cd {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    .player-wrap {
-      position: relative;
-      z-index: 2;
-      width: min(380px, 84vw);
-    }
-
-    /* The real Spotify iframe still does the actual streaming/licensed
-       playback — it's just shrunk to invisible rather than display:none,
-       since fully-hidden iframes can get their audio paused by the
-       browser. Our own UI below drives it via the iFrame API. */
-    .spotify-embed-cage {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      overflow: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-      contain: strict;
-      z-index: -1;
-    }
-    .spotify-embed-cage * {
-      width: 1px !important;
-      height: 1px !important;
-    }
-
-    /* ── Custom player UI (replaces the visible Spotify widget) ── */
-    .wr-player {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .wr-tracklist {
-      list-style: none;
-      border-top: 1px solid rgba(33, 29, 29, 0.25);
-    }
-    .wr-track {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      width: 100%;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(33, 29, 29, 0.25);
-      font-family: var(--font-mono);
-      font-weight: 300;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      color: var(--text);
-      cursor: pointer;
-      background: none;
-      border-left: none;
-      border-right: none;
-      text-align: left;
-      overflow: hidden;
-      max-height: 6rem;
-      opacity: 1;
-      transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease, border-color 0.35s ease;
-    }
-    /* Collapsed state: only the currently active track stays visible —
-       everything else shrinks to nothing rather than being removed
-       from the DOM, so the swap between tracks (and the reveal of the
-       full list) can animate smoothly instead of popping. */
-    .wr-tracklist:not(.is-expanded) .wr-track:not(.is-active) {
-      max-height: 0;
+      right: 0;
+      padding: 28px;
       opacity: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      border-bottom-color: transparent;
-      pointer-events: none;
+      animation: fadeIn 1.8s ease forwards;
+      animation-delay: 0.4s;
+      font-family: var(--font-body);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "desc weather" "contact weather";
+      align-items: end;
     }
 
-    /* Phone: no animated reveal. On phone this should behave like the
-       hamburger nav: press the arrow, the list is just immediately
-       there, and the card grows to fit it — no easing to feel glitchy. */
-    @media (max-width: 650px) {
-      .wr-track {
-        transition: none;
-      }
-    }
-    .wr-track-main {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-    .wr-track-num {
-      flex-shrink: 0;
-      width: 1.1rem;
-      font-size: 13px;
-      opacity: 0.55;
-    }
-    .wr-track-info {
+    .footer-desc { grid-area: desc; }
+    .footer-row { grid-area: contact; display: contents; }
+    .footer-col-left { grid-area: contact; }
+    .footer-col-right { grid-area: weather; }
+
+    .footer-col {
       display: flex;
       flex-direction: column;
-      flex: 1 1 auto;
-      min-width: 0;
-      gap: 0.2rem;
     }
-    .wr-track-title {
-      font-family: var(--font-body);
-      font-weight: 300;
-      text-transform: none;
-      letter-spacing: normal;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .wr-track-artist {
-      font-family: var(--font-body);
-      font-size: 11px;
-      opacity: 0.55;
-      letter-spacing: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .wr-track-thumb {
-      flex-shrink: 0;
-      align-self: center;
-      width: 2.86rem;
-      height: 2.86rem;
-      object-fit: cover;
-      border: 1px solid rgba(33, 29, 29, 0.8);
-      display: block;
-    }
-    .wr-track.is-active { color: var(--wine); }
-    .wr-track.is-active .wr-track-num { opacity: 1; }
-    .wr-track:hover { opacity: 0.7; }
-    /* The currently-playing track shouldn't be selectable — clicking it
-       would just reload/restart the same track it already is. Disabling
-       pointer events also stops the hover dim above from applying. */
-    .wr-track.is-playing { pointer-events: none; cursor: default; }
-    .wr-track.is-playing:hover { opacity: 1; }
 
-    /* Progress bar: same drag pattern as the weather-reel scrollbar,
-       but sharp (no border-radius) and in the cream card's dark-on-
-       cream palette instead of the wine card's cream-on-wine one. */
-    .wr-progress-row {
+    .footer-col-left {
+      align-items: flex-start;
+      transform: scale(0.9);
+      transform-origin: bottom left;
+    }
+
+    .footer-col-right {
+      align-items: flex-end;
+    }
+
+    /* ── World clock / weather block ── */
+    .station {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      /* Small uniform nudge down to match the contact block's top/bottom —
+         purely visual (transform), doesn't touch layout, alignment, or
+         font-size, and applies consistently across every breakpoint since
+         it's on .station itself rather than a per-breakpoint wrapper.
+         Adjust this single value up/down if it needs to move further. */
+      transform: translateY(3px);
+    }
+
+    /* City + time rows reveal independently of the weather row — the time's
+       font-size is derived from the city label, not from the weather fetch,
+       so it shouldn't be held hostage by a slow/hung network request. */
+    .station-row:nth-child(1),
+    .station-row:nth-child(2) {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .station.clock-ready .station-row:nth-child(1),
+    .station.clock-ready .station-row:nth-child(2) {
+      opacity: 1;
+    }
+
+    /* Weather row (icon + temperature) reveals once the fetch settles. */
+    .station-row:nth-child(3) {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .station.is-ready .station-row:nth-child(3) {
+      opacity: 1;
+    }
+
+    .station-row {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
-      width: 100%;
-      margin-bottom: 1.28rem;
+      justify-content: flex-end;
     }
 
-    .wr-progress-hit {
-      flex: 1 1 auto;
-      min-width: 0;
-      padding: 12px 0 10px;
-      cursor: pointer;
-      touch-action: none;
-    }
-    .wr-progress-hit:not(.is-seekable) {
-      cursor: default;
-    }
-    .wr-progress-track {
+    .station-city {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 2.7px;
+      text-transform: uppercase;
+      color: #000000;
+      font-weight: 400;
       position: relative;
-      width: 100%;
-      height: 4px;
-      background: rgba(33, 29, 29, 0.25);
-      pointer-events: none;
-    }
-    .wr-progress-thumb {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: var(--wine);
-      pointer-events: none;
-    }
-    .wr-timer {
-      flex-shrink: 0;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      font-variant-numeric: tabular-nums;
-      color: var(--text);
-      white-space: nowrap;
+      top: -0.9px;
     }
 
-    .wr-controls {
+    .station-time {
+      font-family: var(--font-body);
+      font-size: 34.2px;
+      letter-spacing: 0.9px;
+      color: #000000;
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .station-meta {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 0.44rem;
-      margin-bottom: 0.64rem;
+      gap: 6.3px;
+      font-family: var(--font-body);
+      font-size: 27px;
+      letter-spacing: 0.9px;
+      color: #000000;
     }
-    .wr-ctrl-btn {
-      appearance: none;
-      -webkit-appearance: none;
+
+    .station-icon {
+      width: 32.4px;
+      height: 32.4px;
+      flex-shrink: 0;
+    }
+    .station-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Clickable retry — only appears in place of the icon when the weather
+       fetch has failed. Sized to fill .station-icon exactly (100%/100%), so
+       it automatically matches the normal icon's dimensions at every
+       breakpoint without needing its own separate size rules. Same hairline
+       stroke treatment as the lightbox close/submit icons for consistency. */
+    .station-refresh-btn {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
       border: none;
       background: none;
-      padding: 0;
-      margin: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 1.71rem;
-      color: var(--text);
       cursor: pointer;
-      text-decoration: none;
-    }
-    .wr-ctrl-btn img {
-      height: 100%;
-      width: auto;
-      display: block;
-    }
-    .wr-ctrl-btn:hover { opacity: 0.7; }
-
-    .wr-ctrl-btn--expand svg {
-      height: 100%;
-      width: auto;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    .wr-ctrl-btn--expand.is-expanded svg {
-      transform: rotate(180deg);
     }
 
-    .wr-spotify-link {
-      /* Only shown once the tracklist is expanded (see the sibling
-         rule below) — it has no reason to appear above the single
-         collapsed/active track. */
-      display: none;
-      align-items: center;
-      align-self: flex-end;
-      gap: 0.4rem;
-      margin-top: 1.5rem;
+    .station-refresh-btn svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--text);
+      stroke-width: 1.4;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    /* ── Description block ── */
+  .footer-desc {
+  max-width: 420px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  text-align: left;
+  margin: 0 0 14px 0;
+}
+
+/* ── Contact block ── */
+.contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  text-align: left;
+}
+
+    .contact-label {
       font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 1px;
+      font-size: 15px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text);
+      font-weight: 400;
+    }
+
+    .contact-line {
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      color: #000000;
+      font-weight: 300;
+    }
+
+    .contact-link {
+      color: #000000 !important;
       text-decoration: underline;
-      text-underline-offset: 3px;
     }
-    .wr-tracklist.is-expanded ~ .wr-spotify-link {
-      display: inline-flex;
+    .contact-link:visited,
+    .contact-link:active,
+    .contact-link:hover {
+      color: #000000 !important;
     }
-    .wr-spotify-link svg { flex-shrink: 0; }
-    .wr-spotify-link:hover { opacity: 0.7; }
 
-
-    /* ── Small screens: stack panels, page scrolls, logo turns white ── */
-    @media (max-width: 650px) {
-      html, body {
-        height: auto;
-        overflow-y: auto;
-        overflow-x: hidden;
+    @media (max-width: 760px) {
+      img { max-width: 165px; }
+      .site-footer {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "desc desc" "contact weather";
+        align-items: start;
+        gap: 40px 12px;
+        padding: 20px;
       }
-
-      .viewfinder {
-        position: static;
-        display: grid;
-        width: 100%;
-        height: auto;
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto auto;
-        grid-template-areas:
-          "top"
-          "right"
-          "bottom"
-          "games"
-          "blank";
-      }
-
-      .wine-block--top {
-        height: auto;
-        min-height: 26vh;
-      }
-      .wine-block--bottom {
-        height: auto;
-        min-height: 18vh;
-      }
-      /* Unwrap the card-snap scroller on mobile: its cards become
-         independent grid items, stacked vertically in normal order. */
-      .cream-col {
-        display: contents;
-      }
-      .cream-viewport {
-        display: contents;
-      }
-      .cream-track {
-        display: contents;
-      }
-      .cream-snap-top,
-      .cream-snap-spacer,
-      .cream-track-overflow-spacer {
-        display: none;
-      }
-      .cream-card {
-        width: 100%;
-        height: auto;
-        min-height: 0;
-        scroll-snap-align: none;
-      }
-      .cream-card--music {
-        grid-area: right;
-        min-height: 70vh;
-        padding-bottom: 3.5rem;
-        /* Top-anchored (not centered) specifically so expanding the
-           tracklist can't shift the CD/controls above it — with
-           align-items:center, growing the card's content would have
-           re-centered everything each time, making the CD appear to
-           "move" as the list opened. Anchoring from the top means
-           expanding only ever adds height below the existing content,
-           never repositions it. */
+      .footer-row { display: contents; }
+      .footer-col-left {
         align-items: flex-start;
+        transform: none;
+        align-self: stretch;
       }
-      .cream-card--games {
-        grid-area: games;
-        /* No longer forced to match the music card's height — it
-           sizes to its own content, independent of whether the
-           tracklist above it is expanded. */
-        min-height: 70vh;
-        padding: 1.75rem 1.5rem 1.75rem;
+      .footer-col-right {
+        align-items: flex-end;
+        transform: none;
+        align-self: stretch;
       }
-      .cream-card--blank {
-        grid-area: blank;
-        /* No forced min-height: sizes to its own content, per the
-           About.html-matched spacing above. */
-      }
-
-      .music-stack {
-        margin-top: 3.959375rem;
-      }
-
-      /* header overlays the wine band at the top on mobile, so both
-         the hamburger and the logo need to read against wine */
-      .site-name { color: var(--bg); }
-
-      /* fixed to the top section itself (scrolls away with it), rather
-         than pinned to the viewport for the whole page — matches the
-         original reference page's header behaviour */
-      .header-wrap {
-        position: absolute;
-      }
-    }
-
-    /* ── Landscape block: phones only ──
-       Mirrors the Thoughtline lightbox's visual formatting exactly —
-       same dark wine overlay at 95% opacity, same gemeli-mono uppercase
-       heading treatment, same owners-text body copy. Targets phones in
-       landscape specifically (max-height:500px catches phone landscape
-       heights while leaving tablets/laptops in landscape untouched). No
-       close button — it's not a dismissible dialog, it just disappears
-       on its own once the device is rotated back to portrait. */
-    .landscape-block {
-      display: none;
-    }
-    @media (orientation: landscape) and (max-height: 500px) {
-      .landscape-block {
+      .contact-block {
+        height: 100%;
         display: flex;
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(23, 0, 6, 0.95);
-        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .station {
+        height: 100%;
+        justify-content: space-between;
+      }
+      .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
+      .contact-block { text-align: left; }
+      .station-city { font-size: 15px; letter-spacing: 2px; }
+      .station-time { font-size: 28px; }
+      .station-meta { font-size: 22px; }
+      .station-icon { width: 22px; height: 22px; }
+      .station { width: auto; }
+
+      .lightbox-box {
+        align-items: flex-end;
         justify-content: center;
-        text-align: center;
-        padding: 24px 40px;
+        padding-right: 0;
       }
-      .landscape-block-inner {
-        max-width: 420px;
+      .lightbox-content {
+        padding-bottom: 25px;
+        transform: translateY(32px);
       }
-      .landscape-block-heading {
-        font-family: var(--font-mono);
-        font-weight: 300;
-        font-size: 19px;
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        color: var(--bg);
+    }
+
+    /* ── Phone landscape (short viewport): keep the compact single-row
+         footer instead of the tall stacked portrait layout. Capped at
+         max-height so tablets in landscape (which have plenty of room)
+         keep the normal desktop-style footer untouched. ── */
+    @media (orientation: landscape) and (max-height: 500px) {
+      img { max-width: 110px; }
+
+      .ticker { height: 42px; padding: 0 12px 0 20px; }
+      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
+
+      .site-nav { top: 24px; padding: 36px 20px 14px 20px; width: 33.33vw; }
+
+      .site-footer {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "desc weather" "contact weather";
+        align-items: end;
+        gap: 0;
+        padding: 14px 24px;
+      }
+
+      .footer-row { display: contents; }
+      .footer-col-left {
+        grid-area: contact;
+        align-items: flex-start;
+        transform: none;
+        align-self: end;
+      }
+      .footer-col-right {
+        grid-area: weather;
+        align-items: flex-end;
+        transform: none;
+        align-self: end;
+      }
+
+      .footer-desc {
+        text-align: left;
+        font-size: 12px;
+        line-height: 1.15;
+        max-width: 280px;
         margin: 0 0 16px 0;
+        justify-self: start;
       }
-      .landscape-block-copy {
-        font-family: var(--font-body);
-        font-weight: 300;
+
+      .contact-block { gap: 4px; text-align: left; }
+      .contact-label { font-size: 10px; letter-spacing: 1.5px; }
+      .contact-line { font-size: 11px; }
+
+      .station { gap: 3px; }
+      .station-city { font-size: 11px; letter-spacing: 1.5px; }
+      .station-time { font-size: 18px; }
+      .station-meta { font-size: 14px; gap: 4px; }
+      .station-icon { width: 14px; height: 14px; }
+
+      .lightbox-close {
+        top: 0;
+      }
+
+      .lightbox-box {
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 0 0 24px;
+      }
+      .lightbox-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 40px;
         font-size: 15px;
-        line-height: 1.5;
-        color: var(--bg);
-        margin: 0;
       }
+      .lightbox-copy {
+        flex: 1 1 0;
+        max-width: 340px;
+      }
+      .lightbox-heading {
+        font-size: 19px;
+      }
+
+      .lightbox-form {
+        flex: 1 1 0;
+        max-width: 300px;
+      }
+
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9ZHK592471');
+</script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xxr0mg59uq");
+</script>
 </head>
 <body>
+  <h1 style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Creative direction for conceptually ambitious brands.</h1>
 
-  <div class="landscape-block" role="dialog" aria-label="Rotate device">
-    <div class="landscape-block-inner">
-      <p class="landscape-block-heading">Portrait Only</p>
-      <p class="landscape-block-copy">This page is portrait only. Turn your device back upright to enter.</p>
+  <div class="ticker">
+    <div class="ticker-quote-wrap">
+      <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
     </div>
+    <button type="button" class="ticker-icon-btn" id="tickerLightboxTrigger" aria-label="Open lightbox">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M3,6 L21,12 L3,18 L6.2,12 Z"/>
+      </svg>
+    </button>
   </div>
 
-  <div class="viewfinder">
-    <div class="wine-block wine-block--top">
-      <div class="hero-text">
-        <p class="hero-lead">A space for ideas and distractions.<br>Take a seat while you wait.</p>
-      </div>
-    </div>
-    <div class="cream-col" id="creamCol">
-      <span class="cream-snap-top" aria-hidden="true"></span>
-      <div class="cream-viewport">
-        <div class="cream-track" id="creamTrack">
-          <div class="cream-card cream-card--music">
-            <div class="music-stack">
-              <span class="music-heading">Curated Sounds <span class="em-rule"></span> Autumn 2026</span>
-              <div class="cd-stack">
-                <img src="blank_CD.png" alt="" class="cd-image cd-image--spin" id="cdImage" />
+  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
+    <div class="lightbox-box">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+      </button>
+      <div class="lightbox-content" id="lightboxContent">
+        <div class="lightbox-copy">
+          <p class="lightbox-heading">Thoughtline</p>
+          <p>A creative prompt subscription.<br>A bite of incentive via SMS.</p>
+          <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
+          <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
+          <p>Just thoughts. No wrong answers.<br>(No replies at all, actually &ndash; it&rsquo;s one-way.)</p>
+        </div>
+        <form class="lightbox-form" id="lightboxForm" novalidate>
+          <div class="form-field" data-field="name">
+            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
+            <div class="form-error-msg">Required.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-field form-field--code" data-field="areaCode">
+              <div class="code-input-wrap">
+                <span class="code-prefix" aria-hidden="true">+</span>
+                <input type="text" name="areaCode" placeholder="000" autocomplete="tel-country-code" inputmode="numeric" pattern="[0-9]*" maxlength="3" required>
               </div>
-              <div class="player-wrap">
-                <div class="spotify-embed-cage">
-                  <div id="spotify-embed"></div>
-                </div>
-
-                <div class="wr-player">
-                  <div class="wr-controls">
-                    <button type="button" class="wr-ctrl-btn" id="wrPrevBtn" aria-label="Previous track">
-                      <img src="music-icons/icon-previous.png" alt="">
-                    </button>
-                    <button type="button" class="wr-ctrl-btn" id="wrNextBtn" aria-label="Next track">
-                      <img src="music-icons/icon-next.png" alt="">
-                    </button>
-                    <button type="button" class="wr-ctrl-btn wr-ctrl-btn--play" id="wrPlayBtn" aria-label="Play">
-                      <img id="wrPlayIcon" src="music-icons/icon-play.png" alt="">
-                    </button>
-                    <button type="button" class="wr-ctrl-btn wr-ctrl-btn--expand" id="wrExpandBtn" aria-expanded="false" aria-controls="wrTracklist" aria-label="Show full tracklist">
-                      <svg viewBox="0 0 16 16" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M3.5 6L8 10.5L12.5 6" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </button>
-                  </div>
-
-                  <div class="wr-progress-row" id="wrProgressRow">
-                    <div class="wr-progress-hit is-seekable" id="wrProgressHit">
-                      <div class="wr-progress-track">
-                        <div class="wr-progress-thumb" id="wrProgressThumb"></div>
-                      </div>
-                    </div>
-                    <span class="wr-timer" id="wrTimer">-00:00</span>
-                  </div>
-
-                  <ol class="wr-tracklist" id="wrTracklist">
-                    <li class="wr-track" data-uri="spotify:track:6EOJjwcPgGWe98IDyCsBmY" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">01</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">In The Waiting Line</span>
-                        <span class="wr-track-artist">Zero 7, Sophie Barker</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273e79a1017901613837ea0fca9" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:3ZzhV6JIDKWvWR7wiKWD0C" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">02</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">La femme d&rsquo;argent</span>
-                        <span class="wr-track-artist">Air</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273f175f7e9aa80290164db00a3" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:7DBBuzCuZQaWNRix9ys6UB" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">03</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">Suzuki</span>
-                        <span class="wr-track-artist">Tosca</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273253a1b35c8c2995bebe300af" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:53VS3tjssARzYcVoyG5vXE" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">04</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">All That We Perceive</span>
-                        <span class="wr-track-artist">Thievery Corporation</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273943b30cf86f0edd3fc5a3221" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:7l7Z0eHAZ4uoNho7moZlTv" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">05</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">Modular Mix</span>
-                        <span class="wr-track-artist">Air</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273345d6b305ba4e618ce86749a" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:0KVNBXWdsyZs5dicoOTUyq" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">06</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">Lebanese Blonde</span>
-                        <span class="wr-track-artist">Thievery Corporation</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b273976bc2ace1672ba9400a0662" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:0VcvKN17fqyvbznfwypjDB" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">07</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">Da Du Dah</span>
-                        <span class="wr-track-artist">Korokoro</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b27395ee9ba6913b82d4724ec1f7" alt="">
-                    </li>
-                    <li class="wr-track" data-uri="spotify:track:5lMugQF80AuN6uukFJLT58" tabindex="0" role="button">
-                      <span class="wr-track-main">
-                      <span class="wr-track-num">08</span>
-                      <span class="wr-track-info">
-                        <span class="wr-track-title">Junie</span>
-                        <span class="wr-track-artist">Solange</span>
-                      </span>
-                      </span>
-                      <img class="wr-track-thumb" src="https://i.scdn.co/image/ab67616d0000b2735fbf6306df238e6b7356ac03" alt="">
-                    </li>
-                  </ol>
-
-                  <a class="wr-spotify-link" href="https://open.spotify.com/playlist/0XXOJH57JlfsukZGkiRdKz?si=GlIWVbt0RDirn-0_BI6dfg" target="_blank" rel="noopener noreferrer">
-                    Listen on Spotify
-                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path d="M4 12L12 4M12 4H5.5M12 4V10.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
+              <div class="form-error-msg">Required.</div>
+            </div>
+            <div class="form-field form-field--number" data-field="number">
+              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
+              <div class="form-error-msg">Required.</div>
             </div>
           </div>
-          <div class="cream-card cream-card--games">
-            <div class="games-inner">
-              <div class="games-header">
-                <span>Brain Games</span>
-                <span>Off Paper<sup class="tm">&trade;</sup></span>
-              </div>
-              <p class="games-hero">Newspaper-style games <br class="hero-linebreak">reimagined for brand people.</p>
-              <ul class="games-list">
-                <li>
-                  <a class="games-list-item" href="https://play.sabi.london/word-search" target="_blank" rel="noopener noreferrer">
-                    <span class="games-list-label">Game 01</span>
-                    <span class="games-list-value">Word Search</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="games-list-item" href="https://play.sabi.london/buzzword" target="_blank" rel="noopener noreferrer">
-                    <span class="games-list-label">Game 02</span>
-                    <span class="games-list-value">Buzzword</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <div class="form-consent" data-field="consent">
+            <label class="consent-label">
+              <input type="checkbox" name="consent" required>
+              <span class="consent-box" aria-hidden="true"></span>
+              <span class="consent-text">I agree to receive SABI&rsquo;s weekly prompts by SMS. I understand that I can unsubscribe anytime by texting STOP. I've read the <a href="https://sabi.london/legal" target="_blank" class="consent-link">privacy policy</a>.</span>
+            </label>
+            <div class="form-error-msg consent-error-msg">Required.</div>
           </div>
-          <div class="cream-card cream-card--blank">
-            <div class="footer-divider-mobile" aria-hidden="true"></div>
-            <footer class="site-footer">
-              <div class="footer-col">
-                <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
-                <p class="footer-copyright">© 2026 SABI London</p>
-              </div>
-
-              <div class="footer-col footer-col--contact">
-                <p class="footer-heading">Contact</p>
-                <div class="footer-links">
-                  <a href="mailto:office@sabi.london" target="_blank" rel="noopener">office@sabi.london</a>
-                  <a href="tel:+447400192837">+44 7400 192837</a>
-                  <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
-                </div>
-              </div>
-
-              <div class="footer-col footer-col--services">
-                <p class="footer-heading">Services</p>
-                <div class="footer-links">
-                  <a href="https://sabi.london/services/brand-strategy/">Brand Strategy</a>
-                  <a href="https://sabi.london/services/world-building/">World Building</a>
-                  <a href="https://sabi.london/services/copy/">Copy</a>
-                  <a href="https://sabi.london/services/community-and-partnerships/">Community &amp; Partnerships</a>
-                  <a href="https://sabi.london/services/campaign/">Campaign</a>
-                </div>
-              </div>
-            </footer>
-          </div>
-        </div>
-      </div>
-      <!-- Extra scroll room added on the fly (desktop only) whenever the
-           expanded tracklist is taller than the viewport — see
-           updateCreamTrack(). Keeps the cream column's own scrollbar as
-           the single scrollbar for reading the full tracklist, instead
-           of giving the music card a second, nested one. -->
-      <div class="cream-track-overflow-spacer" id="trackOverflowSpacer" aria-hidden="true"></div>
-      <div class="cream-snap-spacer" aria-hidden="true"></div>
-      <div class="cream-snap-spacer" aria-hidden="true"></div>
-    </div>
-    <div class="wine-block wine-block--bottom">
-      <div class="clocks-wrap">
-        <div class="weather-reel" id="weatherReel">
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>L</span><span>o</span><span>n</span><span>d</span><span>o</span><span>n</span></span></span>
-            <span class="wr-city-time" id="clock-London"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-London"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>N</span><span>e</span><span>w</span><span>&nbsp;</span><span>Y</span><span>o</span><span>r</span><span>k</span></span></span>
-            <span class="wr-city-time" id="clock-New York"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-New York"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>P</span><span>a</span><span>r</span><span>i</span><span>s</span></span></span>
-            <span class="wr-city-time" id="clock-Paris"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Paris"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>T</span><span>o</span><span>k</span><span>y</span><span>o</span></span></span>
-            <span class="wr-city-time" id="clock-Tokyo"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Tokyo"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>M</span><span>i</span><span>l</span><span>a</span><span>n</span></span></span>
-            <span class="wr-city-time" id="clock-Milan"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Milan"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>L</span><span>o</span><span>s</span><span>&nbsp;</span><span>A</span><span>n</span><span>g</span><span>e</span><span>l</span><span>e</span><span>s</span></span></span>
-            <span class="wr-city-time" id="clock-Los Angeles"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Los Angeles"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>S</span><span>e</span><span>o</span><span>u</span><span>l</span></span></span>
-            <span class="wr-city-time" id="clock-Seoul"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Seoul"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name wr-city-name--small"><span class="wr-city-inner"><span>C</span><span>o</span><span>p</span><span>e</span><span>n</span><span>h</span><span>a</span><span>g</span><span>e</span><span>n</span></span></span>
-            <span class="wr-city-time" id="clock-Copenhagen"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Copenhagen"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-          <div class="wr-block">
-            <span class="wr-city-name"><span class="wr-city-inner"><span>B</span><span>e</span><span>r</span><span>l</span><span>i</span><span>n</span></span></span>
-            <span class="wr-city-time" id="clock-Berlin"><span class="wr-time-inner"><span data-h1>0</span><span data-h2>0</span><span class="wr-time-colon">:</span><span data-m1>0</span><span data-m2>0</span></span></span>
-            <span class="wr-city-weather" id="weather-Berlin"><span class="wr-icon" data-icon></span><span data-temp>--°C</span><span class="wr-refresh-text" data-refresh-text hidden>UPDATE<br>WEATHER</span></span>
-          </div>
-        </div>
-        <div class="weather-scrollbar-hit" id="weatherScrollbarTrack">
-          <div class="weather-scrollbar-track">
-            <div class="weather-scrollbar-thumb" id="weatherScrollbarThumb"></div>
-          </div>
-        </div>
-        <div class="weather-tagline">
-          <span>All the good ideas are outside</span>
-        </div>
+          <button type="submit" class="lightbox-submit" aria-label="Submit">
+            <svg viewBox="0 0 60 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14 4 L14 14 Q14 20 20 20 L56 20"/>
+              <polyline points="44 10 56 20 44 30"/>
+            </svg>
+          </button>
+        </form>
+        <p class="form-success" id="formSuccess">You&rsquo;re on the list :)<br>Text you l8r</p>
       </div>
     </div>
   </div>
 
-  <div class="header-wrap">
-    <header class="site-header">
-      <div class="menu-btn-wrap">
-        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-        </button>
-        <nav class="menu-accordion" id="menuAccordion">
-          <div class="menu-list">
-            <a href="https://sabi.london/about/">About</a>
-            <a href="https://sabi.london/services/">Services</a>
-            <a href="https://play.sabi.london/word-search/" class="menu-link--disabled" aria-disabled="true" tabindex="-1">Play</a>
-          </div>
-        </nav>
+  <nav class="site-nav">
+    <a href="https://sabi.london/about" class="nav-link">About</a>
+    <a href="https://sabi.london/services/"class="nav-link">Services</a>
+    <a href="https://play.sabi.london/" class="nav-link">Play</a>
+  </nav>
+
+  <img src="sabi-logo.png" alt="SABI">
+
+  <footer class="site-footer">
+    <p class="footer-desc">A creative consultancy offering strategy and design <br class="desc-break">for culture-shaping presence and storytelling.</p>
+
+    <div class="footer-row">
+      <div class="footer-col footer-col-left">
+        <div class="contact-block">
+          <span class="contact-label">Contact</span>
+          <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
+          <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
+        </div>
       </div>
-      <a href="https://sabi.london/" class="site-name">S A B I</a>
-    </header>
-  </div>
+
+      <div class="footer-col footer-col-right">
+        <div class="station" id="station">
+          <div class="station-row">
+            <span class="station-city">London</span>
+          </div>
+          <div class="station-row">
+            <span class="station-time" data-time>--:--</span>
+          </div>
+          <div class="station-row">
+            <span class="station-meta">
+              <span class="station-icon" data-icon></span>
+              <span data-temp>--°C</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    const menuBtn = document.getElementById('menuBtn');
-    const menuAccordion = document.getElementById('menuAccordion');
-    const heroText = document.querySelector('.hero-text');
-    const clocksWrap = document.querySelector('.clocks-wrap');
+    // ── Typewriter quote reel (replaces the old scrolling ticker) ──
+    const TICKER_QUOTES = [
+      'All the good ideas are outside',
+      'No detail too casual',
+      'Signed, on and off paper',
+      'We saw you see it first',
+      'Tuesday afternoons are cancelled',
+      'The business of good impressions'
+      // Add a 6th quote here as another string in the array, if needed.
+    ];
 
-    menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = menuAccordion.classList.toggle('open');
-      menuBtn.classList.toggle('open', isOpen);
-      menuBtn.setAttribute('aria-expanded', isOpen);
+    const TYPE_SPEED_MS = 83;      // per character, typing (1.5x slower than before)
+    const DELETE_SPEED_MS = 45;    // per character, deleting (1.5x slower than before)
+    const HOLD_MS = 3500;          // pause once fully typed
+    const GAP_MS = 400;            // pause once fully deleted, before next quote
 
-      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
-      const offset = menuAccordion.scrollHeight;
+    const tickerQuoteEl = document.getElementById('tickerQuote');
 
-      if (isDesktop) {
-        // Transform-only, and only on the hero copy: transform never
-        // grows the grid row or clips content, and there's already a
-        // natural gap between the hero paragraph and the weather reel
-        // (which sits flush against the bottom of its own row), so the
-        // reel doesn't need to move too — doing so was pushing it off
-        // the bottom of the viewport entirely, since it had nowhere
-        // left to go.
-        const shift = isOpen ? `translateY(${offset}px)` : 'translateY(0)';
-        if (heroText) {
-          heroText.style.transform = shift;
-          heroText.style.marginTop = '0px';
-        }
-        if (clocksWrap) {
-          clocksWrap.style.transform = '';
-        }
-      } else {
-        if (heroText) {
-          heroText.style.marginTop = isOpen ? offset + 'px' : '0px';
-          heroText.style.transform = '';
-        }
-        if (clocksWrap) {
-          clocksWrap.style.transform = '';
+    function typewriterLoop(index = 0) {
+      const quote = TICKER_QUOTES[index];
+      let charIndex = 0;
+
+      function typeChar() {
+        tickerQuoteEl.textContent = quote.slice(0, charIndex);
+        charIndex++;
+        if (charIndex <= quote.length) {
+          setTimeout(typeChar, TYPE_SPEED_MS);
+        } else {
+          setTimeout(deleteChar, HOLD_MS);
         }
       }
-    });
-  </script>
 
-  <!-- ── World clocks + weather ── -->
-  <script>
-    const WR_ICONS = {
+      function deleteChar() {
+        charIndex--;
+        tickerQuoteEl.textContent = quote.slice(0, charIndex);
+        if (charIndex > 0) {
+          setTimeout(deleteChar, DELETE_SPEED_MS);
+        } else {
+          const nextIndex = (index + 1) % TICKER_QUOTES.length;
+          setTimeout(() => typewriterLoop(nextIndex), GAP_MS);
+        }
+      }
+
+      typeChar();
+    }
+
+    if (tickerQuoteEl && TICKER_QUOTES.length) {
+      typewriterLoop(0);
+    }
+
+    // ── Lightbox, triggered by the ticker's arrow icon ──
+    const smsLightbox = document.getElementById('smsLightbox');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const tickerLightboxTrigger = document.getElementById('tickerLightboxTrigger');
+
+    function openLightbox() {
+      smsLightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      smsLightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    tickerLightboxTrigger.addEventListener('click', openLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    smsLightbox.addEventListener('click', (e) => {
+      if (e.target === smsLightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && smsLightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+
+    // ── Sign-up form: digits-only area code, and custom validation that
+    //    only flags a field once a submit attempt has actually failed ──
+    const lightboxForm = document.getElementById('lightboxForm');
+    const areaCodeInput = lightboxForm.querySelector('input[name="areaCode"]');
+    const formSuccess = document.getElementById('formSuccess');
+    const lightboxContent = document.getElementById('lightboxContent');
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzDo7B7pz9AsWq5Wd5lRDh37Pyhe6dqL_-Uyx-vQkAPbAIpoexq47138wB_Rv7iMLb6w/exec';
+
+    areaCodeInput.addEventListener('input', () => {
+      areaCodeInput.value = areaCodeInput.value.replace(/\D/g, '').slice(0, 3);
+    });
+
+    function fieldWrapper(field) {
+      return field.closest('[data-field]');
+    }
+
+    function clearError(field) {
+      const wrapper = fieldWrapper(field);
+      if (!wrapper) return;
+      wrapper.classList.remove('has-error');
+      const codeWrap = wrapper.querySelector('.code-input-wrap');
+      if (codeWrap) codeWrap.classList.remove('has-error');
+      if (wrapper.classList.contains('consent-label')) wrapper.classList.remove('has-error');
+    }
+
+    lightboxForm.querySelectorAll('input').forEach((input) => {
+      const evt = input.type === 'checkbox' ? 'change' : 'input';
+      input.addEventListener(evt, () => clearError(input));
+    });
+
+    lightboxForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let firstInvalid = null;
+
+      lightboxForm.querySelectorAll('[required]').forEach((input) => {
+        const isCheckbox = input.type === 'checkbox';
+        const invalid = isCheckbox ? !input.checked : input.value.trim() === '';
+        const wrapper = fieldWrapper(input);
+        if (!wrapper) return;
+
+        if (invalid) {
+          wrapper.classList.add('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.add('has-error');
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          wrapper.classList.remove('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.remove('has-error');
+        }
+      });
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      // All valid — assemble the payload with keys matching the Google Sheet
+      // column headers exactly, then send to Google Apps Script.
+      const payload = {
+        'TIMESTAMP': new Date().toISOString(),
+        'NAME': lightboxForm.querySelector('input[name="name"]').value.trim(),
+        'COUNTRY CODE': '+' + areaCodeInput.value.trim(),
+        'MOBILE NUMBER': lightboxForm.querySelector('input[name="number"]').value.trim(),
+        'CONSENT': true
+      };
+
+      // Show success immediately — don't wait on the network request.
+      // Disabling the button too is a second safeguard: even a very fast
+      // double-click can't fire this handler twice once it's disabled.
+      const submitBtn = lightboxForm.querySelector('.lightbox-submit');
+      if (submitBtn) submitBtn.disabled = true;
+
+      // On the mobile layout the lightbox is bottom-anchored, so if the
+      // form (tall) is simply swapped for the success message (short)
+      // the whole block collapses and re-anchors lower on screen,
+      // dragging the heading/copy down with it. Locking in the box's
+      // current height before hiding the form keeps the heading/copy
+      // exactly where they were, and lets the success message land in
+      // the space the form used to occupy (right where "Name" was).
+      if (window.matchMedia('(max-width: 760px)').matches) {
+        lightboxContent.style.minHeight = lightboxContent.offsetHeight + 'px';
+      }
+      lightboxForm.style.display = 'none';
+      formSuccess.classList.add('is-visible');
+
+      // no-cors: Apps Script doesn't send CORS headers back, so the response
+      // is opaque — we can't read it, but the request still goes through.
+      // Fired without awaiting it, so a slow/cold-start Apps Script response
+      // can't hold up the UI.
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      }).catch((err) => console.error('Sign-up submit failed', err));
+    });
+
+    // ── Hairline weather icons, matched to Open-Meteo WMO weather codes ──
+    const ICONS = {
       clear: 'clear',
       moon: 'moon',
       partlyCloudy: 'partlyCloudy',
@@ -1699,901 +1183,247 @@
       storm: 'storm'
     };
 
-    function wrIconForCode(code, isDay) {
-      if (code === 0) return isDay ? WR_ICONS.clear : WR_ICONS.moon;
-      if ([1, 2].includes(code)) return isDay ? WR_ICONS.partlyCloudy : WR_ICONS.partlyCloudyNight;
-      if (code === 3) return WR_ICONS.cloud;
-      if ([45, 48].includes(code)) return WR_ICONS.fog;
-      if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return WR_ICONS.rain;
-      if ([71, 73, 75, 77, 85, 86].includes(code)) return WR_ICONS.snow;
-      if ([95, 96, 99].includes(code)) return WR_ICONS.storm;
-      return WR_ICONS.cloud;
+    function iconForCode(code, isDay) {
+      if (code === 0) return isDay ? ICONS.clear : ICONS.moon;
+      if ([1,2].includes(code)) return isDay ? ICONS.partlyCloudy : ICONS.partlyCloudyNight;
+      if (code === 3) return ICONS.cloud;
+      if ([45,48].includes(code)) return ICONS.fog;
+      if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return ICONS.rain;
+      if ([71,73,75,77,85,86].includes(code)) return ICONS.snow;
+      if ([95,96,99].includes(code)) return ICONS.storm;
+      return ICONS.cloud;
     }
 
-    const WR_CITIES = [
-      { id: 'London', lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
-      { id: 'New York', lat: 40.7128, lon: -74.0060, tz: 'America/New_York' },
-      { id: 'Paris', lat: 48.8566, lon: 2.3522, tz: 'Europe/Paris' },
-      { id: 'Tokyo', lat: 35.6762, lon: 139.6503, tz: 'Asia/Tokyo' },
-      { id: 'Milan', lat: 45.4642, lon: 9.1900, tz: 'Europe/Rome' },
-      { id: 'Los Angeles', lat: 34.0522, lon: -118.2437, tz: 'America/Los_Angeles' },
-      { id: 'Seoul', lat: 37.5665, lon: 126.9780, tz: 'Asia/Seoul' },
-      { id: 'Copenhagen', lat: 55.6761, lon: 12.5683, tz: 'Europe/Copenhagen' },
-      { id: 'Berlin', lat: 52.5200, lon: 13.4050, tz: 'Europe/Berlin' }
-    ];
+    const LONDON = { lat: 51.5074, lon: -0.1278, tz: 'Europe/London' };
+    const panel = document.querySelector('.station');
 
-    function wrUpdateClock(city) {
-      const timeCell = document.getElementById('clock-' + city.id);
-      if (!timeCell) return;
-      const timeStr = new Date().toLocaleTimeString('en-GB', {
-        timeZone: city.tz,
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-GB', {
+        timeZone: LONDON.tz,
         hour: '2-digit',
         minute: '2-digit'
       });
-      const [hh, mm] = timeStr.split(':');
-      timeCell.querySelector('[data-h1]').textContent = hh[0];
-      timeCell.querySelector('[data-h2]').textContent = hh[1];
-      timeCell.querySelector('[data-m1]').textContent = mm[0];
-      timeCell.querySelector('[data-m2]').textContent = mm[1];
+      panel.querySelector('[data-time]').textContent = timeStr;
+      // Re-fit the time font-size to match the city label's width every tick —
+      // not just on load/resize — since different digits render at slightly
+      // different widths and the match would otherwise go stale between ticks.
+      // Guarded to only run after the initial reveal so it doesn't race the
+      // webfont-loading sequencing handled in initClockReveal() below.
+      if (panel.classList.contains('clock-ready')) {
+        matchStationRowWidths();
+      }
     }
 
-    async function wrUpdateWeather(city) {
-      const weatherCell = document.getElementById('weather-' + city.id);
-      if (!weatherCell) return;
+    // City + time reveal: waits only on webfonts (needed so the width-match
+    // measures against real font metrics, not a fallback font), never on the
+    // weather fetch. This is what actually needs to happen "together" with
+    // the city row, since the time's font-size is derived from it.
+    async function initClockReveal() {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      matchStationRowWidths();
+      matchLeftColumnHeightToStation();
+      panel.classList.add('clock-ready');
+    }
+
+    async function updateWeather() {
       try {
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code,is_day`);
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LONDON.lat}&longitude=${LONDON.lon}&current=temperature_2m,weather_code,is_day`);
         const data = await res.json();
         const temp = Math.round(data.current.temperature_2m);
         const code = data.current.weather_code;
         const isDay = data.current.is_day === 1;
-        weatherCell.classList.remove('is-error');
-        weatherCell.querySelector('[data-temp]').textContent = `${temp}°C`;
-        const iconName = wrIconForCode(code, isDay);
-        weatherCell.querySelector('[data-icon]').innerHTML =
-          `<img src="/icons-cream/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
+        panel.querySelector('[data-temp]').textContent = `${temp}°C`;
+        const iconName = iconForCode(code, isDay);
+        panel.querySelector('[data-icon]').innerHTML =
+          `<img src="icons/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
       } catch (e) {
-        weatherCell.classList.add('is-error');
-        weatherCell.querySelector('[data-temp]').textContent = '';
-        weatherCell.querySelector('[data-icon]').innerHTML =
-          `<button type="button" class="wr-refresh-btn" aria-label="Retry weather">
+        panel.querySelector('[data-temp]').textContent = '';
+        panel.querySelector('[data-icon]').innerHTML =
+          `<button type="button" class="station-refresh-btn" aria-label="Retry weather">
              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                <polyline points="1 4 1 10 7 10"/>
                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
              </svg>
            </button>`;
-        const retryBtn = weatherCell.querySelector('.wr-refresh-btn');
-        if (retryBtn) retryBtn.addEventListener('click', () => wrUpdateWeather(city));
+        const retryBtn = panel.querySelector('.station-refresh-btn');
+        if (retryBtn) retryBtn.addEventListener('click', updateWeather);
+      } finally {
+        // Same webfont-readiness guard as initClockReveal(), applied here so
+        // the weather row's icon/temperature width-match is also measured
+        // against real font metrics rather than a fallback font.
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+        panel.classList.add('is-ready');
       }
     }
 
-    // Measure natural (unconstrained) content width of a space-between
-    // flex row — temporarily switch it to shrink-to-fit so we get its
-    // real minimum width instead of whatever width we last gave it.
-    function wrNaturalWidth(el) {
-      if (!el) return 0;
-      const prevDisplay = el.style.display;
-      const prevWidth = el.style.width;
-      const prevJustify = el.style.justifyContent;
-      el.style.display = 'inline-flex';
-      el.style.width = 'auto';
-      el.style.justifyContent = 'flex-start';
-      const width = el.getBoundingClientRect().width;
-      el.style.display = prevDisplay;
-      el.style.width = prevWidth;
-      el.style.justifyContent = prevJustify;
-      return width;
+    updateClock();
+    initClockReveal();
+    updateWeather();
+    setInterval(updateClock, 1000);
+    // No periodic refresh — a failed fetch now shows a clickable retry icon
+    // instead (see the catch block above), which is a more direct fix for
+    // the one scenario this interval was actually covering.
+
+    // ── Force all three station rows (city/time/meta) to share the exact same width ──
+    function matchStationRowWidths() {
+      const cityEl = document.querySelector('.station-city');
+      const timeEl = document.querySelector('.station-time');
+      const metaEl = document.querySelector('.station-meta');
+      if (!cityEl || !timeEl || !metaEl) return;
+
+      // Reset any previous scaling before measuring fresh
+      timeEl.style.fontSize = '';
+      metaEl.style.fontSize = '';
+
+      const cityWidth = cityEl.getBoundingClientRect().width;
+
+      const timeWidth = timeEl.getBoundingClientRect().width;
+      const timeFontSize = parseFloat(getComputedStyle(timeEl).fontSize);
+      if (timeWidth > 0) {
+        const newTimeSize = timeFontSize * (cityWidth / timeWidth);
+        timeEl.style.fontSize = newTimeSize + 'px';
+      }
+
+      const metaIcon = metaEl.querySelector('.station-icon');
+      const metaTemp = metaEl.querySelector('[data-temp]');
+      if (metaIcon && metaTemp) {
+        const iconWidth = metaIcon.getBoundingClientRect().width;
+        const gapPx = parseFloat(getComputedStyle(metaEl).gap) || 0;
+        const tempWidth = metaTemp.getBoundingClientRect().width;
+        const tempFontSize = parseFloat(getComputedStyle(metaTemp).fontSize) || parseFloat(getComputedStyle(metaEl).fontSize);
+        const availableForText = cityWidth - iconWidth - gapPx;
+        if (tempWidth > 0 && availableForText > 0) {
+          const newTempSize = tempFontSize * (availableForText / tempWidth);
+          metaTemp.style.fontSize = newTempSize + 'px';
+        }
+      }
     }
 
-    // Card width is driven by the TIME row's natural content width (plus
-    // weather as a safety floor) — NOT the city name. Because both
-    // .wr-city-inner and .wr-time-inner use width:100% + space-between,
-    // the city name automatically stretches to match this exact same
-    // width; they're locked together by construction, so they always
-    // align, and narrowing the time row narrows the whole card.
-    function matchWrBlockWidths() {
-      const blocks = document.querySelectorAll('.wr-block');
-      const reel = document.getElementById('weatherReel');
-      if (!blocks.length || !reel) return;
+    window.addEventListener('load', matchStationRowWidths);
 
-      let naturalMax = 0;
-      blocks.forEach((block) => {
-        const nameInner = block.querySelector('.wr-city-inner');
-        const timeInner = block.querySelector('.wr-time-inner');
-        const weatherEl = block.querySelector('.wr-city-weather');
-        const w = Math.max(
-          wrNaturalWidth(nameInner),
-          wrNaturalWidth(timeInner),
-          wrNaturalWidth(weatherEl)
-        );
-        if (w > naturalMax) naturalMax = w;
+    // The very first measurement can run before the Typekit font
+    // ('owners-text') has actually finished loading — if it measures
+    // against the browser's fallback font instead, the font-size scale
+    // it calculates is wrong once the real font swaps in. Re-run once
+    // the real webfont is confirmed loaded to correct for that.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
       });
-      const cardWidth = Math.ceil(naturalMax) + 24; // covers the block's own left/right padding + a bit of extra breathing room
-      blocks.forEach((block) => {
-        block.style.width = cardWidth + 'px';
-      });
-
-      // Reset gap to measure the reel's true available width first,
-      // then solve for the gap that spaces exactly N cards across it.
-      reel.style.gap = '0px';
-      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
-      const visibleCount = isDesktop ? 5 : 3;
-      const availableWidth = reel.clientWidth;
-      const minGap = 16;
-      const rawGap = (availableWidth - visibleCount * cardWidth) / (visibleCount - 1);
-      const gap = Math.max(minGap, rawGap);
-      reel.style.gap = gap + 'px';
-
-      wrUpdateThumb();
     }
 
-    async function wrInit() {
-      const weatherPromises = WR_CITIES.map((city) => {
-        wrUpdateClock(city);
-        setInterval(() => wrUpdateClock(city), 1000);
-        return wrUpdateWeather(city);
-      });
-      // No periodic refresh — a failed fetch shows a clickable retry icon
-      // instead (see the catch block in wrUpdateWeather), same approach
-      // as the Home page's weather block.
-      await Promise.all(weatherPromises);
-      matchWrBlockWidths();
-      document.getElementById('weatherReel').classList.add('is-ready');
+    // Debounced instead of running on every single resize tick — rotating
+    // a phone fires a burst of resize events while the viewport is still
+    // mid-transition, and measuring during that burst risks writing an
+    // unstable font-size value.
+    let stationResizeTimer;
+    function scheduleMatchStationRowWidths() {
+      clearTimeout(stationResizeTimer);
+      stationResizeTimer = setTimeout(matchStationRowWidths, 250);
     }
+    window.addEventListener('resize', scheduleMatchStationRowWidths);
 
-    wrInit();
-    window.addEventListener('resize', matchWrBlockWidths);
-  </script>
+    // ── On mobile, centre the logo within the empty space between nav and footer.
+    //    On desktop, leave it to the default flex centering (dead-centre of the page). ──
+    function centreLogoInMainBlock() {
+      const logo = document.querySelector('img');
+      const nav = document.querySelector('.site-nav');
+      const footer = document.querySelector('.site-footer');
+      if (!logo || !nav || !footer) return;
 
-  <!-- ── Weather reel: custom scrollbar (Typeform-style progress bar) ── -->
-  <script>
-    const wrReel = document.getElementById('weatherReel');
-    const wrTrack = document.getElementById('weatherScrollbarTrack');
-    const wrThumb = document.getElementById('weatherScrollbarThumb');
+      const isPhone = window.innerWidth <= 760 ||
+        (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
 
-    function wrMaxScroll() {
-      return Math.max(0, wrReel.scrollWidth - wrReel.clientWidth);
-    }
-
-    function wrUpdateThumb() {
-      const max = wrMaxScroll();
-      // Thumb width mirrors how much of the reel is visible at once
-      // (e.g. 5 of 9 blocks visible → thumb covers 5/9 of the track).
-      const widthRatio = Math.min(1, wrReel.clientWidth / wrReel.scrollWidth);
-      const widthPct = widthRatio * 100;
-      wrThumb.style.width = widthPct + '%';
-
-      const scrollRatio = max > 0 ? wrReel.scrollLeft / max : 0;
-      const trackWidth = wrTrack.clientWidth;
-      const thumbWidthPx = (widthPct / 100) * trackWidth;
-      const maxThumbLeft = trackWidth - thumbWidthPx;
-      wrThumb.style.left = (scrollRatio * maxThumbLeft) + 'px';
-    }
-
-    function wrScrollToRatio(ratio) {
-      const max = wrMaxScroll();
-      wrReel.scrollLeft = Math.min(max, Math.max(0, ratio * max));
-    }
-
-    function wrRatioFromClientX(clientX) {
-      const rect = wrTrack.getBoundingClientRect();
-      const thumbWidthPx = wrThumb.getBoundingClientRect().width;
-      const usable = Math.max(1, rect.width - thumbWidthPx);
-      const x = clientX - rect.left - thumbWidthPx / 2;
-      return Math.min(1, Math.max(0, x / usable));
-    }
-
-    let wrDragging = false;
-
-    wrTrack.addEventListener('pointerdown', (e) => {
-      wrDragging = true;
-      wrTrack.setPointerCapture(e.pointerId);
-      wrReel.style.scrollBehavior = 'auto';
-      wrScrollToRatio(wrRatioFromClientX(e.clientX));
-    });
-    wrTrack.addEventListener('pointermove', (e) => {
-      if (!wrDragging) return;
-      wrScrollToRatio(wrRatioFromClientX(e.clientX));
-    });
-    wrTrack.addEventListener('pointerup', (e) => {
-      wrDragging = false;
-      wrTrack.releasePointerCapture(e.pointerId);
-      wrReel.style.scrollBehavior = 'smooth';
-    });
-    wrTrack.addEventListener('pointercancel', () => {
-      wrDragging = false;
-      wrReel.style.scrollBehavior = 'smooth';
-    });
-
-    wrReel.addEventListener('scroll', wrUpdateThumb);
-    window.addEventListener('resize', wrUpdateThumb);
-    wrUpdateThumb();
-  </script>
-
-  <!-- ── Tracklist expand/collapse: independent of the Spotify controller,
-       so it works even before the iFrame API finishes loading ── -->
-  <script>
-    const wrExpandBtn = document.getElementById('wrExpandBtn');
-    const wrTracklistEl = document.getElementById('wrTracklist');
-    const musicCardEl = document.querySelector('.cream-card--music');
-    const musicStackEl = document.querySelector('.music-stack');
-    const wrControlsEl = document.querySelector('.wr-controls');
-    let topAnchorReleaseTimeout = null;
-
-    // Desktop only: computes how far .music-stack needs to move so the
-    // top of the controls row (prev/play/next/expand) lines up with the
-    // top of the hero paragraph on the wine side. Must be called with
-    // .music-stack's own transform cleared first (see callers below) so
-    // the measurement reflects its untransformed, flex-start-anchored
-    // position rather than compounding on top of a previous shift.
-    function computeHeroAlignDelta() {
-      const heroLeadEl = document.querySelector('.hero-lead');
-      if (!heroLeadEl || !wrControlsEl) return 0;
-      const targetY = heroLeadEl.getBoundingClientRect().top;
-      const currentTop = wrControlsEl.getBoundingClientRect().top;
-      return targetY - currentTop;
-    }
-
-    // Recomputes and re-applies the hero-alignment transform without
-    // any FLIP animation — used on resize, where there's no discrete
-    // class-toggle jump to compensate for, just a target position that
-    // may have moved.
-    function updateMusicStackOffset() {
-      if (!musicStackEl) return;
-
-      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
-      if (!isDesktop || !musicStackEl.classList.contains('is-expanded')) {
-        musicStackEl.style.transform = '';
+      if (!isPhone) {
+        // Desktop: clear any inline overrides so the body's flexbox centering
+        // (justify-content/align-items: center) places the logo dead-centre
+        // of the full viewport, both horizontally and vertically.
+        logo.style.position = '';
+        logo.style.left = '';
+        logo.style.top = '';
+        logo.style.transform = '';
         return;
       }
 
-      musicStackEl.style.transform = '';
-      void musicStackEl.getBoundingClientRect(); // force reflow before measuring
-      musicStackEl.style.transform = `translateY(${computeHeroAlignDelta()}px)`;
+      const navBottom = nav.getBoundingClientRect().bottom;
+      const footerHeight = footer.getBoundingClientRect().height;
+      const viewportHeight = window.innerHeight;
+      const availableMid = navBottom + (viewportHeight - navBottom - footerHeight) / 2;
+
+      logo.style.position = 'fixed';
+      logo.style.left = '50%';
+      logo.style.top = availableMid + 'px';
+      logo.style.transform = 'translate(-50%, -50%)';
     }
 
-    function setTracklistExpanded(expanded) {
-      const isDesktop = window.matchMedia('(min-width: 651px)').matches;
+    window.addEventListener('load', centreLogoInMainBlock);
+    window.addEventListener('resize', centreLogoInMainBlock);
+    setTimeout(centreLogoInMainBlock, 100);
 
-      // FLIP: toggling .is-expanded here causes a discrete,
-      // non-animatable layout jump — the heading + CD instantly
-      // disappear (see .music-stack.is-expanded CSS). Rather than
-      // choreograph that separately, this just measures the effect:
-      // capture the position right before toggling the classes, then
-      // right after (with .music-stack's transform cleared, so this
-      // reflects pure layout, not a previous transform), and use the
-      // difference as a one-frame instant transform that cancels the
-      // jump — released on the very next frame so only the *real*
-      // move (to the hero-aligned target, or back to 0 on collapse)
-      // animates via .music-stack's own transform transition.
-      //
-      // .cream-card--music also carries its own transform — set
-      // directly by the scroll handler (updateCreamTrack) to reveal
-      // tracklist overflow as the user scrolls, with no transition of
-      // its own. If that's left at a nonzero value here (e.g. the user
-      // had scrolled down before collapsing), it snaps back to 0
-      // separately and instantly once updateCreamTrack recalculates —
-      // reading as a second, disconnected motion on top of
-      // .music-stack's smooth one. Clearing it before "last" is
-      // captured folds that snap into the same FLIP measurement, so
-      // the whole thing cancels and releases as a single move.
-      const first = isDesktop && musicStackEl ? musicStackEl.getBoundingClientRect() : null;
+    // ── Desktop only: match total height of (description + contact) to the weather block ──
+    function matchLeftColumnHeightToStation() {
+      const desc = document.querySelector('.footer-desc');
+      const contact = document.querySelector('.footer-col-left');
+      const station = document.querySelector('.station');
+      if (!desc || !contact || !station) return;
 
-      // Cancel any pending release-from-top-anchor left over from a
-      // previous collapse, in case the user re-expands before it's
-      // fired (see the bottom of this function).
-      if (topAnchorReleaseTimeout) {
-        clearTimeout(topAnchorReleaseTimeout);
-        topAnchorReleaseTimeout = null;
-      }
+      // Always clear any previously-written inline values FIRST, before the
+      // desktop-only check below. Rotating a phone to landscape can push its
+      // width over 760px, letting this function run and write a custom
+      // gap/margin for that wide layout — then rotating back to portrait
+      // (width <= 760) was hitting the early return below and leaving that
+      // leftover landscape-calculated spacing permanently baked in. This is
+      // the actual cause of the block appearing taller after rotating back.
+      desc.style.marginBottom = '';
+      station.style.gap = '';
 
-      wrExpandBtn.classList.toggle('is-expanded', expanded);
-      wrExpandBtn.setAttribute('aria-expanded', String(expanded));
-      wrTracklistEl.classList.toggle('is-expanded', expanded);
-      musicCardEl.classList.toggle('is-expanded', expanded);
-      musicStackEl.classList.toggle('is-expanded', expanded);
+      if (window.innerWidth <= 760) return;
 
-      // .is-top-anchored is added immediately on expand, but
-      // deliberately *not* removed immediately on collapse — see the
-      // release step below.
-      if (expanded && musicCardEl) {
-        musicCardEl.classList.add('is-top-anchored');
-      }
+      const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
+      const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
 
-      if (!isDesktop) return; // Phone: normal document flow, nothing else to do.
+      const stationHeight = station.getBoundingClientRect().height;
+      const descHeight = desc.getBoundingClientRect().height;
+      const contactHeight = contact.getBoundingClientRect().height;
+      const leftTotal = descHeight + baseMarginBottom + contactHeight;
 
-      musicStackEl.style.transform = '';
-      if (musicCardEl) musicCardEl.style.transform = '';
-      void musicStackEl.getBoundingClientRect(); // force reflow before measuring "last"
-      const last = musicStackEl.getBoundingClientRect();
-      const flipDelta = first ? first.top - last.top : 0;
-      const targetDelta = expanded ? computeHeroAlignDelta() : 0;
+      const diff = leftTotal - stationHeight;
 
-      if (flipDelta) {
-        musicStackEl.style.transition = 'none';
-        musicStackEl.style.transform = `translateY(${flipDelta}px)`;
-        musicStackEl.getBoundingClientRect(); // force reflow before releasing
-        requestAnimationFrame(() => {
-          musicStackEl.style.transition = '';
-          musicStackEl.style.transform = `translateY(${targetDelta}px)`;
-        });
+      if (diff > 0) {
+        // Left column is taller — stretch the station's internal gaps to match
+        const extraPerGap = diff / 2; // 2 gaps between the 3 station rows
+        station.style.gap = (baseStationGap + extraPerGap) + 'px';
       } else {
-        musicStackEl.style.transform = `translateY(${targetDelta}px)`;
-      }
-
-      // Re-syncs the scroll-driven overflow transform on .cream-card
-      // --music for the tracklist's new (settled) height. Harmless to
-      // run right away even mid-FLIP: collapsing always resolves to 0
-      // overflow, and expanding starts from a scrollTop of 0, so this
-      // won't reintroduce the jump just cancelled above.
-      if (window.wrUpdateCreamTrack) {
-        window.wrUpdateCreamTrack();
-        setTimeout(window.wrUpdateCreamTrack, 400);
-      }
-
-      if (!expanded && musicCardEl) {
-        // .is-top-anchored has been held through the collapse (see
-        // above and its CSS comment) so the browser doesn't
-        // live-recenter while the tracklist is shrinking. Once that's
-        // had time to settle, release it back to the default
-        // align-items:center — with its own small FLIP, so that
-        // switch is smooth too, rather than a final snap.
-        topAnchorReleaseTimeout = setTimeout(() => {
-          topAnchorReleaseTimeout = null;
-          const beforeRelease = musicStackEl.getBoundingClientRect();
-          musicCardEl.classList.remove('is-top-anchored');
-          void musicStackEl.getBoundingClientRect(); // force reflow
-          const afterRelease = musicStackEl.getBoundingClientRect();
-          const releaseDelta = beforeRelease.top - afterRelease.top;
-          if (releaseDelta) {
-            musicStackEl.style.transition = 'none';
-            musicStackEl.style.transform = `translateY(${releaseDelta}px)`;
-            musicStackEl.getBoundingClientRect(); // force reflow before releasing
-            requestAnimationFrame(() => {
-              musicStackEl.style.transition = '';
-              musicStackEl.style.transform = '';
-            });
-          }
-        }, 400);
+        // Station is taller or equal — grow the description's margin to match
+        desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
       }
     }
 
-    wrExpandBtn.addEventListener('click', () => {
-      setTracklistExpanded(!wrTracklistEl.classList.contains('is-expanded'));
-    });
+    window.addEventListener('load', matchLeftColumnHeightToStation);
 
-    window.addEventListener('resize', () => {
-      if (wrTracklistEl.classList.contains('is-expanded')) {
-        updateMusicStackOffset();
-      }
-    });
-  </script>
-
-
-  <!-- ── Spotify IFrame API: drives the custom player UI + CD spin ── -->
-  <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
-  <script>
-    window.onSpotifyIframeApiReady = (IFrameAPI) => {
-      const element = document.getElementById('spotify-embed');
-      const cdImage = document.getElementById('cdImage');
-
-      const trackEls = Array.from(document.querySelectorAll('#wrTracklist .wr-track'));
-      const tracklistEl = document.getElementById('wrTracklist');
-      const playBtn = document.getElementById('wrPlayBtn');
-      const playIcon = document.getElementById('wrPlayIcon');
-      const prevBtn = document.getElementById('wrPrevBtn');
-      const nextBtn = document.getElementById('wrNextBtn');
-      const progressRow = document.getElementById('wrProgressRow');
-      const progressHit = document.getElementById('wrProgressHit');
-      const progressThumb = document.getElementById('wrProgressThumb');
-      const timerEl = document.getElementById('wrTimer');
-
-      // "-MM:SS" counting down to a plain "00:00" (no minus) at the end.
-      function formatCountdown(ms) {
-        const totalSeconds = Math.max(0, Math.round(ms / 1000));
-        const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-        const ss = String(totalSeconds % 60).padStart(2, '0');
-        const sign = totalSeconds > 0 ? '-' : '';
-        return `${sign}${mm}:${ss}`;
-      }
-
-      const ICON_PLAY = 'music-icons/icon-play.png';
-      const ICON_PAUSE = 'music-icons/icon-pause.png';
-
-      let currentIndex = 0;
-      let currentDurationMs = 0;
-      let dragging = false;
-      let trackEnded = false;
-      let lastPlayingPosition = 0;
-      let lastPlayingDuration = 0;
-
-      // The iFrame API only fires playback_update roughly once a second,
-      // which made the bar visibly "step" forward instead of gliding.
-      // To smooth it out, we keep a local (position, timestamp) pair
-      // from the most recent update and interpolate every animation
-      // frame based on elapsed real time, only snapping back to the
-      // API's real position whenever a fresh update arrives (which also
-      // corrects any drift).
-      let progressPlaying = false;
-      let basePosition = 0;
-      let baseTimestamp = 0;
-      let isPausedState = true;
-      let playRequestToken = 0;
-
-      // Right after a track loads (skip/select, or the auto-advance on
-      // natural end below), the iFrame API can still deliver one or two
-      // playback_update events describing the track we just moved away
-      // from — a known Spotify quirk where position/duration briefly lag
-      // behind the real, newly-loaded track. Left unchecked, those stale
-      // events stomp the fresh 0:00 state loadTrack() just set. The
-      // genuine first update for a freshly-loaded track always reports a
-      // position at/near 0, so that's what's waited for below.
-      let expectingFreshTrack = false;
-
-      // A seek issued while the track is paused/not-yet-playing (e.g.
-      // dragging the bar right after loading a new track, before ever
-      // hitting play) — Spotify's embed silently ignores EmbedController
-      // .seek() called before playback has actually started, so it would
-      // otherwise still start from 0 the moment play is pressed. This
-      // remembers the target position so it can be re-issued once
-      // playback_update confirms audio has genuinely begun. See the
-      // pointerup handler (where it's set) and the playback_update
-      // listener (where it's consumed) below.
-      let pendingSeekMs = null;
-
-      // Right after issuing EmbedController.seek() (pointerup below), the
-      // very next playback_update event(s) can still report the
-      // pre-seek position — the iFrame API's periodic update was already
-      // "in flight" before the seek landed. Left unchecked, that stale
-      // update would stomp the bar back to where it was, and then the
-      // *following* update (once the seek has actually taken effect)
-      // would snap it forward again — the visible "snap back, then
-      // forward" glitch. This mirrors the expectingFreshTrack pattern
-      // above: ignore position updates until one arrives close to the
-      // seek target, with a short timeout as a safety net in case
-      // Spotify never reports a matching position.
-      let expectingSeekMs = null;
-      let expectingSeekAt = 0;
-
-      // Set once loadTrack() exists (inside the createController
-      // callback below); tickProgress needs a way to trigger the next
-      // track without being nested inside that closure itself.
-      let trackAdvanceHandler = null;
-
-      function renderProgress(positionMs, durationMs) {
-        if (durationMs > 0) {
-          progressThumb.style.width = Math.min(100, (positionMs / durationMs) * 100) + '%';
-          timerEl.textContent = formatCountdown(durationMs - positionMs);
-        }
-      }
-
-      function tickProgress() {
-        if (progressPlaying && !dragging && currentDurationMs > 0) {
-          const elapsed = performance.now() - baseTimestamp;
-          const position = Math.min(currentDurationMs, basePosition + elapsed);
-          renderProgress(position, currentDurationMs);
-
-          // Fallback "ended" detection, driven by our own interpolated
-          // clock rather than waiting on another playback_update from
-          // Spotify. The iFrame API doesn't reliably fire a final
-          // isPaused:true update once a track (especially a preview
-          // clip) actually finishes — when that happens the
-          // listener-based check below never runs, and the track just
-          // sits there: CD still spinning, timer frozen at 00:00, next
-          // track never selected. Advancing here as soon as our own
-          // clock reaches the track's duration fixes that regardless of
-          // whether Spotify ever tells us it stopped.
-          if (!trackEnded && trackAdvanceHandler && (currentDurationMs - position) <= 250) {
-            trackEnded = true;
-            trackAdvanceHandler();
-          }
-        }
-        requestAnimationFrame(tickProgress);
-      }
-      tickProgress();
-
-      function scrollActiveIntoView(index) {
-        const track = trackEls[index];
-        const listRect = tracklistEl.getBoundingClientRect();
-        const trackRect = track.getBoundingClientRect();
-        const offset = (trackRect.top - listRect.top) + tracklistEl.scrollTop;
-        tracklistEl.scrollTop = offset;
-      }
-
-      function setActiveTrack(index) {
-        trackEls.forEach((el, i) => el.classList.toggle('is-active', i === index));
-        scrollActiveIntoView(index);
-      }
-
-      // Keeps the currently-playing track non-clickable in the list (see
-      // .wr-track.is-playing above) — only the active track while it's
-      // actually playing, not merely loaded/paused. Re-run whenever
-      // isPausedState or currentIndex changes: from loadTrack (new track
-      // loaded, always starts paused) and from the playback_update
-      // listener (play/pause actually toggling on the loaded track).
-      function updatePlayingTrackState() {
-        trackEls.forEach((el, i) => {
-          const playing = i === currentIndex && !isPausedState;
-          el.classList.toggle('is-playing', playing);
-          el.setAttribute('aria-disabled', playing ? 'true' : 'false');
-        });
-      }
-
-      const callback = (EmbedController) => {
-        // Calling EmbedController.play() immediately after loadUri() is
-        // unreliable — the embed sometimes silently ignores it (a known
-        // quirk of Spotify's iframe player), so a track can advance but
-        // then just sit there paused instead of continuing to play. To
-        // work around it, we keep re-issuing play() a few times, a
-        // little further apart each time, until playback actually
-        // starts — but only for the track that requested it, and only
-        // until the user does something else (manual play/pause, skip,
-        // seek) which invalidates the request.
-        function requestAutoplay(index) {
-          const token = ++playRequestToken;
-          const tryPlay = (attempt) => {
-            if (token !== playRequestToken || currentIndex !== index || !isPausedState) return;
-            EmbedController.play();
-            if (attempt < 4) setTimeout(() => tryPlay(attempt + 1), 300 + attempt * 250);
-          };
-          tryPlay(0);
-        }
-
-        function loadTrack(index, autoplay) {
-          currentIndex = (index + trackEls.length) % trackEls.length;
-          trackEnded = false;
-          lastPlayingPosition = 0;
-          lastPlayingDuration = 0;
-          expectingFreshTrack = true;
-          pendingSeekMs = null;
-          expectingSeekMs = null;
-          setActiveTrack(currentIndex);
-          progressPlaying = false;
-          basePosition = 0;
-          baseTimestamp = performance.now();
-          progressThumb.style.width = '0%';
-          timerEl.textContent = '-00:00';
-          // A freshly loaded URI has nothing playing yet — reset this
-          // now rather than waiting for the API's own playback_update.
-          // Without it, isPausedState is still whatever the *previous*
-          // track reported, and if that was "playing" (false),
-          // requestAutoplay's very first check below reads it as
-          // "already playing" and never calls play() on the new track
-          // at all — leaving it loaded but silent until the pause
-          // button is clicked (which then actually starts it).
-          isPausedState = true;
-          updatePlayingTrackState();
-          // Reflect "not playing" immediately on a non-autoplaying
-          // skip/select, rather than waiting on the API's own
-          // playback_update to report it — without this the pause
-          // icon/spinning CD would hang over from the previous track
-          // until that event arrives. Skipped whenever autoplay is true
-          // (natural end-of-track, or a manual skip/select made while
-          // something was already playing) since the icon/CD are
-          // already correctly showing "playing" from the track that
-          // just finished/was playing, and resetting then immediately
-          // flipping back would just flicker.
-          if (!autoplay) {
-            cdImage.classList.remove('playing');
-            playIcon.src = ICON_PLAY;
-            playBtn.setAttribute('aria-label', 'Play');
-          }
-          EmbedController.loadUri(trackEls[currentIndex].dataset.uri);
-          if (autoplay) requestAutoplay(currentIndex);
-        }
-        trackAdvanceHandler = () => loadTrack(currentIndex + 1, true);
-
-        EmbedController.addListener('playback_update', (e) => {
-          const { isPaused, position, duration } = e.data;
-
-          // Discard updates that still belong to the track we just
-          // navigated away from — see the expectingFreshTrack comment
-          // above. Wait for the first update whose position is close to
-          // 0 (the genuine signature of a just-loaded track) before
-          // trusting anything it says.
-          if (expectingFreshTrack) {
-            if (position > 1500) return;
-            expectingFreshTrack = false;
-          }
-
-          cdImage.classList.toggle('playing', !isPaused);
-          playIcon.src = isPaused ? ICON_PLAY : ICON_PAUSE;
-          playBtn.setAttribute('aria-label', isPaused ? 'Play' : 'Pause');
-          const wasPaused = isPausedState;
-          isPausedState = isPaused;
-          updatePlayingTrackState();
-
-          // Some updates — particularly the one where isPaused flips to
-          // true — report duration as 0/undefined even mid-track (see
-          // the "ended" comment below for the same quirk with
-          // position). Only trust duration when it's a real value, so a
-          // pause doesn't wipe out currentDurationMs.
-          //
-          // Seeking itself is always available now (.is-seekable is set
-          // permanently in markup) — previews used to be blocked below
-          // on the assumption Spotify couldn't seek within a preview
-          // clip, but that assumption doesn't hold and just left the
-          // bar dead for anyone not logged into Spotify.
-          if (duration > 0) {
-            currentDurationMs = duration;
-          }
-
-          progressPlaying = !isPaused;
-
-          // Swallow stale updates left over from just before a seek (see
-          // expectingSeekMs above) — unless the target position was
-          // reached, or the timeout has passed, in which case stop
-          // waiting and trust the API again as normal.
-          if (expectingSeekMs != null) {
-            const closeEnough = Math.abs(position - expectingSeekMs) < 1000;
-            const timedOut = (performance.now() - expectingSeekAt) > 2000;
-            if (closeEnough || timedOut) {
-              expectingSeekMs = null;
-            } else {
-              return;
-            }
-          }
-
-          if (!dragging && duration > 0) {
-            basePosition = position;
-            baseTimestamp = performance.now();
-            renderProgress(position, duration);
-          }
-
-          // Playback has just genuinely started (as opposed to a
-          // periodic update while already playing) — if the person
-          // dragged the bar while the track was paused, this is the
-          // moment to actually apply that seek. Spotify ignored the
-          // seek() call issued back when they dragged (it silently
-          // no-ops before playback begins), so without this the track
-          // would otherwise start over from 0 despite the bar already
-          // showing the dragged-to position.
-          if (wasPaused && !isPaused && pendingSeekMs != null) {
-            const seekMs = pendingSeekMs;
-            pendingSeekMs = null;
-            EmbedController.seek(seekMs / 1000);
-            basePosition = seekMs;
-            baseTimestamp = performance.now();
-            renderProgress(seekMs, currentDurationMs);
-          }
-
-          // The iFrame API has no explicit "ended" event, so infer it.
-          // Some players reset position back to ~0 in the very same
-          // update where isPaused flips true once a track finishes, so
-          // checking that update's own position is unreliable — instead
-          // compare against the last position seen *while still
-          // playing*, which reflects where playback actually was right
-          // before it stopped.
-          if (!isPaused) {
-            lastPlayingPosition = position;
-            lastPlayingDuration = duration;
-            trackEnded = false;
-          } else if (!trackEnded && lastPlayingDuration > 0) {
-            const remaining = lastPlayingDuration - lastPlayingPosition;
-            const pctComplete = lastPlayingPosition / lastPlayingDuration;
-            if (remaining <= 1200 || pctComplete >= 0.97) {
-              trackEnded = true;
-              loadTrack(currentIndex + 1, true);
-            }
-          }
-        });
-
-        playBtn.addEventListener('click', () => {
-          playRequestToken++;
-          EmbedController.togglePlay();
-        });
-        // Manual skip/select never autoplays — loading a new URI and
-        // then trying to force playback on it isn't reliable across
-        // browsers (some report themselves as playing — right track,
-        // real advancing position — while never actually starting the
-        // audio; there's no way to detect that mismatch from here). To
-        // avoid ever showing that false "playing" state, a manual skip
-        // or track selection just loads the track and waits for the
-        // person to hit play. Only a track finishing on its own (see
-        // the "ended" handling above) autoplays the next one, since
-        // that path doesn't have this problem.
-        prevBtn.addEventListener('click', () => loadTrack(currentIndex - 1, false));
-        nextBtn.addEventListener('click', () => loadTrack(currentIndex + 1, false));
-
-        // Selecting a track from the list. The currently-playing track
-        // itself is excluded via .wr-track.is-playing's pointer-events:
-        // none (so this never even fires for it from a click), but the
-        // guard below also covers the keydown path, which isn't blocked
-        // by pointer-events.
-        function selectTrack(i) {
-          if (i === currentIndex && !isPausedState) return;
-          loadTrack(i, false);
-        }
-
-        trackEls.forEach((el, i) => {
-          el.addEventListener('click', () => selectTrack(i));
-          el.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              selectTrack(i);
-            }
-          });
-        });
-
-        function ratioFromClientX(clientX) {
-          const rect = progressHit.getBoundingClientRect();
-          return Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-        }
-
-        progressHit.addEventListener('pointerdown', (e) => {
-          dragging = true;
-          progressHit.setPointerCapture(e.pointerId);
-          const ratio = ratioFromClientX(e.clientX);
-          progressThumb.style.width = (ratio * 100) + '%';
-          if (currentDurationMs > 0) timerEl.textContent = formatCountdown(currentDurationMs * (1 - ratio));
-        });
-        progressHit.addEventListener('pointermove', (e) => {
-          if (!dragging) return;
-          const ratio = ratioFromClientX(e.clientX);
-          progressThumb.style.width = (ratio * 100) + '%';
-          if (currentDurationMs > 0) timerEl.textContent = formatCountdown(currentDurationMs * (1 - ratio));
-        });
-        progressHit.addEventListener('pointerup', (e) => {
-          if (!dragging) return;
-          dragging = false;
-          progressHit.releasePointerCapture(e.pointerId);
-          const ratio = ratioFromClientX(e.clientX);
-          if (currentDurationMs > 0) {
-            const seekMs = ratio * currentDurationMs;
-            basePosition = seekMs;
-            baseTimestamp = performance.now();
-            EmbedController.seek(seekMs / 1000);
-            // Paused/not-yet-playing: Spotify ignores that seek() call
-            // above until playback actually starts, so remember the
-            // target and re-issue it once the playback_update listener
-            // sees play actually begin (see there for why).
-            pendingSeekMs = isPausedState ? seekMs : null;
-            // Only while already playing does the next playback_update
-            // risk arriving with the stale pre-seek position (see
-            // expectingSeekMs above) — while paused, nothing ticks until
-            // playback resumes, and that resume is handled entirely by
-            // pendingSeekMs instead.
-            if (!isPausedState) {
-              expectingSeekMs = seekMs;
-              expectingSeekAt = performance.now();
-            }
-          }
-        });
-        progressHit.addEventListener('pointercancel', () => { dragging = false; });
-
-        setActiveTrack(currentIndex);
-        updatePlayingTrackState();
-      };
-
-      const options = {
-        uri: trackEls[0].dataset.uri,
-        width: '100%',
-        height: '80'
-      };
-
-      IFrameAPI.createController(element, options, callback);
-    };
-  </script>
-
-  <!-- ── Cream column: vertical scroll drives an L-shaped card slide (PC only) ──
-       Music → Brain Games slides horizontally; Brain Games → blank card
-       slides vertically. Scroll interaction itself is always vertical. ── -->
-  <script>
-    (function () {
-      const creamCol = document.getElementById('creamCol');
-      const creamTrack = document.getElementById('creamTrack');
-      const creamViewportEl = document.querySelector('.cream-viewport');
-      const musicCardEl = document.querySelector('.cream-card--music');
-      const overflowSpacer = document.getElementById('trackOverflowSpacer');
-      if (!creamCol || !creamTrack) return;
-
-      // How much taller the music card is than the viewport right now
-      // — only non-zero on desktop, while the tracklist is expanded,
-      // and only when it genuinely doesn't fit.
-      function getTrackOverflow() {
-        const isDesktop = window.matchMedia('(min-width: 651px)').matches;
-        if (!isDesktop || !musicCardEl || !creamViewportEl) return 0;
-        if (!musicCardEl.classList.contains('is-expanded')) return 0;
-        return Math.max(0, musicCardEl.scrollHeight - creamViewportEl.clientHeight);
-      }
-
-      function updateCreamTrack() {
-        const isDesktop = window.matchMedia('(min-width: 651px)').matches;
-        if (!isDesktop) {
-          creamTrack.style.transform = '';
-          if (musicCardEl) musicCardEl.style.transform = '';
-          if (overflowSpacer) overflowSpacer.style.height = '0px';
-          creamCol.classList.remove('tracklist-scroll-active');
-          return;
-        }
-
-        const overflowPx = getTrackOverflow();
-        if (overflowSpacer) overflowSpacer.style.height = overflowPx + 'px';
-        // Mandatory scroll-snap only has a snap point at the very top
-        // and at the start of the next card, so while there's overflow
-        // room to scroll through, snapping is paused — otherwise it
-        // fights the user reading down the tracklist.
-        creamCol.classList.toggle('tracklist-scroll-active', overflowPx > 0);
-
-        const pageHeight = creamCol.clientHeight;
-        const scrollTop = creamCol.scrollTop;
-
-        // First, consume the tracklist's own overflow: the music card
-        // slides up in place, revealing the rest of the tracklist,
-        // before any card-to-card progress is allowed to start.
-        const musicPhase = Math.min(scrollTop, overflowPx);
-        if (musicCardEl) {
-          musicCardEl.style.transform = musicPhase ? `translateY(-${musicPhase}px)` : '';
-        }
-
-        // 0 = music card, 1 = games card, 2 = blank card.
-        const remainingScroll = Math.max(0, scrollTop - overflowPx);
-        const pageFloat = pageHeight > 0
-          ? Math.min(2, Math.max(0, remainingScroll / pageHeight))
-          : 0;
-        const xProgress = Math.min(1, pageFloat);           // music → games
-        const yProgress = Math.max(0, Math.min(1, pageFloat - 1)); // games → blank
-        creamTrack.style.transform = `translate(-${xProgress * 50}%, -${yProgress * 50}%)`;
-      }
-
-      creamCol.addEventListener('scroll', updateCreamTrack, { passive: true });
-      window.addEventListener('resize', updateCreamTrack);
-      updateCreamTrack();
-
-      // Exposed so the tracklist expand/collapse handler can trigger a
-      // recalculation as soon as the card's height changes.
-      window.wrUpdateCreamTrack = updateCreamTrack;
-    })();
-  </script>
-
-  <!-- ── Keep the header's right edge aligned with the cream column's
-       content edge, even though .cream-col has a real, visible scrollbar.
-       A visible scrollbar reserves actual width inside .cream-col,
-       shrinking its content from the right — but the header is
-       position:fixed and spans the full viewport, so it's untouched by
-       that. Rather than hiding the scrollbar (which removes the visual
-       scroll cue entirely), we measure the scrollbar's real width and
-       add that same amount to the header's right padding, so the logo
-       shifts left to meet the content edge exactly, on any browser/OS. ── -->
-  <script>
-    function wrSyncHeaderToScrollbar() {
-      const creamCol = document.querySelector('.cream-col');
-      const headerWrap = document.querySelector('.header-wrap');
-      if (!creamCol || !headerWrap) return;
-      const scrollbarWidth = creamCol.offsetWidth - creamCol.clientWidth;
-      headerWrap.style.setProperty('--scrollbar-w', scrollbarWidth + 'px');
+    let leftColumnResizeTimer;
+    function scheduleMatchLeftColumnHeightToStation() {
+      clearTimeout(leftColumnResizeTimer);
+      leftColumnResizeTimer = setTimeout(matchLeftColumnHeightToStation, 250);
     }
-    window.addEventListener('load', wrSyncHeaderToScrollbar);
-    window.addEventListener('resize', wrSyncHeaderToScrollbar);
+    window.addEventListener('resize', scheduleMatchLeftColumnHeightToStation);
+
+    // Settle delay after rotation, same reasoning as the station width matcher above.
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      }, 300);
+    });
+
   </script>
-
-  <script>
-    /* Safari's chrome-tinting (status bar, bottom URL pill) only reads
-       a static background-color on html/body — it never updates on
-       its own as the page scrolls. This swaps that color to cream once
-       the footer card is reached, and back to wine once it's scrolled
-       out of view, so the phone's chrome matches whichever end of the
-       page is on screen. Desktop doesn't scroll the page itself, so
-       this is a no-op there. */
-    (function () {
-      const footer = document.querySelector('.cream-card--blank');
-      if (!footer || !('IntersectionObserver' in window)) return;
-
-      const wine = getComputedStyle(document.documentElement).getPropertyValue('--wine').trim();
-      const cream = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const isFooterVisible = entries[0].isIntersecting;
-          const color = isFooterVisible ? cream : wine;
-          document.documentElement.style.backgroundColor = color;
-          document.body.style.backgroundColor = color;
-        },
-        { threshold: 0.15 }
-      );
-
-      observer.observe(footer);
-    })();
-  </script>
-
 </body>
 </html>
