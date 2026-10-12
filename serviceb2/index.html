@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
+
+  <title>Brand Strategy — SABI</title>
+  <meta name="description" content="A strategy service that clarifies your brand positioning, identifies untapped growth opportunities, and highlights priority actions across core branding, intellectual property, communications, customer service, and social media." />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    ::selection { background: var(--select-bg); }
+    ::-moz-selection { background: var(--select-bg); }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    :root {
+      --bg: #FAFBE3;
+      --border: #423A3A;
+      --text: #211D1D;
+      --tint: rgba(33, 29, 29, 0.07);
+      --found-text: #FAFBE3;
+      --select-bg: rgba(183, 184, 168, 0.4);
+      --font-body: 'owners-text', sans-serif;
+      --font-mono: 'gemeli-mono', monospace;
+      --gutter: 40px;
+      --col-gap: 40px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 350;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: var(--text); }
+    a:hover { opacity: 0.7; }
+
+    /* ── Shell: content column + right-hand nav rail ── */
+    .shell {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+    }
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px var(--gutter) 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .site-name {
+      font-family: "all-round-gothic", sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      color: var(--text);
+      text-decoration: none;
+      align-self: flex-start;
+    }
+
+    /* Right-hand vertical nav (desktop/tablet) */
+    .rail {
+      width: 48px;
+      flex-shrink: 0;
+      border-left: 0.5px solid var(--border);
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+      justify-items: center;
+      padding: 40px 0;
+    }
+    .rail a {
+      writing-mode: vertical-rl;
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .rail a:nth-child(1) { align-self: start; }
+    .rail a:nth-child(2) { align-self: center; }
+    .rail a:nth-child(3) { align-self: end; }
+
+    /* Horizontal nav (phone only, replaces the rail) */
+    .topnav {
+      display: none;
+      gap: 1.5rem;
+      padding-top: 1.25rem;
+    }
+    .topnav a {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    /* ── Tinted section label ── */
+    .tag {
+      display: inline-block;
+      background: var(--tint);
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 1.3px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      padding: 8px 14px;
+    }
+
+    /* ── Hero: title + overview left, approach right ── */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--col-gap);
+      padding-top: 56px;
+      min-height: 560px;
+      container-type: inline-size;
+    }
+    .hero-copy {
+      flex: 1 1 320px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    .back-link {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 0.5px solid var(--border);
+      padding-bottom: 2px;
+      white-space: nowrap;
+    }
+    .service-title {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(22px, 3.8vw, 27px);
+      line-height: 1.1;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .service-overview {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.8;
+      width: 50%;
+      max-width: 100%;
+    }
+    @supports (width: 1cqw) {
+      .service-overview { width: 50cqw; }
+    }
+
+    /* ── Approach: label, counter, description, menu ── */
+    .approach {
+      flex: 0 0 calc((100% - (var(--col-gap) * 2)) / 3);
+      min-width: 280px;
+    }
+    .approach-head {
+      height: 314px;
+      padding-bottom: 57px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .approach-head .tag {
+      align-self: flex-end;
+      margin-bottom: 36px;
+    }
+    .approach-counter {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .approach-desc {
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .approach-desc[hidden] { display: none; }
+
+    .menu { list-style: none; border-bottom: 0.5px solid var(--border); }
+    .menu button {
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      border-top: 0.5px solid var(--border);
+      border-radius: 0;
+      padding: 14px 12px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .menu button:hover { background: var(--tint); }
+    .menu button[aria-pressed="true"] {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .menu button:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: -2px;
+    }
+    .menu button[aria-pressed="true"]:focus-visible {
+      outline-color: var(--bg);
+    }
+    .menu .num {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 12px;
+    }
+
+    /* ── Deliverables ── */
+    .deliverables-tag { align-self: flex-start; margin: 96px 0 36px; }
+    .deliverables-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+    }
+    .deliverables-copy { max-width: 720px; }
+    .phase { margin-bottom: 2rem; }
+    .phase:last-child { margin-bottom: 0; }
+    .phase-title {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+    .phase-row {
+      font-weight: 300;
+      font-size: 13.5px;
+      line-height: 1.7;
+      padding: 0.55rem 0;
+    }
+    .phase-list { list-style: none; }
+    .phase-list li {
+      font-weight: 300;
+      font-size: 13.5px;
+      line-height: 1.9;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .phase-list li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+    }
+    .phase-footnote {
+      font-weight: 300;
+      font-style: italic;
+      font-size: 13.5px;
+      line-height: 1.7;
+      margin-top: 2rem;
+    }
+    .cta-col {
+      flex: 0 0 calc((100% - (var(--col-gap) * 2)) / 3);
+      min-width: 280px;
+    }
+    .btn {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 12px 22px;
+      border-radius: 0;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      color: var(--found-text);
+      background: #2E000D;
+      border: 0.5px solid #2E000D;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn:hover { opacity: 1; background: #1f0009; }
+    .main-end { height: 96px; flex-shrink: 0; }
+
+    /* ── Footer (full-bleed line) ── */
+    .footer-line { border-top: 0.5px solid var(--border); }
+    .site-footer {
+      padding: 1.5rem var(--gutter) 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+    .footer-groups {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      align-items: flex-start;
+    }
+    .footer-col { display: flex; flex-direction: column; }
+    .footer-desc {
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 0.9rem;
+      margin-top: -0.2em;
+    }
+    .footer-copyright {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    .footer-heading {
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 0.55rem; }
+    .footer-links a {
+      font-weight: 300;
+      font-size: 13px;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+    .footer-col--services .footer-links a { text-transform: uppercase; }
+
+    /* ── Tablet and phone ── */
+    @media (max-width: 900px) {
+      :root { --gutter: 20px; }
+      .rail { display: none; }
+      .topnav { display: flex; }
+      .main { padding-top: 28px; }
+      .hero { padding-top: 40px; min-height: 0; gap: 3rem; }
+      .hero-copy { flex-basis: 100%; }
+      .service-overview { width: 100%; }
+      .approach { flex: 1 1 100%; min-width: 0; }
+      .approach-head { height: auto; padding-bottom: 24px; }
+      .approach-head .tag { margin-bottom: 24px; }
+      .deliverables-tag { margin-top: 64px; }
+      .cta-col { flex: 1 1 100%; min-width: 0; }
+      .main-end { height: 64px; }
+      .site-footer { padding-bottom: 32px; }
+    }
+    @media (max-width: 500px) {
+      .footer-groups { gap: 2rem; }
+      .footer-links a { white-space: normal; }
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-9ZHK592471');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xxr0mg59uq");
+  </script>
+  <noscript><style>.approach-desc[hidden] { display: block; margin-top: 1rem; }</style></noscript>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+
+    <a href="https://sabi.london/" class="site-name" aria-label="SABI">S A B I</a>
+
+    <nav class="topnav" aria-label="Primary">
+      <a href="https://sabi.london/about">About</a>
+      <a href="https://sabi.london/services/">Services</a>
+      <a href="https://play.sabi.london/">Play</a>
+    </nav>
+
+    <main>
+      <div class="hero">
+
+        <div class="hero-copy">
+          <a href="https://sabi.london/services/" class="back-link">← All Services</a>
+          <h1 class="service-title">Brand Strategy</h1>
+          <p class="service-overview">
+            A strategy service that clarifies your brand positioning, identifies untapped
+            growth opportunities, and highlights priority actions across core branding, intellectual
+            property, communications, customer experience, and social media.
+          </p>
+        </div>
+
+        <section class="approach" aria-labelledby="approach-label">
+          <div class="approach-head">
+            <h2 class="tag" id="approach-label">Approach</h2>
+            <p class="approach-counter"><span id="approach-current">01</span> / 05</p>
+            <div aria-live="polite">
+              <p class="approach-desc" id="desc-1">Clarity, coherence, and cultural signals. Defining your target audience, and mapping your brand alongside 15 competitor brands. Assessing product-market fit.</p>
+              <p class="approach-desc" id="desc-2" hidden>Reviewing the impact and associations of your trademark, logo, brand name, slogan, or product names. Market research for naming, renaming, and copywriting.</p>
+              <p class="approach-desc" id="desc-3" hidden>Identifying opportunities to refine or reframe how your products or services are structured, priced, and conveyed. Mapping the customer experience journey to identify opportunities to improve conversion.</p>
+              <p class="approach-desc" id="desc-4" hidden>Assessing how your brand reaches and converts its audience across website, social, search, marketing, and other acquisition channels. Identifying gaps in discoverability and messaging to support launches, campaigns, and rebranding.</p>
+              <p class="approach-desc" id="desc-5" hidden>Key observations, growth opportunities, and priority actions. Referrals to 15 relevant industry contacts for community and partnerships opportunities.</p>
+            </div>
+          </div>
+          <ul class="menu">
+            <li><button type="button" aria-pressed="true" aria-controls="desc-1"><span class="num">01</span><span>Brand Positioning</span></button></li>
+            <li><button type="button" aria-pressed="false" aria-controls="desc-2"><span class="num">02</span><span>Intellectual Property</span></button></li>
+            <li><button type="button" aria-pressed="false" aria-controls="desc-3"><span class="num">03</span><span>Business Model</span></button></li>
+            <li><button type="button" aria-pressed="false" aria-controls="desc-4"><span class="num">04</span><span>Go-to-Market</span></button></li>
+            <li><button type="button" aria-pressed="false" aria-controls="desc-5"><span class="num">05</span><span>Referrals</span></button></li>
+          </ul>
+        </section>
+
+      </div>
+
+      <h2 class="tag deliverables-tag">Deliverables</h2>
+
+      <div class="deliverables-row">
+        <div class="deliverables-copy">
+          <div class="phase">
+            <h3 class="phase-title">Phase I</h3>
+            <p class="phase-row">Pre-consultation questionnaire</p>
+            <p class="phase-row">First consultation up to 90 minutes to outline your priorities and objectives</p>
+          </div>
+          <div class="phase">
+            <h3 class="phase-title">Phase II</h3>
+            <ul class="phase-list">
+              <li>Up to 3 hours of meeting time</li>
+              <li>A concise report summarising insights and recommendations</li>
+              <li>4–6 weeks delivery*</li>
+            </ul>
+            <p class="phase-footnote">* Scope scaled to the size of the business and the complexity of the priorities.</p>
+          </div>
+        </div>
+        <div class="cta-col">
+          <a href="https://form.typeform.com/to/PHBRp1qa" target="_blank" rel="noopener" class="btn">Start the questionnaire →</a>
+        </div>
+      </div>
+    </main>
+
+    <div class="main-end"></div>
+  </div>
+
+  <nav class="rail" aria-label="Primary">
+    <a href="https://sabi.london/about">About</a>
+    <a href="https://sabi.london/services/">Services</a>
+    <a href="https://play.sabi.london/">Play</a>
+  </nav>
+</div>
+
+<div class="footer-line"></div>
+
+<footer class="site-footer">
+  <div class="footer-col">
+    <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
+    <p class="footer-copyright">© 2026 SABI LDN</p>
+  </div>
+
+  <div class="footer-groups">
+    <div class="footer-col">
+      <p class="footer-heading">Contact</p>
+      <div class="footer-links">
+        <a href="mailto:office@sabi.london">office@sabi.london</a>
+        <a href="tel:+447400192837">+44 7400 192837</a>
+        <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
+      </div>
+    </div>
+
+    <div class="footer-col footer-col--services">
+      <p class="footer-heading">Services</p>
+      <div class="footer-links">
+        <a href="https://sabi.london/services/brand-strategy">Brand Strategy</a>
+        <a href="https://sabi.london/services/world-building">World Building</a>
+        <a href="https://sabi.london/services/copy">Copy</a>
+        <a href="https://sabi.london/services/community-and-partnerships">Community &amp; Partnerships</a>
+        <a href="https://sabi.london/services/campaign">Campaign</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.menu button');
+    var descs = document.querySelectorAll('.approach-desc');
+    var counter = document.getElementById('approach-current');
+
+    function select(index) {
+      buttons.forEach(function (b, i) { b.setAttribute('aria-pressed', i === index ? 'true' : 'false'); });
+      descs.forEach(function (d, i) { d.hidden = i !== index; });
+      counter.textContent = '0' + (index + 1);
+    }
+
+    buttons.forEach(function (b, i) {
+      b.addEventListener('click', function () { select(i); });
+    });
+  })();
+</script>
+</body>
+</html>
