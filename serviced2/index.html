@@ -252,7 +252,7 @@
       cursor: pointer;
       background: transparent;
       color: var(--text);
-      font-family: var(--font-body);
+      font-family: var(--font-mono);
       font-weight: 400;
       font-size: 13px;
       letter-spacing: 1.5px;
@@ -271,7 +271,7 @@
     .menu .num {
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     /* ── Card 3: deliverables + footer ── */
@@ -284,7 +284,7 @@
       gap: 32px;
     }
     .deliverables-copy { max-width: 720px; }
-    .phase { margin-bottom: 2rem; }
+    .phase { margin-bottom: 3.275rem; }
     .phase:last-child { margin-bottom: 0; }
     .phase-title {
       font-family: var(--font-mono);
@@ -300,25 +300,12 @@
       line-height: 1.7;
       padding: 0.55rem 0;
     }
-    .phase-list { list-style: none; }
-    .phase-list li {
-      font-weight: 300;
-      font-size: 13.5px;
-      line-height: 1.9;
-      padding-left: 1rem;
-      position: relative;
-    }
-    .phase-list li::before {
-      content: "–";
-      position: absolute;
-      left: 0;
-    }
     .phase-footnote {
       font-weight: 300;
       font-style: italic;
       font-size: 13.5px;
       line-height: 1.7;
-      margin-top: 2rem;
+      margin-top: 3.275rem;
     }
     .cta-col {
       flex: 0 0 calc((100% - (var(--col-gap) * 2)) / 3);
@@ -415,10 +402,10 @@
       .approach-head { height: 240px; padding-bottom: 24px; }
       .approach-head .tag { margin-bottom: 24px; }
       .deliverables-tag { margin-bottom: 24px; }
-      .phase { margin-bottom: 1rem; }
+      .phase { margin-bottom: 1.65rem; }
       .phase-title { margin-bottom: 0.5rem; }
       .phase-row { padding: 0.3rem 0; }
-      .phase-footnote { margin-top: 1rem; }
+      .phase-footnote { margin-top: 1.65rem; }
     }
     @media (max-width: 500px) {
       .footer-groups { gap: 2rem; }
@@ -528,11 +515,9 @@
           </div>
           <div class="phase">
             <h3 class="phase-title">Phase II</h3>
-            <ul class="phase-list">
-              <li>Up to 3 hours of meeting time</li>
-              <li>A concise report summarising insights and recommendations</li>
-              <li>4–6 weeks delivery*</li>
-            </ul>
+            <p class="phase-row">Up to 3 hours of meeting time</p>
+            <p class="phase-row">A concise report summarising insights and recommendations</p>
+            <p class="phase-row">4–6 weeks delivery*</p>
             <p class="phase-footnote">* Scope scaled to the size of the business and the complexity of the priorities.</p>
           </div>
         </div>
