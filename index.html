@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon-play.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
-
-  <title>Brand Strategy — SABI</title>
-  <meta name="description" content="A strategy service that clarifies your brand positioning, identifies untapped growth opportunities, and highlights priority actions across core branding, intellectual property, communications, customer service, and social media." />
-
+  
+  <title>Marketing Buzzword — SABI Games</title>
+  <meta name="description" content="Buzzword, a marketing acronym game by SABI. These marketing acronyms describe the core business functions that every founder or creative needs to understand" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    ::selection { background: var(--select-bg); }
-    ::-moz-selection { background: var(--select-bg); }
+    ::selection {
+      background: var(--select-bg);
+    }
+    ::-moz-selection {
+      background: var(--select-bg);
+    }
 
     html {
       -webkit-text-size-adjust: 100%;
@@ -23,15 +26,17 @@
 
     :root {
       --bg: #FAFBE3;
+      --surface: #FAFBE3;
       --border: #423A3A;
+      --border-light: #423A3A;
       --text: #211D1D;
-      --tint: rgba(33, 29, 29, 0.07);
+      --found-bg: #2E000D;
       --found-text: #FAFBE3;
       --select-bg: rgba(183, 184, 168, 0.4);
+      --select-text: var(--text);
+      --wrong-fill: rgba(182, 175, 169, 0.5);
       --font-body: 'owners-text', sans-serif;
-      --font-mono: 'gemeli-mono', monospace;
-      --gutter: 40px;
-      --col-gap: 40px;
+      --font-mono: 'gemeli-mono', serif;
     }
 
     body {
@@ -42,31 +47,80 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding: 0 var(--gutter) 40px;
+      align-items: center;
+      padding: 3rem 0 5rem;
     }
 
-    a { color: var(--text); }
-    a:hover { opacity: 0.7; }
+    .page { width: 100%; }
+
+    /* Narrow, centered wrapper for reading content (matches sabi.london/services/) */
+    .container {
+      max-width: 768px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    /* Wide row: used for the header, nav links, dividers and footer.
+       Stays the same as .container on mobile, but opens up to full width
+       with generous side padding on desktop/tablet — same breakpoint
+       convention as sabi.london/services/ */
+    .wide-row {
+      max-width: 720px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    @media (min-width: 721px) {
+      .wide-row {
+        max-width: none;
+        width: 100%;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+    }
+    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
+      .wide-row {
+        max-width: 720px;
+        width: auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    /* Full-width horizontal rule, drawn inside a .wide-row parent */
+    .full-divider {
+      border-top: 0.5px solid var(--border);
+    }
 
     /* ── Header ── */
     .site-header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      padding: 40px 0 16px;
+      padding-bottom: 1rem;
     }
-    .header-divider { border-top: 0.5px solid var(--border); }
     .site-name {
       font-family: "all-round-gothic", sans-serif;
       font-weight: 400;
       font-size: 24px;
       text-transform: uppercase;
-      letter-spacing: 0;
+      letter-spacing: 0px;
       color: var(--text);
       text-decoration: none;
+      justify-self: end;
+    }
+    .site-tag {
+      font-family: var(--font-body);
+      font-weight: 350;
+      font-size: 18px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      justify-self: center;
     }
 
-    /* ── Hamburger menu ── */
+    /* ── Hamburger menu (accordion) ── */
     .menu-btn {
       position: relative;
       width: 22px;
@@ -75,6 +129,7 @@
       border: none;
       cursor: pointer;
       padding: 0;
+      justify-self: start;
     }
     .menu-btn span {
       position: absolute;
@@ -110,426 +165,754 @@
       text-decoration: none;
       padding: 0.5rem 0;
     }
+    .menu-list a.active {
+      color: rgba(139, 140, 120, 0.5);
+      pointer-events: none;
+      cursor: default;
+    }
 
-    /* ── Tinted section label ── */
-    .tag {
-      display: inline-block;
-      background: var(--tint);
+    .header-divider {
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── Game header ── */
+    .game-label {
       font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: 1.3px;
-      line-height: 1.2;
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text);
       text-transform: uppercase;
-      padding: 8px 14px;
+      letter-spacing: 2.5px;
+      margin-bottom: 0.6rem;
     }
-
-    /* ── Hero: title + overview left, approach right ── */
-    main { flex: 1; }
-    .hero {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--col-gap);
-      padding-top: 40px;
-      min-height: 560px;
-      container-type: inline-size;
-    }
-    .hero-copy {
-      flex: 1 1 320px;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      align-items: flex-start;
-    }
-    .back-link {
+    .game-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      text-decoration: none;
-      border-bottom: 0.5px solid var(--border);
-      padding-bottom: 2px;
-      white-space: nowrap;
-    }
-    .service-title {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: clamp(22px, 3.8vw, 27px);
+      font-size: clamp(24px, 5vw, 28px);
       line-height: 1.1;
       letter-spacing: 2px;
       text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 1rem;
     }
-    .service-overview {
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.8;
-      width: 50%;
-      max-width: 100%;
-    }
-    @supports (width: 1cqw) {
-      .service-overview { width: 50cqw; }
+    /* Narrow reading column, centered within .container rather than
+       flush-left (flashcard/options/intro are 540px inside a 720px box) */
+    .game-content {
+      max-width: 540px;
+      margin: 0 auto;
     }
 
-    /* ── Approach: label, counter, description, menu ── */
-    .approach {
-      flex: 0 0 calc((100% - (var(--col-gap) * 2)) / 3);
-      min-width: 280px;
+    .game-intro {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 540px;
+      margin-bottom: 2rem;
     }
-    .approach-head {
-      height: 314px;
-      padding-bottom: 57px;
+
+    /* ── Mode toggle ── */
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 2.5rem;
+    }
+    .mode-label {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text);
+      opacity: 0.65;
+      transition: opacity 0.15s;
+    }
+    .mode-label.active { opacity: 1; }
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 22px;
+      border: 0.5px solid #2E000D;
+      border-radius: 11px;
+      background: #2E000D;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .toggle-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg);
+      transition: transform 0.18s ease;
+    }
+    .toggle.is-easy .toggle-knob { transform: translateX(0px); }
+    .toggle:not(.is-easy) .toggle-knob { transform: translateX(20px); }
+
+    /* ── Flashcard ── */
+    .flashcard {
+      border: 0.5px solid var(--border);
+      box-shadow: inset 0 0 0 1.1px var(--border);
+      border-radius: 16px;
+      padding: 2.1rem 2.25rem 1.7rem;
+      margin-bottom: 2rem;
+      min-height: 148px;
+      display: flex;
+      align-items: center;
+      max-width: 540px;
+    }
+    .flashcard p {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      text-align: justify;
+    }
+
+    /* ── Answer options ── */
+    .options {
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 2rem;
+      max-width: 540px;
     }
-    .approach-head .tag {
-      align-self: flex-end;
-      margin-bottom: 36px;
-    }
-    .approach-counter {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .approach-desc {
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-    .approach-desc[hidden] { display: none; }
-
-    .menu { list-style: none; border-bottom: 0.5px solid var(--border); }
-    .menu button {
+    .option {
+      position: relative;
       display: flex;
-      gap: 16px;
-      align-items: baseline;
-      width: 100%;
-      text-align: left;
-      border: 0;
-      border-top: 0.5px solid var(--border);
+      align-items: center;
+      gap: 14px;
+      border: 0.5px solid var(--border);
       border-radius: 0;
-      padding: 14px 12px;
+      padding: 0.9rem 1.1rem;
       cursor: pointer;
       background: transparent;
+      transition: background 0.12s, border-width 0.05s;
+      width: 100%;
+      text-align: left;
+    }
+    .option:hover:not(.locked) { background: rgba(66,58,58,0.05); }
+    .option-letter {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #423A3A;
+      opacity: 1;
+      flex-shrink: 0;
+      width: 14px;
+    }
+    .option-text {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       color: var(--text);
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
+      flex: 1;
     }
-    .menu button:hover { background: var(--tint); }
-    .menu button[aria-pressed="true"] {
-      background: var(--text);
-      color: var(--bg);
+    .option-mark {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+  color: #2E000D;
+}
+    .option.wrong {
+      background: var(--wrong-fill);
     }
-    .menu button:focus-visible {
-      outline: 2px solid var(--text);
-      outline-offset: -2px;
+    .option.correct {
+      border-color: #000000;
+      box-shadow: inset 0 0 0 1.1px #000000;
     }
-    .menu button[aria-pressed="true"]:focus-visible {
-      outline-color: var(--bg);
-    }
-    .menu .num {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 12px;
-    }
+    .option.locked { cursor: default; }
 
-    /* ── Deliverables ── */
-    .deliverables-tag { margin: 96px 0 36px; }
-    .deliverables-row {
+    /* ── Footer controls ── */
+    .game-footer {
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-end;
-      gap: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 3rem;
+      min-height: 38px;
     }
-    .deliverables-copy { max-width: 720px; }
-    .phase { margin-bottom: 2rem; }
-    .phase:last-child { margin-bottom: 0; }
-    .phase-title {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-      margin-bottom: 0.9rem;
-    }
-    .phase-row {
-      font-weight: 300;
-      font-size: 13.5px;
-      line-height: 1.7;
-      padding: 0.55rem 0;
-    }
-    .phase-list { list-style: none; }
-    .phase-list li {
-      font-weight: 300;
-      font-size: 13.5px;
-      line-height: 1.9;
-      padding-left: 1rem;
-      position: relative;
-    }
-    .phase-list li::before {
-      content: "–";
-      position: absolute;
-      left: 0;
-    }
-    .phase-footnote {
-      font-weight: 300;
-      font-style: italic;
-      font-size: 13.5px;
-      line-height: 1.7;
-      margin-top: 2rem;
-    }
-    .cta-col {
-      flex: 0 0 calc((100% - (var(--col-gap) * 2)) / 3);
-      min-width: 280px;
-    }
-    .btn {
+    .progress-text {
       font-family: var(--font-body);
-      font-weight: 500;
+      font-weight: 300;
+      font-size: 12px;
+      color: var(--text);
+    }
+    .btn-next {
+      font-family: var(--font-body);
+      font-weight: 400;
       font-size: 11px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      padding: 12px 22px;
-      border-radius: 0;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
       color: var(--found-text);
-      background: #2E000D;
-      border: 0.5px solid #2E000D;
-      transition: background 0.15s, color 0.15s;
+      background: var(--found-bg);
+      border: 0.5px solid var(--found-bg);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
     }
-    .btn:hover { opacity: 1; background: #1f0009; }
+    .btn-next.show { opacity: 1; pointer-events: auto; }
+    .btn-next:hover { background: #1f0009; }
 
-    /* ── Footer (inset line) ── */
-    .footer-line { border-top: 0.5px solid var(--border); margin-top: 96px; }
-    .site-footer {
-      padding-top: 1.5rem;
+    /* ── Reflection ── */
+    .reflection {
+      margin-bottom: 2.5rem;
+    }
+
+    .reflection h2 {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+    }
+    .reflection p {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.9;
+    }
+
+    /* ── Next/previous game nav ── */
+    .game-nav {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 2rem;
+      align-items: flex-end;
     }
-    .footer-groups {
+    .game-nav a {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 0.5px solid var(--border);
+      padding-bottom: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .game-nav a:hover { opacity: 0.7; }
+    .game-nav .inactive {
+      color: rgba(139, 140, 120, 0.6);
+      border-bottom-color: rgba(139, 140, 120, 0.6);
+      opacity: 1;
+      pointer-events: none;
+      cursor: default;
+    }
+    .game-nav-top {
+      margin-bottom: 3rem;
+    }
+    .game-nav-bottom {
+      margin-bottom: 2.5rem;
+    }
+    .game-nav-single {
+      justify-content: flex-end;
+    }
+
+    /* Desktop only: anchor the prev/next links to the bottom edge of the
+       reflection paragraph, spanning out so their outer edges land
+       exactly on the footer divider's left/right edges. */
+    .reflection-block {
+      position: relative;
+      margin-top: 3.5rem;
+    }
+    @media (min-width: 721px) {
+      .game-nav-bottom {
+        position: absolute;
+        /* The +8px nudges each side in from the raw divider-edge calc —
+           100vw includes the scrollbar gutter in most browsers, which was
+           pushing the links a few pixels past the footer divider's ends. */
+        left: min(1rem, calc(400px - 50vw + 8px));
+        right: min(1rem, calc(400px - 50vw + 8px));
+        bottom: 0;
+        margin-bottom: 0;
+      }
+    }
+    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
+      .game-nav-bottom {
+        position: static;
+        left: auto;
+        right: auto;
+        margin-bottom: 2.5rem;
+      }
+    }
+
+    /* ── Site footer ── */
+    .site-footer {
+      display: grid;
+      grid-template-columns: 1.4fr auto auto;
+      column-gap: 0.75rem;
+      align-items: start;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .footer-col {
       display: flex;
-      flex-wrap: wrap;
-      gap: 3rem;
-      align-items: flex-start;
+      flex-direction: column;
+      align-self: start;
     }
-    .footer-col { display: flex; flex-direction: column; }
+
     .footer-desc {
+      font-family: var(--font-body);
       font-weight: 400;
       font-size: 15px;
       line-height: 1.5;
+      color: var(--text);
       margin-bottom: 0.9rem;
       margin-top: -0.2em;
     }
+
     .footer-copyright {
       font-family: var(--font-mono);
       font-weight: 300;
       font-size: 14px;
+      color: var(--text);
       letter-spacing: 0.5px;
     }
+
     .footer-heading {
+      font-family: var(--font-body);
       font-weight: 400;
       font-size: 12px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
+      color: var(--text);
       margin-bottom: 0.7rem;
     }
-    .footer-links { display: flex; flex-direction: column; gap: 0.55rem; }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
     .footer-links a {
+      font-family: var(--font-body);
       font-weight: 300;
       font-size: 13px;
+      color: var(--text);
       text-decoration: underline;
       white-space: nowrap;
     }
-    .footer-col--services .footer-links a { text-transform: uppercase; }
 
-    /* ── Tablet and phone ── */
-    @media (max-width: 900px) {
-      :root { --gutter: 20px; }
-      .site-header { padding-top: 28px; }
-      .hero { padding-top: 32px; min-height: 0; gap: 3rem; }
-      .hero-copy { flex-basis: 100%; }
-      .service-overview { width: 100%; }
-      .approach { flex: 1 1 100%; min-width: 0; }
-      .approach-head { height: auto; padding-bottom: 24px; }
-      .approach-head .tag { margin-bottom: 24px; }
-      .deliverables-tag { margin-top: 64px; }
-      .cta-col { flex: 1 1 100%; min-width: 0; }
-      .footer-line { margin-top: 64px; }
+    .footer-col--services {
+      margin-left: 2rem;
     }
+
+    .footer-col--services .footer-links a {
+      text-transform: uppercase;
+    }
+
     @media (max-width: 500px) {
-      .footer-groups { gap: 2rem; }
-      .footer-links a { white-space: normal; }
+      .site-footer {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
+        row-gap: 1.75rem;
+      }
+      .footer-col:first-child {
+        grid-column: 1 / -1;
+      }
+      .footer-col--services {
+        margin-left: 0;
+      }
+      .footer-links a {
+        white-space: normal;
+      }
+      .footer-copyright {
+        font-size: 12px;
+      }
     }
+
+    /* Divider above the footer */
+    .footer-divider {
+      margin-top: 5rem;
+      margin-bottom: 1.5rem;
+    }
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.footer-desc {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  margin-bottom: 0.9rem;
+  margin-top: -0.2em;
+}
+
+.footer-copyright {
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.footer-heading {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.7rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.footer-links a {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.footer-col--services {
+  margin-left: 2rem;
+}
+
+.footer-col--services .footer-links a {
+  text-transform: uppercase;
+}
+
+@media (max-width: 500px) {
+  .site-footer {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1.75rem;
+  }
+  .footer-col:first-child {
+    grid-column: 1 / -1;
+  }
+  .footer-col--services {
+    margin-left: 0;
+  }
+  .footer-links a {
+    white-space: normal;
+  }
+  .footer-copyright {
+    font-size: 12px;
+  }
+}
   </style>
-
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    gtag('config', 'G-9ZHK592471');
-  </script>
+  gtag('config', 'G-9ZHK592471');
+</script>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xxr0mg59uq");
-  </script>
-  <noscript><style>.approach-desc[hidden] { display: block; margin-top: 1rem; }</style></noscript>
+</script>
 </head>
 <body>
+<div class="page">
 
-<header class="site-header">
-  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menuAccordion">
-    <span></span>
-    <span></span>
-  </button>
-  <a href="https://sabi.london/" class="site-name" aria-label="SABI">S A B I</a>
-</header>
+  <div class="wide-row site-header-wrap">
+    <header class="site-header">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+      <span class="site-tag">Game 02</span>
+      <a href="https://www.sabi.london" class="site-name">S A B I</a>
+    </header>
 
-<nav class="menu-accordion" id="menuAccordion" aria-label="Primary">
-  <div class="menu-list">
-    <a href="https://sabi.london/about">About</a>
-    <a href="https://sabi.london/services/">Services</a>
-    <a href="https://play.sabi.london/">Play</a>
+    <nav class="menu-accordion" id="menuAccordion">
+      <div class="menu-list">
+        <a href="https://sabi.london/about">About</a>
+        <a href="https://sabi.london/services/">Services</a>
+        <a href="https://play.sabi.london">Play</a>
+      </div>
+    </nav>
+
+    <div class="full-divider header-divider"></div>
   </div>
-</nav>
 
-<div class="header-divider"></div>
-
-<main>
-  <div class="hero">
-
-    <div class="hero-copy">
-      <a href="https://sabi.london/services/" class="back-link">← All Services</a>
-      <h1 class="service-title">Brand Strategy</h1>
-      <p class="service-overview">
-        A strategy service that clarifies your brand positioning, identifies untapped
-        growth opportunities, and highlights priority actions across core branding, intellectual
-        property, communications, customer experience, and social media.
-      </p>
+  <main>
+    <div class="wide-row">
+      <div class="game-nav game-nav-top">
+        <a href="https://play.sabi.london/word-search/">← Game 01</a>
+        <a class="inactive" aria-disabled="true" tabindex="-1">Game 03 →</a>
+      </div>
     </div>
 
-    <section class="approach" aria-labelledby="approach-label">
-      <div class="approach-head">
-        <h2 class="tag" id="approach-label">Approach</h2>
-        <p class="approach-counter"><span id="approach-current">01</span> / 05</p>
-        <div aria-live="polite">
-          <p class="approach-desc" id="desc-1">Clarity, coherence, and cultural signals. Defining your target audience, and mapping your brand alongside 15 competitor brands. Assessing product-market fit.</p>
-          <p class="approach-desc" id="desc-2" hidden>Reviewing the impact and associations of your trademark, logo, brand name, slogan, or product names. Market research for naming, renaming, and copywriting.</p>
-          <p class="approach-desc" id="desc-3" hidden>Identifying opportunities to refine or reframe how your products or services are structured, priced, and conveyed. Mapping the customer experience journey to identify opportunities to improve conversion.</p>
-          <p class="approach-desc" id="desc-4" hidden>Assessing how your brand reaches and converts its audience across website, social, search, marketing, and other acquisition channels. Identifying gaps in discoverability and messaging to support launches, campaigns, and rebranding.</p>
-          <p class="approach-desc" id="desc-5" hidden>Key observations, growth opportunities, and priority actions. Referrals to 15 relevant industry contacts for community and partnerships opportunities.</p>
+    <div class="container">
+      <div class="game-content">
+        <p class="game-label">Buzzword</p>
+        <h1 class="game-title">Know your jargon</h1>
+        <p class="game-intro">
+          These marketing acronyms describe the core business functions 
+          that every founder or creative needs to understand — whether
+          you remember the letters or not. Choose the right acronym to match
+          the definition on the flashcard below. You can switch to easy mode 
+          for hints.
+        </p>
+
+        <div class="mode-row">
+          <span class="mode-label" id="label-easy">EASY</span>
+          <button class="toggle" id="mode-toggle" aria-label="Toggle easy or pro mode" role="switch" aria-checked="false">
+            <span class="toggle-knob"></span>
+          </button>
+          <span class="mode-label active" id="label-pro">PRO</span>
+        </div>
+
+        <div class="flashcard">
+          <p id="definition-text"></p>
+        </div>
+
+        <div class="options" id="options"></div>
+
+        <div class="game-footer">
+          <span class="progress-text" id="progress">01 / 35</span>
+          <button class="btn-next" id="next-btn">Next →</button>
         </div>
       </div>
-      <ul class="menu">
-        <li><button type="button" aria-pressed="true" aria-controls="desc-1"><span class="num">01</span><span>Brand Positioning</span></button></li>
-        <li><button type="button" aria-pressed="false" aria-controls="desc-2"><span class="num">02</span><span>Intellectual Property</span></button></li>
-        <li><button type="button" aria-pressed="false" aria-controls="desc-3"><span class="num">03</span><span>Business Model</span></button></li>
-        <li><button type="button" aria-pressed="false" aria-controls="desc-4"><span class="num">04</span><span>Go-to-Market</span></button></li>
-        <li><button type="button" aria-pressed="false" aria-controls="desc-5"><span class="num">05</span><span>Referrals</span></button></li>
-      </ul>
-    </section>
+    </div>
 
-  </div>
+    <div class="container">
+      <div class="reflection-block">
+        <div class="reflection">
+          <h2>Why it matters</h2>
+          <p>
+            You don't need to memorise all of the marketing jargon, but you do need a
+            confident grasp of what each function does for your business.
+            These are terms that might come up in strategy sessions, investor calls,
+            or pitches.
+          </p>
+        </div>
 
-  <h2 class="tag deliverables-tag">Deliverables</h2>
-
-  <div class="deliverables-row">
-    <div class="deliverables-copy">
-      <div class="phase">
-        <h3 class="phase-title">Phase I</h3>
-        <p class="phase-row">Pre-consultation questionnaire</p>
-        <p class="phase-row">First consultation up to 90 minutes to outline your priorities and objectives</p>
-      </div>
-      <div class="phase">
-        <h3 class="phase-title">Phase II</h3>
-        <ul class="phase-list">
-          <li>Up to 3 hours of meeting time</li>
-          <li>A concise report summarising insights and recommendations</li>
-          <li>4–6 weeks delivery*</li>
-        </ul>
-        <p class="phase-footnote">* Scope scaled to the size of the business and the complexity of the priorities.</p>
+        <div class="game-nav game-nav-bottom">
+          <a href="https://play.sabi.london/word-search/">← Previous Game</a>
+          <a class="inactive" aria-disabled="true" tabindex="-1">Next Game →</a>
+        </div>
       </div>
     </div>
-    <div class="cta-col">
-      <a href="https://form.typeform.com/to/PHBRp1qa" target="_blank" rel="noopener" class="btn">Start the questionnaire →</a>
-    </div>
+  </main>
+
+  <div class="wide-row">
+    <div class="full-divider footer-divider"></div>
   </div>
-</main>
 
-<div class="footer-line"></div>
-
-<footer class="site-footer">
+  <div class="container">
+ <footer class="site-footer">
   <div class="footer-col">
     <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
     <p class="footer-copyright">© 2026 SABI LDN</p>
   </div>
 
-  <div class="footer-groups">
-    <div class="footer-col">
-      <p class="footer-heading">Contact</p>
-      <div class="footer-links">
-        <a href="mailto:office@sabi.london">office@sabi.london</a>
-        <a href="tel:+447400192837">+44 7400 192837</a>
-        <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
-      </div>
-    </div>
-
-    <div class="footer-col footer-col--services">
-      <p class="footer-heading">Services</p>
-      <div class="footer-links">
-        <a href="https://sabi.london/services/brand-strategy">Brand Strategy</a>
-        <a href="https://sabi.london/services/world-building">World Building</a>
-        <a href="https://sabi.london/services/copy">Copy</a>
-        <a href="https://sabi.london/services/community-and-partnerships">Community &amp; Partnerships</a>
-        <a href="https://sabi.london/services/campaign">Campaign</a>
-      </div>
+  <div class="footer-col">
+    <p class="footer-heading">Contact</p>
+    <div class="footer-links">
+      <a href="mailto:office@sabi.london">office@sabi.london</a>
+      <a href="tel:+447400192837">+44 7400 192837</a>
+      <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
     </div>
   </div>
-</footer>
+
+  <div class="footer-col footer-col--services">
+    <p class="footer-heading">Services</p>
+    <div class="footer-links">
+      <a href="https://sabi.london/services/brand-strategy">Brand Strategy</a>
+      <a href="https://sabi.london/services/world-building">World Building</a>
+      <a href="https://sabi.london/services/copy">Copy</a>
+      <a href="https://sabi.london/services/community-and-partnerships">Community &amp; Partnerships</a>
+      <a href="https://sabi.london/services/campaign">Campaign</a>
+    </div>
+  </div>
+  </footer>
+  </div>
+
+</div>
 
 <script>
   const menuBtn = document.getElementById('menuBtn');
   const menuAccordion = document.getElementById('menuAccordion');
+
   menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     const isOpen = menuAccordion.classList.toggle('open');
     menuBtn.classList.toggle('open', isOpen);
     menuBtn.setAttribute('aria-expanded', isOpen);
   });
+</script>
+<script>
+const ACRONYMS = {"AOV": {"expanded": "Average Order Value", "def": "The average amount of money a customer spends each time they complete a purchase."}, "CTR": {"expanded": "Click-Through Rate", "def": "The percentage of people who see your ad and actually click on it."}, "EMV": {"expanded": "Earned Media Value", "def": "An estimation of the monetary equivalent of unpaid, organic media exposure – such as influencer mentions, social media shares, press coverage, reviews, and word-of-mouth recommendations."}, "ROI": {"expanded": "Return on Investment", "def": "A percentage calculation used to measure the profitability of an investment or budget. To calculate it, divide net profit by the total cost of the investment."}, "KPI": {"expanded": "Key Performance Indicator", "def": "A measurable value that demonstrates how effectively a company is achieving key business objectives."}, "CRM": {"expanded": "Customer Relationship Management", "def": "Software and strategies used to manage and analyze customer interactions to improve engagement, retention, and loyalty."}, "CMS": {"expanded": "Content Management System", "def": "The software that allows multiple users to create, edit, and publish digital content without needing advanced coding knowledge."}, "CTA": {"expanded": "Call to Action", "def": "A prompt that encourages users to take immediate action. For example, a button, link, or instruction."}, "CLTV": {"expanded": "Customer Lifetime Value", "def": "The total revenue or net profit expected to be generated from a single customer throughout their relationship with a business. A high estimate indicates good customer retention."}, "GTM": {"expanded": "Go-to-Market", "def": "A comprehensive, cross-functional strategy plan detailing exactly how a company will launch a new product or enter a new market."}, "NPS": {"expanded": "Net Promoter Score", "def": "A score that measures customer loyalty by asking customers a single question: “How likely are you to recommend our company to a friend or colleague on a scale of one to ten?”"}, "ICP": {"expanded": "Ideal Customer Profile", "def": "A detailed, fictitious description of the type of customer that would get the most value from your product or service."}, "USP": {"expanded": "Unique Selling Proposition", "def": "The key feature or benefit that makes your business better than its competitors."}, "UGC": {"expanded": "User-Generated Content", "def": "Any content – such as reviews, testimonials, or social media posts – created by your customers rather than your brand."}, "CPM": {"expanded": "Cost per Mille", "def": "A common pricing model where advertisers pay a set price for every 1000 impressions their ad receives. This is often used for brand awareness campaigns where visibility is a higher priority than clicks."}, "B2B": {"expanded": "Business-to-Business", "def": "Marketing products or services to other companies."}, "B2C": {"expanded": "Business-to-Consumer", "def": "Marketing products or services to everyday consumers."}, "D2C": {"expanded": "Direct-to-Consumer", "def": "A retail business model where a brand sells its products directly to the end customer, bypassing third-party wholesalers, distributors, or retailers."}, "SEO": {"expanded": "Search Engine Optimisation", "def": "The process of improving your website – its content, backend development, and trust signalling – so it appears higher on search engine results pages."}, "GEO": {"expanded": "Generative Engine Optimisation", "def": "Structuring and refining digital content so it is easily understood, trusted, and cited by AI search tools."}, "CPC": {"expanded": "Cost per Click", "def": "An advertising pricing model where a digital platform hosts an ad for a brand, and the brand only pays when a user clicks the ad."}, "CPL": {"expanded": "Cost per Lead", "def": "An advertising pricing model where companies pay a platform for each lead generated by an ad, rather than impressions or clicks. A lead is a potential customer who has shown interest in your brand by voluntarily providing their contact information."}, "CPA": {"expanded": "Cost-Per-Acquisition", "def": "The cost of acquiring one paying customer, or converting a lead (when a potential customer shows active interest in your brand by voluntarily providing their contact information)."}, "CR": {"expanded": "Conversion Rate", "def": "The percentage of website users who take a desired action."}, "ESP": {"expanded": "Email Service Provider", "def": "A software platform used to create, send, automate, and manage email marketing campaigns, such as Mailchimp or Klaviyo."}, "SQL": {"expanded": "Sales Qualified Lead", "def": "A potential customer that has been evaluated and deemed ready for direct contact by a brand’s sales team because they are considered likely to make a purchase."}, "UX": {"expanded": "User Experience", "def": "The overall experience a person has when interacting with a website, app, or product, including how easy, efficient, and enjoyable it is to use."}, "UI": {"expanded": "User Interface", "def": "The visual elements of a digital product – such as buttons, menus, colours, and layouts – that users interact with."}, "CX": {"expanded": "Customer Experience", "def": "The overall perception customers have of your brand based on every interaction they have with your business before, during, and after a purchase."}, "SWOT": {"expanded": "Strengths Weaknesses Opportunities Threats", "def": "A strategic planning method used by businesses to assess internal capabilities and external market factors."}, "SKU": {"expanded": "Stock Keeping Unit", "def": "A unique alphanumeric code that retailers and businesses assign to products to internally track inventory, monitor sales, and manage stock levels."}, "OMO": {"expanded": "Online-Merge-Offline", "def": "A business and marketing strategy that erases the boundaries between digital and physical retail."}, "SOV": {"expanded": "Share of Voice", "def": "A measure of your brand’s visibility and overall presence in the market compared to your competitors."}, "VOC": {"expanded": "Voice of Customer", "def": "Feedback and insights gathered directly from customers to understand their needs and perceptions."}, "GDPR": {"expanded": "General Data Protection Regulation", "def": "A comprehensive data privacy and security law created by the European Union. It applies to businesses anywhere in the world that collect or target data from customers or clients who are EU residents."}};
 
-  (function () {
-    var buttons = document.querySelectorAll('.menu button');
-    var descs = document.querySelectorAll('.approach-desc');
-    var counter = document.getElementById('approach-current');
+const COMBINATIONS = [["AOV", ["CLTV", "ROI", "CR"]], ["CTR", ["CPC", "CPM", "CR"]], ["EMV", ["UGC", "SOV", "NPS"]], ["ROI", ["KPI", "CPA", "AOV"]], ["KPI", ["ROI", "GTM", "SWOT"]], ["CRM", ["CMS", "ESP", "CX"]], ["CMS", ["CRM", "ESP", "SEO"]], ["CTA", ["CTR", "CR", "UX"]], ["CLTV", ["AOV", "CRM", "CPA"]], ["GTM", ["ICP", "USP", "SWOT"]], ["NPS", ["CX", "UGC", "EMV"]], ["ICP", ["USP", "GTM", "B2B"]], ["USP", ["ICP", "GTM", "SWOT"]], ["UGC", ["EMV", "SOV", "NPS"]], ["CPM", ["CPC", "CTR", "CPL"]], ["B2B", ["B2C", "D2C", "OMO"]], ["B2C", ["B2B", "D2C", "OMO"]], ["D2C", ["B2C", "B2B", "OMO"]], ["SEO", ["GEO", "CMS", "SOV"]], ["GEO", ["SEO", "UX", "CMS"]], ["CPC", ["CTR", "CPM", "CPL"]], ["CPL", ["CPA", "CPC", "SQL"]], ["CPA", ["CPL", "CPC", "ROI"]], ["CR", ["CTR", "CTA", "UX"]], ["ESP", ["CRM", "CMS", "GDPR"]], ["SQL", ["CRM", "NPS", "CLTV"]], ["UX", ["UI", "CX", "CR"]], ["UI", ["UX", "CX", "CMS"]], ["CX", ["UX", "CRM", "NPS"]], ["SWOT", ["GTM", "USP", "KPI"]], ["SKU", ["CMS", "OMO", "D2C"]], ["OMO", ["D2C", "B2C", "UX"]], ["SOV", ["EMV", "UGC", "SEO"]], ["VOC", ["GDPR", "CRM", "ESP"]], ["GDPR", ["ESP", "CRM", "VOC"]]];
 
-    function select(index) {
-      buttons.forEach(function (b, i) { b.setAttribute('aria-pressed', i === index ? 'true' : 'false'); });
-      descs.forEach(function (d, i) { d.hidden = i !== index; });
-      counter.textContent = '0' + (index + 1);
-    }
+let order = [];
+let currentIndex = 0;
+let isEasyMode = false;
+let answered = false;
 
-    buttons.forEach(function (b, i) {
-      b.addEventListener('click', function () { select(i); });
+function shuffledOrder() {
+  const arr = COMBINATIONS.map((_, i) => i);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function shuffleOptions(correct, distractors) {
+  const opts = [correct, ...distractors];
+  for (let i = opts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+  return opts;
+}
+
+function init() {
+  order = shuffledOrder();
+  currentIndex = 0;
+  loadQuestion();
+}
+
+let currentOptionOrder = [];
+
+function loadQuestion() {
+  answered = false;
+  const comboIdx = order[currentIndex];
+  const [correct, distractors] = COMBINATIONS[comboIdx];
+  currentOptionOrder = shuffleOptions(correct, distractors);
+
+  document.getElementById('definition-text').textContent = ACRONYMS[correct].def;
+
+  const optionsEl = document.getElementById('options');
+  optionsEl.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  currentOptionOrder.forEach((acr, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.dataset.acronym = acr;
+    btn.dataset.correct = (acr === correct) ? 'true' : 'false';
+
+    const letterSpan = document.createElement('span');
+    letterSpan.className = 'option-letter';
+    letterSpan.textContent = letters[i];
+
+    const textSpan = document.createElement('span');
+    textSpan.className = 'option-text';
+    textSpan.textContent = isEasyMode ? ACRONYMS[acr].expanded : acr;
+
+    const markSpan = document.createElement('span');
+    markSpan.className = 'option-mark';
+    markSpan.textContent = '';
+
+    btn.appendChild(letterSpan);
+    btn.appendChild(textSpan);
+    btn.appendChild(markSpan);
+    btn.addEventListener('click', () => selectOption(btn));
+    optionsEl.appendChild(btn);
+  });
+
+  document.getElementById('progress').textContent =
+    String(currentIndex + 1).padStart(2, '0') + ' / ' + String(COMBINATIONS.length).padStart(2, '0');
+  document.getElementById('next-btn').classList.remove('show');
+}
+
+function selectOption(btn) {
+  if (answered) return;
+
+  const isCorrect = btn.dataset.correct === 'true';
+  const mark = btn.querySelector('.option-mark');
+
+  if (isCorrect) {
+    answered = true;
+    document.querySelectorAll('.option.wrong').forEach(o => {
+      o.classList.remove('wrong');
+      o.querySelector('.option-mark').textContent = '';
     });
-  })();
+    btn.classList.add('correct');
+    mark.textContent = '✓';
+    document.querySelectorAll('.option').forEach(o => o.classList.add('locked'));
+    document.getElementById('next-btn').classList.add('show');
+  } else {
+    document.querySelectorAll('.option.wrong').forEach(o => {
+      if (o !== btn) {
+        o.classList.remove('wrong');
+        o.querySelector('.option-mark').textContent = '';
+      }
+    });
+    btn.classList.add('wrong');
+    mark.textContent = '✕';
+  }
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= order.length) {
+    order = shuffledOrder();
+    currentIndex = 0;
+  }
+  loadQuestion();
+}
+
+function updateOptionLabels() {
+  document.querySelectorAll('.option').forEach(btn => {
+    const acr = btn.dataset.acronym;
+    const textSpan = btn.querySelector('.option-text');
+    textSpan.textContent = isEasyMode ? ACRONYMS[acr].expanded : acr;
+  });
+}
+
+document.getElementById('mode-toggle').addEventListener('click', () => {
+  isEasyMode = !isEasyMode;
+  const toggle = document.getElementById('mode-toggle');
+  const labelEasy = document.getElementById('label-easy');
+  const labelPro = document.getElementById('label-pro');
+  toggle.classList.toggle('is-easy', isEasyMode);
+  toggle.setAttribute('aria-checked', String(isEasyMode));
+  labelEasy.classList.toggle('active', isEasyMode);
+  labelPro.classList.toggle('active', !isEasyMode);
+  updateOptionLabels();
+});
+
+document.getElementById('next-btn').addEventListener('click', nextQuestion);
+
+init();
 </script>
 </body>
 </html>
