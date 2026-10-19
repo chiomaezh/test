@@ -1,161 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon-play.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A London-based creative consultancy offering strategy, communications, and design for culture-shaping presence and storytelling.">
+
+  <meta property="og:title" content="SABI">
+  <meta property="og:description" content="A creative consultancy for conceptually ambitious brands.">
+  <meta property="og:image" content="/favicon.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="SABI">
+  <meta name="twitter:description" content="A creative consultancy for conceptually ambitious brands.">
+  <meta name="twitter:image" content="/favicon.png">
 
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
   
-  <title>Marketing Buzzword — SABI Games</title>
-  <meta name="description" content="Buzzword, a marketing acronym game by SABI. These marketing acronyms describe the core business functions that every founder or creative needs to understand" />
+  <title>SABI | Brand Therapy</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
 
     ::selection {
-      background: var(--select-bg);
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
     }
     ::-moz-selection {
-      background: var(--select-bg);
-    }
-
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
+      background: var(--text-select-bg);
+      color: var(--text-select-text);
     }
 
     :root {
       --bg: #FAFBE3;
-      --surface: #FAFBE3;
-      --border: #423A3A;
-      --border-light: #423A3A;
       --text: #211D1D;
-      --found-bg: #2E000D;
-      --found-text: #FAFBE3;
-      --select-bg: rgba(183, 184, 168, 0.4);
-      --select-text: var(--text);
-      --wrong-fill: rgba(182, 175, 169, 0.5);
+      --border: #423A3A;
+      --text-select-bg: #170006;
+      --text-select-text: #FFFFFF;
       --font-body: 'owners-text', sans-serif;
       --font-mono: 'gemeli-mono', serif;
     }
 
     body {
-      font-family: var(--font-body);
-      font-weight: 350;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+      margin: 0;
+      height: 100vh;
+      background-color: var(--bg);
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 3rem 0 5rem;
-    }
-
-    .page { width: 100%; }
-
-    /* Narrow, centered wrapper for reading content (matches sabi.london/services/) */
-    .container {
-      max-width: 768px;
-      margin: 0 auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-
-    /* Wide row: used for the header, nav links, dividers and footer.
-       Stays the same as .container on mobile, but opens up to full width
-       with generous side padding on desktop/tablet — same breakpoint
-       convention as sabi.london/services/ */
-    .wide-row {
-      max-width: 720px;
-      margin: 0 auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-    @media (min-width: 721px) {
-      .wide-row {
-        max-width: none;
-        width: 100%;
-        padding-left: 2.5rem;
-        padding-right: 2.5rem;
-      }
-    }
-    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
-      .wide-row {
-        max-width: 720px;
-        width: auto;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-      }
-    }
-
-    /* Full-width horizontal rule, drawn inside a .wide-row parent */
-    .full-divider {
-      border-top: 0.5px solid var(--border);
-    }
-
-    /* ── Header ── */
-    .site-header {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      padding-bottom: 1rem;
-    }
-    .site-name {
-      font-family: "all-round-gothic", sans-serif;
-      font-weight: 400;
-      font-size: 24px;
-      text-transform: uppercase;
-      letter-spacing: 0px;
-      color: var(--text);
-      text-decoration: none;
-      justify-self: end;
-    }
-    .site-tag {
+      overflow: hidden;
       font-family: var(--font-body);
-      font-weight: 350;
-      font-size: 18px;
       color: var(--text);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      justify-self: center;
     }
 
-    /* ── Hamburger menu (accordion) ── */
-    .menu-btn {
-      position: relative;
-      width: 22px;
-      height: 16px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      justify-self: start;
+    img {
+      max-width: 220px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
     }
-    .menu-btn span {
-      position: absolute;
+
+    /* ── Ticker strip (sits above the nav) ── */
+    .ticker {
+      position: fixed;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 2px;
-      background: var(--text);
-      transition: transform 0.25s ease, top 0.25s ease;
-    }
-    .menu-btn span:first-child { top: 1.75px; }
-    .menu-btn span:last-child { top: 12.25px; }
-    .menu-btn.open span { height: 1.8px; }
-    .menu-btn.open span:first-child { top: 7px; transform: rotate(45deg); }
-    .menu-btn.open span:last-child { top: 7px; transform: rotate(-45deg); }
-    .menu-accordion {
-      max-height: 0;
+      height: 36px;
+      background: #170006;
       overflow: hidden;
-      transition: max-height 0.25s ease;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px 0 32px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
     }
-    .menu-accordion.open { max-height: 220px; }
-    .menu-list {
+
+    /* ── Typewriter quote (replaces the old scrolling reel) ── */
+    .ticker-quote-wrap {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14.5px;
+      letter-spacing: 1.8px;
+      line-height: 1;
+      color: var(--bg);
+    }
+
+    .ticker-quote {
+      font: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+    }
+
+    .ticker-cursor {
+      display: inline-block;
+      align-self: center;
+      width: 0.12em;
+      height: 1.35em;
+      margin-left: 3px;
+      background: currentColor;
+      animation: cursor-blink 0.9s step-end infinite;
+    }
+
+    @keyframes cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-cursor { animation: none; }
+    }
+
+    /* ── Send icon, top right of the strip, links to Substack ── */
+    .ticker-icon-btn {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      margin-left: 12px;
+      padding: 0;
+      background: none;
+      border: none;
+      color: var(--bg);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .ticker-icon-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      fill: var(--bg);
+      shape-rendering: geometricPrecision;
+    }
+
+    .ticker-icon-btn:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Lightbox (blank shell, full page — wire up content here later) ── */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 0, 6, 0.95);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 64px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--bg);
+      padding: 0;
+    }
+
+    .lightbox-close svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 0.6;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    .lightbox-close:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Lightbox copy ── */
+    .lightbox-content {
+      max-width: 380px;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-top: 0;
+      padding-bottom: 0;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--bg);
+      text-align: left;
+    }
+
+    .lightbox-heading {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--bg);
+      margin: 0 0 44px 0;
+    }
+
+    .lightbox-content p {
+      margin: 0 0 16px 0;
+    }
+
+    .lightbox-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-success {
+      display: none;
+    }
+
+    /* Needs to out-specificity ".lightbox-content p:last-child" above,
+       otherwise its margin-top gets silently reset to 0 and the success
+       message loses its gap above where the Name field used to sit. */
+    .lightbox-content .form-success {
+      margin: 60px 0 0;
+      font-family: var(--font-mono);
+      font-size: 17px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .form-success.is-visible {
+      display: block;
+    }
+
+    /* ── Sign-up form (Name + phone number, underline style) ── */
+    .lightbox-form {
       display: flex;
       flex-direction: column;
-      padding-bottom: 1rem;
+      gap: 0;
+      margin: 40px 0 40px;
     }
-    .menu-list a {
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      margin-top: 12px;
+    }
+
+    .form-field {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .form-field--code {
+      flex: 0 0 72px;
+    }
+
+    .lightbox-form input {
+      width: 100%;
+      display: block;
+      background: none;
+      border: none;
+      border-bottom: 1.6px solid var(--bg);
+      color: var(--bg);
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 18.5px;
+      letter-spacing: 1px;
+      line-height: 1.4;
+      padding: 6px 2px;
+      margin: 0;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+      transition: border-color 0.2s ease;
+    }
+
+    .lightbox-form input::placeholder {
+      color: rgba(250, 251, 227, 0.55);
+    }
+
+    /* Area code field: fixed "+" prefix that can't be deleted, only the
+       digits are part of the editable input */
+    .code-input-wrap {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1.6px solid var(--bg);
+      padding: 6px 2px;
+      transition: border-color 0.2s ease;
+    }
+
+    .code-prefix {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 18.5px;
+      letter-spacing: 1px;
+      color: var(--bg);
+      flex: 0 0 auto;
+    }
+
+    .code-input-wrap input {
+      border-bottom: none;
+      padding: 0 0 0 2px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    /* Error state — only shown after a failed submit attempt */
+    .form-field.has-error input,
+    .code-input-wrap.has-error {
+      border-color: rgba(80, 41, 47, 0.85);
+    }
+
+    .form-error-msg {
+      visibility: hidden;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 10px;
+      letter-spacing: 0.5px;
+      color: #cb9593;
+      margin-top: 10px;
+    }
+
+    .form-field.has-error .form-error-msg,
+    .form-consent.has-error .form-error-msg {
+      visibility: visible;
+    }
+
+    /* ── Consent checkbox + small print ── */
+    .form-consent {
+      margin: 24px 0 0;
+    }
+
+    .consent-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .consent-label input[type="checkbox"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .consent-box {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+      margin-top: 2px;
+      border: 1.6px solid var(--bg);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .consent-label input[type="checkbox"]:checked ~ .consent-box {
+      background-color: var(--bg);
+    }
+
+    .form-consent.has-error .consent-box {
+      border-color: rgb(80, 41, 47);
+    }
+
+    .consent-error-msg {
+      /* Indent to line up with the paragraph text, not the checkbox —
+         matches the checkbox width (15px) + the label's gap (10px). */
+      margin-left: 25px;
+    }
+
+    .consent-link {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .consent-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12.5px;
+      letter-spacing: 0.3px;
+      line-height: 1.5;
+      color: var(--bg);
+      opacity: 0.85;
+    }
+
+    /* ── Submit button — hairline arrow, more to come later ── */
+    .lightbox-submit {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 53px;
+      height: 30px;
+      margin-left: auto;
+      margin-right: -2px;
+      margin-top: -13.7px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .lightbox-submit svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 1.4;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    .lightbox-submit:focus-visible {
+      outline: 1px solid var(--bg);
+      outline-offset: 2px;
+    }
+
+    /* ── Desktop only: split the lightbox into two columns — heading + copy
+         on the left, form fields on the right — both confined to the
+         centre three-fifths (60%) of the page, bottoms aligned ── */
+    @media (min-width: 761px) {
+      .lightbox-box {
+        justify-content: center;
+        padding-right: 0;
+      }
+
+      .lightbox-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 80px;
+        width: auto;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .lightbox-copy {
+        flex: 1 1 0;
+        max-width: 380px;
+        text-align: right;
+      }
+
+      .lightbox-form {
+        flex: 1 1 0;
+        max-width: 320px;
+        margin: 0;
+      }
+    }
+
+    /* ── Top navigation ── */
+    .site-nav {
+      position: fixed;
+      top: 36px;
+      left: 0;
+      display: flex;
+      justify-content: space-between;
+      width: calc(20vw + 96px); /* was 33.33vw — narrower container = ~0.6x the space-between gap, same on both sides by construction */
+      padding: 28px 32px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    .nav-link {
       font-family: var(--font-body);
       font-weight: 500;
       font-size: 13px;
@@ -163,469 +511,396 @@
       text-transform: uppercase;
       color: var(--text);
       text-decoration: none;
-      padding: 0.5rem 0;
     }
-    .menu-list a.active {
-      color: rgba(139, 140, 120, 0.5);
-      pointer-events: none;
-      cursor: default;
-    }
-
-    .header-divider {
-      margin-bottom: 1.75rem;
-    }
-
-    /* ── Game header ── */
-    .game-label {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      color: var(--text);
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      margin-bottom: 0.6rem;
-    }
-    .game-title {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: clamp(24px, 5vw, 28px);
-      line-height: 1.1;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-    /* Narrow reading column, centered within .container rather than
-       flush-left (flashcard/options/intro are 540px inside a 720px box) */
-    .game-content {
-      max-width: 540px;
-      margin: 0 auto;
-    }
-
-    .game-intro {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.9;
-      max-width: 540px;
-      margin-bottom: 2rem;
-    }
-
-    /* ── Mode toggle ── */
-    .mode-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 2.5rem;
-    }
-    .mode-label {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text);
-      opacity: 0.65;
-      transition: opacity 0.15s;
-    }
-    .mode-label.active { opacity: 1; }
-    .toggle {
-      position: relative;
-      width: 44px;
-      height: 22px;
-      border: 0.5px solid #2E000D;
-      border-radius: 11px;
-      background: #2E000D;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .toggle-knob {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--bg);
-      transition: transform 0.18s ease;
-    }
-    .toggle.is-easy .toggle-knob { transform: translateX(0px); }
-    .toggle:not(.is-easy) .toggle-knob { transform: translateX(20px); }
-
-    /* ── Flashcard ── */
-    .flashcard {
-      border: 0.5px solid var(--border);
-      box-shadow: inset 0 0 0 1.1px var(--border);
-      border-radius: 16px;
-      padding: 2.1rem 2.25rem 1.7rem;
-      margin-bottom: 2rem;
-      min-height: 148px;
-      display: flex;
-      align-items: center;
-      max-width: 540px;
-    }
-    .flashcard p {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text);
-      text-align: justify;
-    }
-
-    /* ── Answer options ── */
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 2rem;
-      max-width: 540px;
-    }
-    .option {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border: 0.5px solid var(--border);
-      border-radius: 0;
-      padding: 0.9rem 1.1rem;
-      cursor: pointer;
-      background: transparent;
-      transition: background 0.12s, border-width 0.05s;
-      width: 100%;
-      text-align: left;
-    }
-    .option:hover:not(.locked) { background: rgba(66,58,58,0.05); }
-    .option-letter {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: #423A3A;
-      opacity: 1;
-      flex-shrink: 0;
-      width: 14px;
-    }
-    .option-text {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 14px;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      flex: 1;
-    }
-    .option-mark {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
-  width: 18px;
-  text-align: center;
-  flex-shrink: 0;
-  color: #2E000D;
-}
-    .option.wrong {
-      background: var(--wrong-fill);
-    }
-    .option.correct {
-      border-color: #000000;
-      box-shadow: inset 0 0 0 1.1px #000000;
-    }
-    .option.locked { cursor: default; }
-
-    /* ── Footer controls ── */
-    .game-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 3rem;
-      min-height: 38px;
-    }
-    .progress-text {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 12px;
+    .nav-link:visited,
+    .nav-link:active,
+    .nav-link:hover {
       color: var(--text);
     }
-    .btn-next {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--found-text);
-      background: var(--found-bg);
-      border: 0.5px solid var(--found-bg);
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s;
-    }
-    .btn-next.show { opacity: 1; pointer-events: auto; }
-    .btn-next:hover { background: #1f0009; }
 
-    /* ── Reflection ── */
-    .reflection {
-      margin-bottom: 2.5rem;
-    }
+    @media (max-width: 560px) {
+      .ticker { height: 42px; padding: 0 12px 0 20px; }
+      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
 
-    .reflection h2 {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 16px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text);
-      margin-bottom: 0.85rem;
-    }
-    .reflection p {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 14.5px;
-      color: var(--text);
-      line-height: 1.9;
-    }
-
-    /* ── Next/previous game nav ── */
-    .game-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-    .game-nav a {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-      border-bottom: 0.5px solid var(--border);
-      padding-bottom: 2px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .game-nav a:hover { opacity: 0.7; }
-    .game-nav .inactive {
-      color: rgba(139, 140, 120, 0.6);
-      border-bottom-color: rgba(139, 140, 120, 0.6);
-      opacity: 1;
-      pointer-events: none;
-      cursor: default;
-    }
-    .game-nav-top {
-      margin-bottom: 3rem;
-    }
-    .game-nav-bottom {
-      margin-bottom: 2.5rem;
-    }
-    .game-nav-single {
-      justify-content: flex-end;
-    }
-
-    /* Desktop only: anchor the prev/next links to the bottom edge of the
-       reflection paragraph, spanning out so their outer edges land
-       exactly on the footer divider's left/right edges. */
-    .reflection-block {
-      position: relative;
-      margin-top: 3.5rem;
-    }
-    @media (min-width: 721px) {
-      .game-nav-bottom {
-        position: absolute;
-        /* The +8px nudges each side in from the raw divider-edge calc —
-           100vw includes the scrollbar gutter in most browsers, which was
-           pushing the links a few pixels past the footer divider's ends. */
-        left: min(1rem, calc(400px - 50vw + 8px));
-        right: min(1rem, calc(400px - 50vw + 8px));
-        bottom: 0;
-        margin-bottom: 0;
+      .site-nav {
+        top: 30px;
+        width: auto;
+        right: 0;
+        padding: 26px 20px 20px 20px;
+        gap: 20px;
       }
-    }
-    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
-      .game-nav-bottom {
-        position: static;
-        left: auto;
-        right: auto;
-        margin-bottom: 2.5rem;
+      .nav-link { font-size: 13px; letter-spacing: 1px; }
+
+      .site-footer {
+        padding-bottom: 26px;
       }
     }
 
-    /* ── Site footer ── */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── Footer ── */
     .site-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px;
+      opacity: 0;
+      animation: fadeIn 1.8s ease forwards;
+      animation-delay: 0.4s;
+      font-family: var(--font-body);
       display: grid;
-      grid-template-columns: 1.4fr auto auto;
-      column-gap: 0.75rem;
-      align-items: start;
-      width: 100%;
-      overflow: hidden;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "desc weather" "contact weather";
+      align-items: end;
     }
+
+    .footer-desc { grid-area: desc; }
+    .footer-row { grid-area: contact; display: contents; }
+    .footer-col-left { grid-area: contact; }
+    .footer-col-right { grid-area: weather; }
 
     .footer-col {
       display: flex;
       flex-direction: column;
-      align-self: start;
     }
 
-    .footer-desc {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 1.5;
-      color: var(--text);
-      margin-bottom: 0.9rem;
-      margin-top: -0.2em;
+    .footer-col-left {
+      align-items: flex-start;
+      transform: scale(0.9);
+      transform-origin: bottom left;
     }
 
-    .footer-copyright {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14px;
-      color: var(--text);
-      letter-spacing: 0.5px;
+    .footer-col-right {
+      align-items: flex-end;
     }
 
-    .footer-heading {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      margin-bottom: 0.7rem;
-    }
-
-    .footer-links {
+    /* ── World clock / weather block ── */
+    .station {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      align-items: stretch;
+      gap: 8px;
+      /* Small uniform nudge down to match the contact block's top/bottom —
+         purely visual (transform), doesn't touch layout, alignment, or
+         font-size, and applies consistently across every breakpoint since
+         it's on .station itself rather than a per-breakpoint wrapper.
+         Adjust this single value up/down if it needs to move further. */
+      transform: translateY(3px);
     }
 
-    .footer-links a {
+    /* City + time rows reveal independently of the weather row — the time's
+       font-size is derived from the city label, not from the weather fetch,
+       so it shouldn't be held hostage by a slow/hung network request. */
+    .station-row:nth-child(1),
+    .station-row:nth-child(2) {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .station.clock-ready .station-row:nth-child(1),
+    .station.clock-ready .station-row:nth-child(2) {
+      opacity: 1;
+    }
+
+    /* Weather row (icon + temperature) reveals once the fetch settles. */
+    .station-row:nth-child(3) {
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .station.is-ready .station-row:nth-child(3) {
+      opacity: 1;
+    }
+
+    .station-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .station-city {
       font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 13px;
-      color: var(--text);
-      text-decoration: underline;
-      white-space: nowrap;
-    }
-
-    .footer-col--services {
-      margin-left: 2rem;
-    }
-
-    .footer-col--services .footer-links a {
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 2.7px;
       text-transform: uppercase;
+      color: #000000;
+      font-weight: 400;
+      position: relative;
+      top: -0.9px;
     }
 
-    @media (max-width: 500px) {
+    .station-time {
+      font-family: var(--font-body);
+      font-size: 34.2px;
+      letter-spacing: 0.9px;
+      color: #000000;
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .station-meta {
+      display: flex;
+      align-items: center;
+      gap: 6.3px;
+      font-family: var(--font-body);
+      font-size: 27px;
+      letter-spacing: 0.9px;
+      color: #000000;
+    }
+
+    .station-icon {
+      width: 32.4px;
+      height: 32.4px;
+      flex-shrink: 0;
+    }
+    .station-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Clickable retry — only appears in place of the icon when the weather
+       fetch has failed. Sized to fill .station-icon exactly (100%/100%), so
+       it automatically matches the normal icon's dimensions at every
+       breakpoint without needing its own separate size rules. Same hairline
+       stroke treatment as the lightbox close/submit icons for consistency. */
+    .station-refresh-btn {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    .station-refresh-btn svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--text);
+      stroke-width: 1.4;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
+
+    /* Error state (same treatment as the Play page's weather reel): when the
+       weather fetch fails, the icon slot becomes the retry button and a small
+       "weather / update" note sits to its left, bottom-aligned, with the
+       temperature hidden. */
+    .station-meta.is-error {
+      align-items: flex-end;
+      gap: 13.5px;
+    }
+    .station-meta.is-error [data-icon] { order: 2; }
+    .station-meta.is-error .station-refresh-text { order: 1; }
+    /* The empty temperature span would otherwise still take part in the
+       flex layout (including its share of the gap), so drop it entirely. */
+    .station-meta.is-error [data-temp] { display: none; }
+    .station-refresh-text {
+      display: none;
+      flex-direction: column;
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 10px;
+      line-height: 1.15;
+      letter-spacing: 0.5px;
+      text-transform: lowercase;
+      text-align: left;
+      color: var(--text);
+      white-space: normal;
+    }
+    .station-meta.is-error .station-refresh-text { display: flex; }
+
+    /* ── Description block ── */
+  .footer-desc {
+  max-width: 420px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  text-align: left;
+  margin: 0 0 14px 0;
+}
+
+/* ── Contact block ── */
+.contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  text-align: left;
+}
+
+    .contact-label {
+      font-family: var(--font-body);
+      font-size: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .contact-line {
+      font-family: var(--font-body);
+      font-size: 16.5px;
+      color: #000000;
+      font-weight: 300;
+    }
+
+    .contact-link {
+      color: #000000 !important;
+      text-decoration: underline;
+    }
+    .contact-link:visited,
+    .contact-link:active,
+    .contact-link:hover {
+      color: #000000 !important;
+    }
+
+    @media (max-width: 760px) {
+      img { max-width: 165px; }
       .site-footer {
         grid-template-columns: 1fr 1fr;
-        column-gap: 1rem;
-        row-gap: 1.75rem;
+        grid-template-areas: "desc desc" "contact weather";
+        align-items: start;
+        gap: 45px 12px;
+        padding: 20px;
       }
-      .footer-col:first-child {
-        grid-column: 1 / -1;
+      .footer-row { display: contents; }
+      .footer-col-left {
+        align-items: flex-start;
+        transform: none;
+        align-self: stretch;
       }
-      .footer-col--services {
-        margin-left: 0;
+      .footer-col-right {
+        align-items: flex-end;
+        transform: none;
+        align-self: stretch;
       }
-      .footer-links a {
-        white-space: normal;
+      .contact-block {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
-      .footer-copyright {
+      .station {
+        height: 100%;
+        justify-content: space-between;
+      }
+      .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
+      .contact-block { text-align: left; }
+      .station-city { font-size: 15px; letter-spacing: 2px; }
+      .station-time { font-size: 28px; }
+      .station-meta { font-size: 22px; }
+      .station-icon { width: 22px; height: 22px; }
+      /* Row gap tightened (8px -> 5.5px) so the weather block, and therefore the
+         contact block that stretches to match it, comes out at 82px tall. */
+      .station { width: auto; gap: 5.5px; }
+
+      .lightbox-box {
+        align-items: flex-end;
+        justify-content: center;
+        padding-right: 0;
+      }
+      .lightbox-content {
+        padding-bottom: 25px;
+        transform: translateY(32px);
+      }
+    }
+
+    /* ── Phone landscape (short viewport): keep the compact single-row
+         footer instead of the tall stacked portrait layout. Capped at
+         max-height so tablets in landscape (which have plenty of room)
+         keep the normal desktop-style footer untouched. ── */
+    @media (orientation: landscape) and (max-height: 500px) {
+      img { max-width: 110px; }
+
+      .ticker { height: 42px; padding: 0 12px 0 20px; }
+      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
+
+      .site-nav { top: 24px; padding: 36px 20px 14px 20px; width: 33.33vw; }
+
+      .site-footer {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "desc weather" "contact weather";
+        align-items: end;
+        gap: 0;
+        padding: 14px 24px;
+      }
+
+      .footer-row { display: contents; }
+      .footer-col-left {
+        grid-area: contact;
+        align-items: flex-start;
+        transform: none;
+        align-self: end;
+      }
+      .footer-col-right {
+        grid-area: weather;
+        align-items: flex-end;
+        transform: none;
+        align-self: end;
+      }
+
+      .footer-desc {
+        text-align: left;
         font-size: 12px;
+        line-height: 1.15;
+        max-width: 280px;
+        margin: 0 0 16px 0;
+        justify-self: start;
       }
+
+      .contact-block { gap: 4px; text-align: left; }
+      .contact-label { font-size: 10px; letter-spacing: 1.5px; }
+      .contact-line { font-size: 11px; }
+
+      .station { gap: 3px; }
+      .station-city { font-size: 11px; letter-spacing: 1.5px; }
+      .station-time { font-size: 18px; }
+      .station-meta { font-size: 14px; gap: 4px; }
+      .station-icon { width: 14px; height: 14px; }
+      /* Error state scaled down with the icon so the note + retry icon still fit the narrow row */
+      .station-meta.is-error { gap: 6px; }
+      .station-refresh-text { font-size: 8px; }
+
+      .lightbox-close {
+        top: 0;
+      }
+
+      .lightbox-box {
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 0 0 24px;
+      }
+      .lightbox-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 40px;
+        font-size: 15px;
+      }
+      .lightbox-copy {
+        flex: 1 1 0;
+        max-width: 340px;
+      }
+      .lightbox-heading {
+        font-size: 17px;
+      }
+
+      .lightbox-form {
+        flex: 1 1 0;
+        max-width: 300px;
+      }
+
     }
-
-    /* Divider above the footer */
-    .footer-divider {
-      margin-top: 5rem;
-      margin-bottom: 1.5rem;
-    }
-
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  align-self: start;
-}
-
-.footer-desc {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--text);
-  margin-bottom: 0.9rem;
-  margin-top: -0.2em;
-}
-
-.footer-copyright {
-  font-family: var(--font-mono);
-  font-weight: 300;
-  font-size: 14px;
-  color: var(--text);
-  letter-spacing: 0.5px;
-}
-
-.footer-heading {
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 0.7rem;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.footer-links a {
-  font-family: var(--font-body);
-  font-weight: 300;
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: underline;
-  white-space: nowrap;
-}
-
-.footer-col--services {
-  margin-left: 2rem;
-}
-
-.footer-col--services .footer-links a {
-  text-transform: uppercase;
-}
-
-@media (max-width: 500px) {
-  .site-footer {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 1rem;
-    row-gap: 1.75rem;
-  }
-  .footer-col:first-child {
-    grid-column: 1 / -1;
-  }
-  .footer-col--services {
-    margin-left: 0;
-  }
-  .footer-links a {
-    white-space: normal;
-  }
-  .footer-copyright {
-    font-size: 12px;
-  }
-}
   </style>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
@@ -645,274 +920,548 @@
 </script>
 </head>
 <body>
-<div class="page">
+  <h1 style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Creative direction for conceptually ambitious brands.</h1>
 
-  <div class="wide-row site-header-wrap">
-    <header class="site-header">
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-        <span></span>
-        <span></span>
+  <div class="ticker">
+    <div class="ticker-quote-wrap">
+      <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
+    </div>
+    <button type="button" class="ticker-icon-btn" id="tickerLightboxTrigger" aria-label="Open lightbox">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M3,6 L21,12 L3,18 L6.2,12 Z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
+    <div class="lightbox-box">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
       </button>
-      <span class="site-tag">Game 02</span>
-      <a href="https://www.sabi.london" class="site-name">S A B I</a>
-    </header>
-
-    <nav class="menu-accordion" id="menuAccordion">
-      <div class="menu-list">
-        <a href="https://sabi.london/about">About</a>
-        <a href="https://sabi.london/services/">Services</a>
-        <a href="https://play.sabi.london">Play</a>
-      </div>
-    </nav>
-
-    <div class="full-divider header-divider"></div>
-  </div>
-
-  <main>
-    <div class="wide-row">
-      <div class="game-nav game-nav-top">
-        <a href="https://play.sabi.london/word-search/">← Game 01</a>
-        <a class="inactive" aria-disabled="true" tabindex="-1">Game 03 →</a>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="game-content">
-        <p class="game-label">Buzzword</p>
-        <h1 class="game-title">Know your jargon</h1>
-        <p class="game-intro">
-          These marketing acronyms describe the core business functions 
-          that every founder or creative needs to understand — whether
-          you remember the letters or not. Choose the right acronym to match
-          the definition on the flashcard below. You can switch to easy mode 
-          for hints.
-        </p>
-
-        <div class="mode-row">
-          <span class="mode-label" id="label-easy">EASY</span>
-          <button class="toggle" id="mode-toggle" aria-label="Toggle easy or pro mode" role="switch" aria-checked="false">
-            <span class="toggle-knob"></span>
+      <div class="lightbox-content" id="lightboxContent">
+        <div class="lightbox-copy">
+          <p class="lightbox-heading">Thoughtline</p>
+          <p>A creative prompt subscription.<br>A bite of incentive via SMS.</p>
+          <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
+          <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
+          <p>Just thoughts. No wrong answers.<br>(No replies at all, actually &ndash; it&rsquo;s one-way.)</p>
+        </div>
+        <form class="lightbox-form" id="lightboxForm" novalidate>
+          <div class="form-field" data-field="name">
+            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
+            <div class="form-error-msg">Required.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-field form-field--code" data-field="areaCode">
+              <div class="code-input-wrap">
+                <span class="code-prefix" aria-hidden="true">+</span>
+                <input type="text" name="areaCode" placeholder="000" autocomplete="tel-country-code" inputmode="numeric" pattern="[0-9]*" maxlength="3" required>
+              </div>
+              <div class="form-error-msg">Required.</div>
+            </div>
+            <div class="form-field form-field--number" data-field="number">
+              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
+              <div class="form-error-msg">Required.</div>
+            </div>
+          </div>
+          <div class="form-consent" data-field="consent">
+            <label class="consent-label">
+              <input type="checkbox" name="consent" required>
+              <span class="consent-box" aria-hidden="true"></span>
+              <span class="consent-text">I agree to receive SABI&rsquo;s weekly prompts by SMS. I understand that I can unsubscribe anytime by texting STOP. I've read the <a href="https://sabi.london/legal" target="_blank" class="consent-link">privacy policy</a>.</span>
+            </label>
+            <div class="form-error-msg consent-error-msg">Required.</div>
+          </div>
+          <button type="submit" class="lightbox-submit" aria-label="Submit">
+            <svg viewBox="0 0 60 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M14 4 L14 14 Q14 20 20 20 L56 20"/>
+              <polyline points="44 10 56 20 44 30"/>
+            </svg>
           </button>
-          <span class="mode-label active" id="label-pro">PRO</span>
+        </form>
+        <p class="form-success" id="formSuccess">You&rsquo;re on the list :)<br>Text you l8r</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="site-nav">
+    <a href="https://sabi.london/about" class="nav-link">About</a>
+    <a href="https://sabi.london/services/"class="nav-link">Services</a>
+    <a href="https://play.sabi.london/" class="nav-link">Play</a>
+  </nav>
+
+  <img src="sabi-logo.png" alt="SABI">
+
+  <footer class="site-footer">
+    <p class="footer-desc">A creative consultancy offering strategy and design <br class="desc-break">for culture-shaping presence and storytelling.</p>
+
+    <div class="footer-row">
+      <div class="footer-col footer-col-left">
+        <div class="contact-block">
+          <span class="contact-label">Contact</span>
+          <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
+          <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
         </div>
+      </div>
 
-        <div class="flashcard">
-          <p id="definition-text"></p>
-        </div>
-
-        <div class="options" id="options"></div>
-
-        <div class="game-footer">
-          <span class="progress-text" id="progress">01 / 35</span>
-          <button class="btn-next" id="next-btn">Next →</button>
+      <div class="footer-col footer-col-right">
+        <div class="station" id="station">
+          <div class="station-row">
+            <span class="station-city">London</span>
+          </div>
+          <div class="station-row">
+            <span class="station-time" data-time>--:--</span>
+          </div>
+          <div class="station-row">
+            <span class="station-meta">
+              <span class="station-icon" data-icon></span>
+              <span data-temp>--°C</span>
+              <span class="station-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="container">
-      <div class="reflection-block">
-        <div class="reflection">
-          <h2>Why it matters</h2>
-          <p>
-            You don't need to memorise all of the marketing jargon, but you do need a
-            confident grasp of what each function does for your business.
-            These are terms that might come up in strategy sessions, investor calls,
-            or pitches.
-          </p>
-        </div>
-
-        <div class="game-nav game-nav-bottom">
-          <a href="https://play.sabi.london/word-search/">← Previous Game</a>
-          <a class="inactive" aria-disabled="true" tabindex="-1">Next Game →</a>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <div class="wide-row">
-    <div class="full-divider footer-divider"></div>
-  </div>
-
-  <div class="container">
- <footer class="site-footer">
-  <div class="footer-col">
-    <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
-    <p class="footer-copyright">© 2026 SABI LDN</p>
-  </div>
-
-  <div class="footer-col">
-    <p class="footer-heading">Contact</p>
-    <div class="footer-links">
-      <a href="mailto:office@sabi.london">office@sabi.london</a>
-      <a href="tel:+447400192837">+44 7400 192837</a>
-      <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
-    </div>
-  </div>
-
-  <div class="footer-col footer-col--services">
-    <p class="footer-heading">Services</p>
-    <div class="footer-links">
-      <a href="https://sabi.london/services/brand-strategy">Brand Strategy</a>
-      <a href="https://sabi.london/services/world-building">World Building</a>
-      <a href="https://sabi.london/services/copy">Copy</a>
-      <a href="https://sabi.london/services/community-and-partnerships">Community &amp; Partnerships</a>
-      <a href="https://sabi.london/services/campaign">Campaign</a>
-    </div>
-  </div>
   </footer>
-  </div>
 
-</div>
+  <script>
+    // ── Typewriter quote reel (replaces the old scrolling ticker) ──
+    const TICKER_QUOTES = [
+      'All the good ideas are outside',
+      'No detail too casual',
+      'Signed, on and off paper',
+      'We saw you see it first',
+      'Tuesday afternoons are cancelled',
+      'The business of good impressions'
+      // Add a 6th quote here as another string in the array, if needed.
+    ];
 
-<script>
-  const menuBtn = document.getElementById('menuBtn');
-  const menuAccordion = document.getElementById('menuAccordion');
+    const TYPE_SPEED_MS = 83;      // per character, typing (1.5x slower than before)
+    const DELETE_SPEED_MS = 45;    // per character, deleting (1.5x slower than before)
+    const HOLD_MS = 3500;          // pause once fully typed
+    const GAP_MS = 400;            // pause once fully deleted, before next quote
 
-  menuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = menuAccordion.classList.toggle('open');
-    menuBtn.classList.toggle('open', isOpen);
-    menuBtn.setAttribute('aria-expanded', isOpen);
-  });
-</script>
-<script>
-const ACRONYMS = {"AOV": {"expanded": "Average Order Value", "def": "The average amount of money a customer spends each time they complete a purchase."}, "CTR": {"expanded": "Click-Through Rate", "def": "The percentage of people who see your ad and actually click on it."}, "EMV": {"expanded": "Earned Media Value", "def": "An estimation of the monetary equivalent of unpaid, organic media exposure – such as influencer mentions, social media shares, press coverage, reviews, and word-of-mouth recommendations."}, "ROI": {"expanded": "Return on Investment", "def": "A percentage calculation used to measure the profitability of an investment or budget. To calculate it, divide net profit by the total cost of the investment."}, "KPI": {"expanded": "Key Performance Indicator", "def": "A measurable value that demonstrates how effectively a company is achieving key business objectives."}, "CRM": {"expanded": "Customer Relationship Management", "def": "Software and strategies used to manage and analyze customer interactions to improve engagement, retention, and loyalty."}, "CMS": {"expanded": "Content Management System", "def": "The software that allows multiple users to create, edit, and publish digital content without needing advanced coding knowledge."}, "CTA": {"expanded": "Call to Action", "def": "A prompt that encourages users to take immediate action. For example, a button, link, or instruction."}, "CLTV": {"expanded": "Customer Lifetime Value", "def": "The total revenue or net profit expected to be generated from a single customer throughout their relationship with a business. A high estimate indicates good customer retention."}, "GTM": {"expanded": "Go-to-Market", "def": "A comprehensive, cross-functional strategy plan detailing exactly how a company will launch a new product or enter a new market."}, "NPS": {"expanded": "Net Promoter Score", "def": "A score that measures customer loyalty by asking customers a single question: “How likely are you to recommend our company to a friend or colleague on a scale of one to ten?”"}, "ICP": {"expanded": "Ideal Customer Profile", "def": "A detailed, fictitious description of the type of customer that would get the most value from your product or service."}, "USP": {"expanded": "Unique Selling Proposition", "def": "The key feature or benefit that makes your business better than its competitors."}, "UGC": {"expanded": "User-Generated Content", "def": "Any content – such as reviews, testimonials, or social media posts – created by your customers rather than your brand."}, "CPM": {"expanded": "Cost per Mille", "def": "A common pricing model where advertisers pay a set price for every 1000 impressions their ad receives. This is often used for brand awareness campaigns where visibility is a higher priority than clicks."}, "B2B": {"expanded": "Business-to-Business", "def": "Marketing products or services to other companies."}, "B2C": {"expanded": "Business-to-Consumer", "def": "Marketing products or services to everyday consumers."}, "D2C": {"expanded": "Direct-to-Consumer", "def": "A retail business model where a brand sells its products directly to the end customer, bypassing third-party wholesalers, distributors, or retailers."}, "SEO": {"expanded": "Search Engine Optimisation", "def": "The process of improving your website – its content, backend development, and trust signalling – so it appears higher on search engine results pages."}, "GEO": {"expanded": "Generative Engine Optimisation", "def": "Structuring and refining digital content so it is easily understood, trusted, and cited by AI search tools."}, "CPC": {"expanded": "Cost per Click", "def": "An advertising pricing model where a digital platform hosts an ad for a brand, and the brand only pays when a user clicks the ad."}, "CPL": {"expanded": "Cost per Lead", "def": "An advertising pricing model where companies pay a platform for each lead generated by an ad, rather than impressions or clicks. A lead is a potential customer who has shown interest in your brand by voluntarily providing their contact information."}, "CPA": {"expanded": "Cost-Per-Acquisition", "def": "The cost of acquiring one paying customer, or converting a lead (when a potential customer shows active interest in your brand by voluntarily providing their contact information)."}, "CR": {"expanded": "Conversion Rate", "def": "The percentage of website users who take a desired action."}, "ESP": {"expanded": "Email Service Provider", "def": "A software platform used to create, send, automate, and manage email marketing campaigns, such as Mailchimp or Klaviyo."}, "SQL": {"expanded": "Sales Qualified Lead", "def": "A potential customer that has been evaluated and deemed ready for direct contact by a brand’s sales team because they are considered likely to make a purchase."}, "UX": {"expanded": "User Experience", "def": "The overall experience a person has when interacting with a website, app, or product, including how easy, efficient, and enjoyable it is to use."}, "UI": {"expanded": "User Interface", "def": "The visual elements of a digital product – such as buttons, menus, colours, and layouts – that users interact with."}, "CX": {"expanded": "Customer Experience", "def": "The overall perception customers have of your brand based on every interaction they have with your business before, during, and after a purchase."}, "SWOT": {"expanded": "Strengths Weaknesses Opportunities Threats", "def": "A strategic planning method used by businesses to assess internal capabilities and external market factors."}, "SKU": {"expanded": "Stock Keeping Unit", "def": "A unique alphanumeric code that retailers and businesses assign to products to internally track inventory, monitor sales, and manage stock levels."}, "OMO": {"expanded": "Online-Merge-Offline", "def": "A business and marketing strategy that erases the boundaries between digital and physical retail."}, "SOV": {"expanded": "Share of Voice", "def": "A measure of your brand’s visibility and overall presence in the market compared to your competitors."}, "VOC": {"expanded": "Voice of Customer", "def": "Feedback and insights gathered directly from customers to understand their needs and perceptions."}, "GDPR": {"expanded": "General Data Protection Regulation", "def": "A comprehensive data privacy and security law created by the European Union. It applies to businesses anywhere in the world that collect or target data from customers or clients who are EU residents."}};
+    const tickerQuoteEl = document.getElementById('tickerQuote');
 
-const COMBINATIONS = [["AOV", ["CLTV", "ROI", "CR"]], ["CTR", ["CPC", "CPM", "CR"]], ["EMV", ["UGC", "SOV", "NPS"]], ["ROI", ["KPI", "CPA", "AOV"]], ["KPI", ["ROI", "GTM", "SWOT"]], ["CRM", ["CMS", "ESP", "CX"]], ["CMS", ["CRM", "ESP", "SEO"]], ["CTA", ["CTR", "CR", "UX"]], ["CLTV", ["AOV", "CRM", "CPA"]], ["GTM", ["ICP", "USP", "SWOT"]], ["NPS", ["CX", "UGC", "EMV"]], ["ICP", ["USP", "GTM", "B2B"]], ["USP", ["ICP", "GTM", "SWOT"]], ["UGC", ["EMV", "SOV", "NPS"]], ["CPM", ["CPC", "CTR", "CPL"]], ["B2B", ["B2C", "D2C", "OMO"]], ["B2C", ["B2B", "D2C", "OMO"]], ["D2C", ["B2C", "B2B", "OMO"]], ["SEO", ["GEO", "CMS", "SOV"]], ["GEO", ["SEO", "UX", "CMS"]], ["CPC", ["CTR", "CPM", "CPL"]], ["CPL", ["CPA", "CPC", "SQL"]], ["CPA", ["CPL", "CPC", "ROI"]], ["CR", ["CTR", "CTA", "UX"]], ["ESP", ["CRM", "CMS", "GDPR"]], ["SQL", ["CRM", "NPS", "CLTV"]], ["UX", ["UI", "CX", "CR"]], ["UI", ["UX", "CX", "CMS"]], ["CX", ["UX", "CRM", "NPS"]], ["SWOT", ["GTM", "USP", "KPI"]], ["SKU", ["CMS", "OMO", "D2C"]], ["OMO", ["D2C", "B2C", "UX"]], ["SOV", ["EMV", "UGC", "SEO"]], ["VOC", ["GDPR", "CRM", "ESP"]], ["GDPR", ["ESP", "CRM", "VOC"]]];
+    function typewriterLoop(index = 0) {
+      const quote = TICKER_QUOTES[index];
+      let charIndex = 0;
 
-let order = [];
-let currentIndex = 0;
-let isEasyMode = false;
-let answered = false;
+      function typeChar() {
+        tickerQuoteEl.textContent = quote.slice(0, charIndex);
+        charIndex++;
+        if (charIndex <= quote.length) {
+          setTimeout(typeChar, TYPE_SPEED_MS);
+        } else {
+          setTimeout(deleteChar, HOLD_MS);
+        }
+      }
 
-function shuffledOrder() {
-  const arr = COMBINATIONS.map((_, i) => i);
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
+      function deleteChar() {
+        charIndex--;
+        tickerQuoteEl.textContent = quote.slice(0, charIndex);
+        if (charIndex > 0) {
+          setTimeout(deleteChar, DELETE_SPEED_MS);
+        } else {
+          const nextIndex = (index + 1) % TICKER_QUOTES.length;
+          setTimeout(() => typewriterLoop(nextIndex), GAP_MS);
+        }
+      }
 
-function shuffleOptions(correct, distractors) {
-  const opts = [correct, ...distractors];
-  for (let i = opts.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [opts[i], opts[j]] = [opts[j], opts[i]];
-  }
-  return opts;
-}
+      typeChar();
+    }
 
-function init() {
-  order = shuffledOrder();
-  currentIndex = 0;
-  loadQuestion();
-}
+    if (tickerQuoteEl && TICKER_QUOTES.length) {
+      typewriterLoop(0);
+    }
 
-let currentOptionOrder = [];
+    // ── Lightbox, triggered by the ticker's arrow icon ──
+    const smsLightbox = document.getElementById('smsLightbox');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const tickerLightboxTrigger = document.getElementById('tickerLightboxTrigger');
 
-function loadQuestion() {
-  answered = false;
-  const comboIdx = order[currentIndex];
-  const [correct, distractors] = COMBINATIONS[comboIdx];
-  currentOptionOrder = shuffleOptions(correct, distractors);
+    function openLightbox() {
+      smsLightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
 
-  document.getElementById('definition-text').textContent = ACRONYMS[correct].def;
+    function closeLightbox() {
+      smsLightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
 
-  const optionsEl = document.getElementById('options');
-  optionsEl.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D'];
+    tickerLightboxTrigger.addEventListener('click', openLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
 
-  currentOptionOrder.forEach((acr, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option';
-    btn.dataset.acronym = acr;
-    btn.dataset.correct = (acr === correct) ? 'true' : 'false';
-
-    const letterSpan = document.createElement('span');
-    letterSpan.className = 'option-letter';
-    letterSpan.textContent = letters[i];
-
-    const textSpan = document.createElement('span');
-    textSpan.className = 'option-text';
-    textSpan.textContent = isEasyMode ? ACRONYMS[acr].expanded : acr;
-
-    const markSpan = document.createElement('span');
-    markSpan.className = 'option-mark';
-    markSpan.textContent = '';
-
-    btn.appendChild(letterSpan);
-    btn.appendChild(textSpan);
-    btn.appendChild(markSpan);
-    btn.addEventListener('click', () => selectOption(btn));
-    optionsEl.appendChild(btn);
-  });
-
-  document.getElementById('progress').textContent =
-    String(currentIndex + 1).padStart(2, '0') + ' / ' + String(COMBINATIONS.length).padStart(2, '0');
-  document.getElementById('next-btn').classList.remove('show');
-}
-
-function selectOption(btn) {
-  if (answered) return;
-
-  const isCorrect = btn.dataset.correct === 'true';
-  const mark = btn.querySelector('.option-mark');
-
-  if (isCorrect) {
-    answered = true;
-    document.querySelectorAll('.option.wrong').forEach(o => {
-      o.classList.remove('wrong');
-      o.querySelector('.option-mark').textContent = '';
+    smsLightbox.addEventListener('click', (e) => {
+      if (e.target === smsLightbox) closeLightbox();
     });
-    btn.classList.add('correct');
-    mark.textContent = '✓';
-    document.querySelectorAll('.option').forEach(o => o.classList.add('locked'));
-    document.getElementById('next-btn').classList.add('show');
-  } else {
-    document.querySelectorAll('.option.wrong').forEach(o => {
-      if (o !== btn) {
-        o.classList.remove('wrong');
-        o.querySelector('.option-mark').textContent = '';
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && smsLightbox.classList.contains('is-open')) {
+        closeLightbox();
       }
     });
-    btn.classList.add('wrong');
-    mark.textContent = '✕';
-  }
-}
 
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex >= order.length) {
-    order = shuffledOrder();
-    currentIndex = 0;
-  }
-  loadQuestion();
-}
+    // ── Sign-up form: digits-only area code, and custom validation that
+    //    only flags a field once a submit attempt has actually failed ──
+    const lightboxForm = document.getElementById('lightboxForm');
+    const areaCodeInput = lightboxForm.querySelector('input[name="areaCode"]');
+    const formSuccess = document.getElementById('formSuccess');
+    const lightboxContent = document.getElementById('lightboxContent');
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzDo7B7pz9AsWq5Wd5lRDh37Pyhe6dqL_-Uyx-vQkAPbAIpoexq47138wB_Rv7iMLb6w/exec';
 
-function updateOptionLabels() {
-  document.querySelectorAll('.option').forEach(btn => {
-    const acr = btn.dataset.acronym;
-    const textSpan = btn.querySelector('.option-text');
-    textSpan.textContent = isEasyMode ? ACRONYMS[acr].expanded : acr;
-  });
-}
+    areaCodeInput.addEventListener('input', () => {
+      areaCodeInput.value = areaCodeInput.value.replace(/\D/g, '').slice(0, 3);
+    });
 
-document.getElementById('mode-toggle').addEventListener('click', () => {
-  isEasyMode = !isEasyMode;
-  const toggle = document.getElementById('mode-toggle');
-  const labelEasy = document.getElementById('label-easy');
-  const labelPro = document.getElementById('label-pro');
-  toggle.classList.toggle('is-easy', isEasyMode);
-  toggle.setAttribute('aria-checked', String(isEasyMode));
-  labelEasy.classList.toggle('active', isEasyMode);
-  labelPro.classList.toggle('active', !isEasyMode);
-  updateOptionLabels();
-});
+    function fieldWrapper(field) {
+      return field.closest('[data-field]');
+    }
 
-document.getElementById('next-btn').addEventListener('click', nextQuestion);
+    function clearError(field) {
+      const wrapper = fieldWrapper(field);
+      if (!wrapper) return;
+      wrapper.classList.remove('has-error');
+      const codeWrap = wrapper.querySelector('.code-input-wrap');
+      if (codeWrap) codeWrap.classList.remove('has-error');
+      if (wrapper.classList.contains('consent-label')) wrapper.classList.remove('has-error');
+    }
 
-init();
-</script>
+    lightboxForm.querySelectorAll('input').forEach((input) => {
+      const evt = input.type === 'checkbox' ? 'change' : 'input';
+      input.addEventListener(evt, () => clearError(input));
+    });
+
+    lightboxForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let firstInvalid = null;
+
+      lightboxForm.querySelectorAll('[required]').forEach((input) => {
+        const isCheckbox = input.type === 'checkbox';
+        const invalid = isCheckbox ? !input.checked : input.value.trim() === '';
+        const wrapper = fieldWrapper(input);
+        if (!wrapper) return;
+
+        if (invalid) {
+          wrapper.classList.add('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.add('has-error');
+          if (!firstInvalid) firstInvalid = input;
+        } else {
+          wrapper.classList.remove('has-error');
+          const codeWrap = wrapper.querySelector('.code-input-wrap');
+          if (codeWrap) codeWrap.classList.remove('has-error');
+        }
+      });
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      // All valid — assemble the payload with keys matching the Google Sheet
+      // column headers exactly, then send to Google Apps Script.
+      const payload = {
+        'TIMESTAMP': new Date().toISOString(),
+        'NAME': lightboxForm.querySelector('input[name="name"]').value.trim(),
+        'COUNTRY CODE': '+' + areaCodeInput.value.trim(),
+        'MOBILE NUMBER': lightboxForm.querySelector('input[name="number"]').value.trim(),
+        'CONSENT': true
+      };
+
+      // Show success immediately — don't wait on the network request.
+      // Disabling the button too is a second safeguard: even a very fast
+      // double-click can't fire this handler twice once it's disabled.
+      const submitBtn = lightboxForm.querySelector('.lightbox-submit');
+      if (submitBtn) submitBtn.disabled = true;
+
+      // On the mobile layout the lightbox is bottom-anchored, so if the
+      // form (tall) is simply swapped for the success message (short)
+      // the whole block collapses and re-anchors lower on screen,
+      // dragging the heading/copy down with it. Locking in the box's
+      // current height before hiding the form keeps the heading/copy
+      // exactly where they were, and lets the success message land in
+      // the space the form used to occupy (right where "Name" was).
+      if (window.matchMedia('(max-width: 760px)').matches) {
+        lightboxContent.style.minHeight = lightboxContent.offsetHeight + 'px';
+      }
+      lightboxForm.style.display = 'none';
+      formSuccess.classList.add('is-visible');
+
+      // no-cors: Apps Script doesn't send CORS headers back, so the response
+      // is opaque — we can't read it, but the request still goes through.
+      // Fired without awaiting it, so a slow/cold-start Apps Script response
+      // can't hold up the UI.
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      }).catch((err) => console.error('Sign-up submit failed', err));
+    });
+
+    // ── Hairline weather icons, matched to Open-Meteo WMO weather codes ──
+    const ICONS = {
+      clear: 'clear',
+      moon: 'moon',
+      partlyCloudy: 'partlyCloudy',
+      partlyCloudyNight: 'partlyCloudyNight',
+      cloud: 'cloud',
+      fog: 'fog',
+      rain: 'rain',
+      snow: 'snow',
+      storm: 'storm'
+    };
+
+    function iconForCode(code, isDay) {
+      if (code === 0) return isDay ? ICONS.clear : ICONS.moon;
+      if ([1,2].includes(code)) return isDay ? ICONS.partlyCloudy : ICONS.partlyCloudyNight;
+      if (code === 3) return ICONS.cloud;
+      if ([45,48].includes(code)) return ICONS.fog;
+      if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return ICONS.rain;
+      if ([71,73,75,77,85,86].includes(code)) return ICONS.snow;
+      if ([95,96,99].includes(code)) return ICONS.storm;
+      return ICONS.cloud;
+    }
+
+    const LONDON = { lat: 51.5074, lon: -0.1278, tz: 'Europe/London' };
+    const panel = document.querySelector('.station');
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-GB', {
+        timeZone: LONDON.tz,
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      panel.querySelector('[data-time]').textContent = timeStr;
+      // Re-fit the time font-size to match the city label's width every tick —
+      // not just on load/resize — since different digits render at slightly
+      // different widths and the match would otherwise go stale between ticks.
+      // Guarded to only run after the initial reveal so it doesn't race the
+      // webfont-loading sequencing handled in initClockReveal() below.
+      if (panel.classList.contains('clock-ready')) {
+        matchStationRowWidths();
+      }
+    }
+
+    // City + time reveal: waits only on webfonts (needed so the width-match
+    // measures against real font metrics, not a fallback font), never on the
+    // weather fetch. This is what actually needs to happen "together" with
+    // the city row, since the time's font-size is derived from it.
+    async function initClockReveal() {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      matchStationRowWidths();
+      matchLeftColumnHeightToStation();
+      panel.classList.add('clock-ready');
+    }
+
+    async function updateWeather() {
+      try {
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LONDON.lat}&longitude=${LONDON.lon}&current=temperature_2m,weather_code,is_day`);
+        const data = await res.json();
+        const temp = Math.round(data.current.temperature_2m);
+        const code = data.current.weather_code;
+        const isDay = data.current.is_day === 1;
+        panel.querySelector('.station-meta').classList.remove('is-error');
+        panel.querySelector('[data-temp]').textContent = `${temp}°C`;
+        const iconName = iconForCode(code, isDay);
+        panel.querySelector('[data-icon]').innerHTML =
+          `<img src="icons/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
+      } catch (e) {
+        panel.querySelector('.station-meta').classList.add('is-error');
+        panel.querySelector('[data-temp]').textContent = '';
+        panel.querySelector('[data-icon]').innerHTML =
+          `<button type="button" class="station-refresh-btn" aria-label="Retry weather">
+             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+               <polyline points="1 4 1 10 7 10"/>
+               <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+             </svg>
+           </button>`;
+        const retryBtn = panel.querySelector('.station-refresh-btn');
+        if (retryBtn) retryBtn.addEventListener('click', updateWeather);
+      } finally {
+        // Same webfont-readiness guard as initClockReveal(), applied here so
+        // the weather row's icon/temperature width-match is also measured
+        // against real font metrics rather than a fallback font.
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+        panel.classList.add('is-ready');
+      }
+    }
+
+    updateClock();
+    initClockReveal();
+    updateWeather();
+    setInterval(updateClock, 1000);
+    // No periodic refresh — a failed fetch now shows a clickable retry icon
+    // instead (see the catch block above), which is a more direct fix for
+    // the one scenario this interval was actually covering.
+
+    // ── Force all three station rows (city/time/meta) to share the exact same width ──
+    function matchStationRowWidths() {
+      const cityEl = document.querySelector('.station-city');
+      const timeEl = document.querySelector('.station-time');
+      const metaEl = document.querySelector('.station-meta');
+      if (!cityEl || !timeEl || !metaEl) return;
+
+      // Reset any previous scaling before measuring fresh
+      timeEl.style.fontSize = '';
+      metaEl.style.fontSize = '';
+
+      const cityWidth = cityEl.getBoundingClientRect().width;
+
+      const timeWidth = timeEl.getBoundingClientRect().width;
+      const timeFontSize = parseFloat(getComputedStyle(timeEl).fontSize);
+      if (timeWidth > 0) {
+        const newTimeSize = timeFontSize * (cityWidth / timeWidth);
+        timeEl.style.fontSize = newTimeSize + 'px';
+      }
+
+      const metaIcon = metaEl.querySelector('.station-icon');
+      const metaTemp = metaEl.querySelector('[data-temp]');
+      if (metaIcon && metaTemp) {
+        const iconWidth = metaIcon.getBoundingClientRect().width;
+        const gapPx = parseFloat(getComputedStyle(metaEl).gap) || 0;
+        const tempWidth = metaTemp.getBoundingClientRect().width;
+        const tempFontSize = parseFloat(getComputedStyle(metaTemp).fontSize) || parseFloat(getComputedStyle(metaEl).fontSize);
+        const availableForText = cityWidth - iconWidth - gapPx;
+        if (tempWidth > 0 && availableForText > 0) {
+          const newTempSize = tempFontSize * (availableForText / tempWidth);
+          metaTemp.style.fontSize = newTempSize + 'px';
+        }
+      }
+    }
+
+    window.addEventListener('load', matchStationRowWidths);
+
+    // The very first measurement can run before the Typekit font
+    // ('owners-text') has actually finished loading — if it measures
+    // against the browser's fallback font instead, the font-size scale
+    // it calculates is wrong once the real font swaps in. Re-run once
+    // the real webfont is confirmed loaded to correct for that.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      });
+    }
+
+    // Debounced instead of running on every single resize tick — rotating
+    // a phone fires a burst of resize events while the viewport is still
+    // mid-transition, and measuring during that burst risks writing an
+    // unstable font-size value.
+    let stationResizeTimer;
+    function scheduleMatchStationRowWidths() {
+      clearTimeout(stationResizeTimer);
+      stationResizeTimer = setTimeout(matchStationRowWidths, 250);
+    }
+    window.addEventListener('resize', scheduleMatchStationRowWidths);
+
+    // ── On mobile, centre the logo within the empty space between nav and footer.
+    //    On desktop, leave it to the default flex centering (dead-centre of the page). ──
+    function centreLogoInMainBlock() {
+      const logo = document.querySelector('img');
+      const nav = document.querySelector('.site-nav');
+      const footer = document.querySelector('.site-footer');
+      if (!logo || !nav || !footer) return;
+
+      const isPhone = window.innerWidth <= 760 ||
+        (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
+
+      const navBottom = nav.getBoundingClientRect().bottom;
+      const footerHeight = footer.getBoundingClientRect().height;
+      const viewportHeight = window.innerHeight;
+      const gapMid = navBottom + (viewportHeight - navBottom - footerHeight) / 2;
+
+      if (!isPhone) {
+        // Desktop: split the difference between dead-centre of the full
+        // viewport and the centre of the nav/footer gap.
+        const trueMid = viewportHeight / 2;
+        const blendedMid = (trueMid + gapMid) / 2;
+
+        logo.style.position = 'fixed';
+        logo.style.left = '50%';
+        logo.style.top = blendedMid + 'px';
+        logo.style.transform = 'translate(-50%, -50%)';
+        return;
+      }
+
+      logo.style.position = 'fixed';
+      logo.style.left = '50%';
+      logo.style.top = gapMid + 'px';
+      logo.style.transform = 'translate(-50%, -50%)';
+    }
+
+    window.addEventListener('load', centreLogoInMainBlock);
+    window.addEventListener('resize', centreLogoInMainBlock);
+    setTimeout(centreLogoInMainBlock, 100);
+
+    // ── Desktop only: match total height of (description + contact) to the weather block ──
+    function matchLeftColumnHeightToStation() {
+      const desc = document.querySelector('.footer-desc');
+      const contact = document.querySelector('.footer-col-left');
+      const station = document.querySelector('.station');
+      if (!desc || !contact || !station) return;
+
+      // Always clear any previously-written inline values FIRST, before the
+      // desktop-only check below. Rotating a phone to landscape can push its
+      // width over 760px, letting this function run and write a custom
+      // gap/margin for that wide layout — then rotating back to portrait
+      // (width <= 760) was hitting the early return below and leaving that
+      // leftover landscape-calculated spacing permanently baked in. This is
+      // the actual cause of the block appearing taller after rotating back.
+      desc.style.marginBottom = '';
+      station.style.gap = '';
+
+      if (window.innerWidth <= 760) return;
+
+      const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
+      const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
+
+      const stationHeight = station.getBoundingClientRect().height;
+      const descHeight = desc.getBoundingClientRect().height;
+      const contactHeight = contact.getBoundingClientRect().height;
+      const leftTotal = descHeight + baseMarginBottom + contactHeight;
+
+      const diff = leftTotal - stationHeight;
+
+      if (diff > 0) {
+        // Left column is taller — stretch the station's internal gaps to match
+        const extraPerGap = diff / 2; // 2 gaps between the 3 station rows
+        station.style.gap = (baseStationGap + extraPerGap) + 'px';
+      } else {
+        // Station is taller or equal — grow the description's margin to match
+        desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
+      }
+    }
+
+    window.addEventListener('load', matchLeftColumnHeightToStation);
+
+    let leftColumnResizeTimer;
+    function scheduleMatchLeftColumnHeightToStation() {
+      clearTimeout(leftColumnResizeTimer);
+      leftColumnResizeTimer = setTimeout(matchLeftColumnHeightToStation, 250);
+    }
+    window.addEventListener('resize', scheduleMatchLeftColumnHeightToStation);
+
+    // Settle delay after rotation, same reasoning as the station width matcher above.
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        matchStationRowWidths();
+        matchLeftColumnHeightToStation();
+      }, 300);
+    });
+
+  </script>
 </body>
 </html>
