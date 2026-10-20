@@ -1433,7 +1433,10 @@
 
       const stationHeight = station.getBoundingClientRect().height;
       const descHeight = desc.getBoundingClientRect().height;
-      const contactHeight = contact.getBoundingClientRect().height;
+      // offsetHeight = the real layout height. getBoundingClientRect() would return the
+      // visually scaled height (the contact column has transform: scale(0.9)), which made
+      // the weather block come out ~7px shorter than the left column.
+      const contactHeight = contact.offsetHeight;
       const leftTotal = descHeight + baseMarginBottom + contactHeight;
 
       const diff = leftTotal - stationHeight;
