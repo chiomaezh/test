@@ -592,6 +592,16 @@
       transform: translateY(3px);
     }
 
+    /* Desktop / PC only: the weather block has its own fixed height (115px) and
+       is no longer stretched to match the left column. Phone portrait (<=760px)
+       and phone landscape keep their own layouts below. */
+    @media (min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px))) {
+      .station {
+        height: 115px;
+        justify-content: space-between;
+      }
+    }
+
     /* City + time rows reveal independently of the weather row — the time's
        font-size is derived from the city label, not from the weather fetch,
        so it shouldn't be held hostage by a slow/hung network request. */
@@ -1427,6 +1437,10 @@
       station.style.gap = '';
 
       if (window.innerWidth <= 760) return;
+
+      // Desktop / PC: weather block height is fixed in CSS (115px), so there is
+      // nothing to match. Only phone landscape (compact footer) still uses the matching below.
+      if (!window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches) return;
 
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
       const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
