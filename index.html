@@ -4,506 +4,160 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A London-based creative consultancy offering strategy, communications, and design for culture-shaping presence and storytelling.">
-
-  <meta property="og:title" content="SABI">
-  <meta property="og:description" content="A creative consultancy for conceptually ambitious brands.">
-  <meta property="og:image" content="/favicon.png">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="SABI">
-  <meta name="twitter:description" content="A creative consultancy for conceptually ambitious brands.">
-  <meta name="twitter:image" content="/favicon.png">
-
+  
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
   
-  <title>SABI | Brand Therapy</title>
+  <title>Services — SABI</title>
+  <meta name="description" content="Strategy and design services from SABI, organised across Brand, Experience, and Production." />
   <style>
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    ::selection {
-      background: var(--text-select-bg);
-      color: var(--text-select-text);
-    }
-    ::-moz-selection {
-      background: var(--text-select-bg);
-      color: var(--text-select-text);
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     :root {
       --bg: #FAFBE3;
-      --text: #211D1D;
+      --surface: #FAFBE3;
       --border: #423A3A;
-      --text-select-bg: #170006;
-      --text-select-text: #FFFFFF;
+      --border-light: #423A3A;
+      --text: #211D1D;
+      --found-bg: #211D1D;
+      --found-text: #FAFBE3;
+      --select-bg: rgba(183, 184, 168, 0.4);
+      --select-text: var(--text);
       --font-body: 'owners-text', sans-serif;
       --font-mono: 'gemeli-mono', serif;
     }
 
+    ::selection {
+      background: var(--select-bg);
+    }
+    ::-moz-selection {
+      background: var(--select-bg);
+    }
+
     body {
-      margin: 0;
-      height: 100vh;
-      background-color: var(--bg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
       font-family: var(--font-body);
+      font-weight: 350;
+      background: var(--bg);
       color: var(--text);
-    }
-
-    img {
-      max-width: 220px;
-      width: 100%;
-      height: auto;
-      margin: 0 auto;
-      display: block;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-    }
-
-    /* ── Ticker strip (sits above the nav) ── */
-    .ticker {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 36px;
-      background: #170006;
-      overflow: hidden;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px 0 32px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-    }
-
-    /* ── Typewriter quote (replaces the old scrolling reel) ── */
-    .ticker-quote-wrap {
-      flex: 1 1 auto;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      overflow: hidden;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14.5px;
-      letter-spacing: 1.8px;
-      line-height: 1;
-      color: var(--bg);
-    }
-
-    .ticker-quote {
-      font: inherit;
-      letter-spacing: inherit;
-      color: inherit;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: clip;
-    }
-
-    .ticker-cursor {
-      display: inline-block;
-      align-self: center;
-      width: 0.12em;
-      height: 1.35em;
-      margin-left: 3px;
-      background: currentColor;
-      animation: cursor-blink 0.9s step-end infinite;
-    }
-
-    @keyframes cursor-blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-cursor { animation: none; }
-    }
-
-    /* ── Send icon, top right of the strip, links to Substack ── */
-    .ticker-icon-btn {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      margin-left: 12px;
-      padding: 0;
-      background: none;
-      border: none;
-      color: var(--bg);
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .ticker-icon-btn svg {
-      width: 22px;
-      height: 22px;
-      display: block;
-      fill: var(--bg);
-      shape-rendering: geometricPrecision;
-    }
-
-    .ticker-icon-btn:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
-    }
-
-    /* ── Lightbox (blank shell, full page — wire up content here later) ── */
-    .lightbox-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(23, 0, 6, 0.95);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease;
-    }
-
-    .lightbox-overlay.is-open {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .lightbox-box {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 64px;
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: var(--bg);
-      padding: 0;
-    }
-
-    .lightbox-close svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--bg);
-      stroke-width: 0.6;
-      fill: none;
-      shape-rendering: geometricPrecision;
-    }
-
-    .lightbox-close:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
-    }
-
-    /* ── Lightbox copy ── */
-    .lightbox-content {
-      max-width: 380px;
-      padding-left: 24px;
-      padding-right: 24px;
-      padding-top: 0;
-      padding-bottom: 0;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 17px;
-      line-height: 1.5;
-      color: var(--bg);
-      text-align: left;
-    }
-
-    .lightbox-heading {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 20px;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--bg);
-      margin: 0 0 44px 0;
-    }
-
-    .lightbox-content p {
-      margin: 0 0 16px 0;
-    }
-
-    .lightbox-content p:last-child {
-      margin-bottom: 0;
-    }
-
-    .form-success {
-      display: none;
-    }
-
-    /* Needs to out-specificity ".lightbox-content p:last-child" above,
-       otherwise its margin-top gets silently reset to 0 and the success
-       message loses its gap above where the Name field used to sit. */
-    .lightbox-content .form-success {
-      margin: 60px 0 0;
-      font-family: var(--font-mono);
-      font-size: 17px;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-    }
-
-    .form-success.is-visible {
-      display: block;
-    }
-
-    /* ── Sign-up form (Name + phone number, underline style) ── */
-    .lightbox-form {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 0;
-      margin: 40px 0 40px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 16px;
-      align-items: flex-end;
-      margin-top: 12px;
-    }
-
-    .form-field {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .form-field--code {
-      flex: 0 0 72px;
-    }
-
-    .lightbox-form input {
-      width: 100%;
-      display: block;
-      background: none;
-      border: none;
-      border-bottom: 1.6px solid var(--bg);
-      color: var(--bg);
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 18.5px;
-      letter-spacing: 1px;
-      line-height: 1.4;
-      padding: 6px 2px;
-      margin: 0;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      border-radius: 0;
-      transition: border-color 0.2s ease;
-    }
-
-    .lightbox-form input::placeholder {
-      color: rgba(250, 251, 227, 0.55);
-    }
-
-    /* Area code field: fixed "+" prefix that can't be deleted, only the
-       digits are part of the editable input */
-    .code-input-wrap {
-      display: flex;
-      align-items: baseline;
-      border-bottom: 1.6px solid var(--bg);
-      padding: 6px 2px;
-      transition: border-color 0.2s ease;
-    }
-
-    .code-prefix {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 18.5px;
-      letter-spacing: 1px;
-      color: var(--bg);
-      flex: 0 0 auto;
-    }
-
-    .code-input-wrap input {
-      border-bottom: none;
-      padding: 0 0 0 2px;
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    /* Error state — only shown after a failed submit attempt */
-    .form-field.has-error input,
-    .code-input-wrap.has-error {
-      border-color: rgba(80, 41, 47, 0.85);
-    }
-
-    .form-error-msg {
-      visibility: hidden;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 10px;
-      letter-spacing: 0.5px;
-      color: #cb9593;
-      margin-top: 10px;
-    }
-
-    .form-field.has-error .form-error-msg,
-    .form-consent.has-error .form-error-msg {
-      visibility: visible;
-    }
-
-    /* ── Consent checkbox + small print ── */
-    .form-consent {
-      margin: 24px 0 0;
-    }
-
-    .consent-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .consent-label input[type="checkbox"] {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .consent-box {
-      flex: 0 0 auto;
-      width: 15px;
-      height: 15px;
-      margin-top: 2px;
-      border: 1.6px solid var(--bg);
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .consent-label input[type="checkbox"]:checked ~ .consent-box {
-      background-color: var(--bg);
-    }
-
-    .form-consent.has-error .consent-box {
-      border-color: rgb(80, 41, 47);
-    }
-
-    .consent-error-msg {
-      /* Indent to line up with the paragraph text, not the checkbox —
-         matches the checkbox width (15px) + the label's gap (10px). */
-      margin-left: 25px;
-    }
-
-    .consent-link {
-      color: inherit;
-      text-decoration: underline;
-    }
-
-    .consent-text {
-      flex: 1 1 auto;
-      min-width: 0;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 12.5px;
-      letter-spacing: 0.3px;
-      line-height: 1.5;
-      color: var(--bg);
-      opacity: 0.85;
-    }
-
-    /* ── Submit button — hairline arrow, more to come later ── */
-    .lightbox-submit {
-      display: flex;
       align-items: center;
-      justify-content: flex-end;
-      width: 53px;
-      height: 30px;
-      margin-left: auto;
-      margin-right: -2px;
-      margin-top: -13.7px;
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
+      padding: 3rem 0 5rem;
     }
 
-    .lightbox-submit svg {
+    /* .page is full-bleed. .container is the narrow, centered wrapper —
+       the same convention used on every other page of the site. Only
+       Dial In and the footer stay wide. */
+    .page { width: 100%; }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .container--footer {
+      max-width: 768px;
+    }
+
+    .container-wide {
       width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--bg);
-      stroke-width: 1.4;
-      stroke-linecap: butt;
-      stroke-linejoin: miter;
-      fill: none;
-      shape-rendering: geometricPrecision;
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
     }
 
-    .lightbox-submit:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
+    /* Full-bleed horizontal rule, used between every section */
+    .full-divider {
+      width: 100%;
+      border-top: 0.5px solid var(--border);
+    }
+    .full-divider.light {
+      border-top-color: var(--bg);
+      opacity: 0.3;
     }
 
-    /* ── Desktop only: split the lightbox into two columns — heading + copy
-         on the left, form fields on the right — both confined to the
-         centre three-fifths (60%) of the page, bottoms aligned ── */
-    @media (min-width: 761px) {
-      .lightbox-box {
-        justify-content: center;
-        padding-right: 0;
-      }
-
-      .lightbox-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 80px;
-        width: auto;
-        max-width: none;
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      .lightbox-copy {
-        flex: 1 1 0;
-        max-width: 380px;
-        text-align: right;
-      }
-
-      .lightbox-form {
-        flex: 1 1 0;
-        max-width: 320px;
-        margin: 0;
-      }
+    /* Header divider reverts to the narrow, constrained width (not full-bleed) */
+    .header-divider-inset {
+      width: 100%;
     }
 
-    /* ── Top navigation ── */
-    .site-nav {
-      position: fixed;
-      top: 36px;
-      left: 0;
+    /* Inset divider — same left/right padding as the row text and arrows,
+       used inside What We Do instead of the full-bleed .full-divider */
+    .wwd-divider {
+      margin-left: 2.5rem;
+      margin-right: 2.5rem;
+      border-top: 0.4px solid var(--bg);
+      opacity: 0.3;
+    }
+
+    /* ── Header ── */
+    .site-header {
       display: flex;
       justify-content: space-between;
-      width: calc(20vw + 96px); /* was 33.33vw — narrower container = ~0.6x the space-between gap, same on both sides by construction */
-      padding: 28px 32px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-      animation-delay: 0.4s;
+      align-items: center;
+      padding-bottom: 1rem;
+      padding-top: 0;
     }
 
-    .nav-link {
+    .site-name {
+      font-family: "all-round-gothic", sans-serif;
+      font-weight: 400;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .site-tag {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* ── Hamburger menu (accordion) ── */
+    .menu-btn {
+      position: relative;
+      width: 22px;
+      height: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .menu-btn span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--text);
+      transition: transform 0.25s ease, top 0.25s ease;
+    }
+    .menu-btn span:first-child { top: 1.75px; }
+    .menu-btn span:last-child { top: 12.25px; }
+    .menu-btn.open span { height: 1.8px; }
+    .menu-btn.open span:first-child { top: 7px; transform: rotate(45deg); }
+    .menu-btn.open span:last-child { top: 7px; transform: rotate(-45deg); }
+    .menu-accordion {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+    }
+    .menu-accordion.open { max-height: 220px; }
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1rem;
+    }
+    .menu-list a {
       font-family: var(--font-body);
       font-weight: 500;
       font-size: 13px;
@@ -511,199 +165,452 @@
       text-transform: uppercase;
       color: var(--text);
       text-decoration: none;
+      padding: 0.5rem 0;
     }
-    .nav-link:visited,
-    .nav-link:active,
-    .nav-link:hover {
+    .menu-list a.active {
+      color: rgba(139, 140, 120, 0.5);
+      pointer-events: none;
+      cursor: default;
+    }
+
+    /* ── Section title (was .page-title) ──
+       Reused as the small eyebrow heading for every section except the first. */
+    .section-title {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.1;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
       color: var(--text);
+      margin-bottom: 2.2rem;
     }
+    .section-title.light { color: var(--bg); }
 
-    @media (max-width: 560px) {
-      .ticker { height: 42px; padding: 0 12px 0 20px; }
-      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
-
-      .site-nav {
-        top: 30px;
-        width: auto;
-        right: 0;
-        padding: 26px 20px 20px 20px;
-        gap: 20px;
-      }
-      .nav-link { font-size: 13px; letter-spacing: 1px; }
-
-      .site-footer {
-        padding-bottom: 26px;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* ── Footer ── */
-    .site-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 28px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-      animation-delay: 0.4s;
+    .page-body {
       font-family: var(--font-body);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: "desc weather" "contact weather";
-      align-items: end;
+      font-weight: 300;
+      font-size: 17.5px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 75%;
+    }
+    .page-body p { margin-bottom: 1.5rem; }
+    .page-body p:last-child { margin-bottom: 0; }
+
+    .wwt-body {
+      position: relative;
     }
 
-    .footer-desc { grid-area: desc; }
-    .footer-row { grid-area: contact; display: contents; }
-    .footer-col-left { grid-area: contact; }
-    .footer-col-right { grid-area: weather; }
+    .industry-list {
+      list-style: none;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 17px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 75%;
+    }
+
+    .start-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    /* Header row (logo + hamburger) only: stretch to the full page width
+       with small side padding on desktop/tablet, instead of being capped
+       to the shared 720px .container. Left as a separate class so the
+       body-text sections (which reuse plain .container) are untouched. */
+    @media (min-width: 721px) {
+      .site-header-wrap {
+        max-width: none;
+        width: 100%;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
+      }
+    }
+
+    /* Phone landscape can exceed 720px in width too (e.g. ~844px), which
+       would otherwise get caught by the rule above. Reset it back to the
+       original constrained/centered layout so landscape phone is pixel-for-
+       pixel unchanged, same as portrait. */
+    @media (min-width: 721px) and (orientation: landscape) and (max-height: 500px) {
+      .site-header-wrap {
+        max-width: 720px;
+        width: auto;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .start-link {
+        position: static;
+        transform: none;
+        display: block;
+        text-align: right;
+        margin-top: 1.5rem;
+      }
+    }
+
+    /* ── Sections ── */
+    .section {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .section:first-of-type { padding-top: 0; }
+
+    /* Who We Work With gets extra breathing room top and bottom */
+    .section--wwt {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    /* About section: slightly reduced padding top and bottom */
+    .section--about {
+      padding-top: 2.25rem;
+      padding-bottom: 2.25rem;
+    }
+
+    /* Desktop only: nudge About's top padding back up by 0.4rem to
+       compensate for the manifesto-text upward shift (see
+       .manifesto-text margin-top), keeping the same amount of content
+       visible above the fold as before that change. Mobile is untouched. */
+    @media (min-width: 651px) {
+      .section--about {
+        padding-top: 2.65rem;
+      }
+    }
+
+    /* ── Manifesto ──
+       Same width as the About section (lives inside .container), so the
+       label and text naturally line up with the container's own left/
+       right edges — no viewport-width math needed anymore. */
+    .manifesto {
+      padding-bottom: 6rem;
+    }
+    .manifesto-inner {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+    }
+    .manifesto-label {
+      margin-bottom: 0;
+    }
+    .manifesto-text {
+      width: 400px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-top: -0.4rem;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--text);
+      text-align: right;
+    }
+    .manifesto-text p {
+      margin-bottom: 1.5rem;
+    }
+    .manifesto-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 650px) {
+      .manifesto-inner {
+        display: block;
+      }
+      .manifesto-label {
+        margin-bottom: 1.5rem;
+        text-align: right;
+      }
+      .manifesto-text {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 0;
+      }
+    }
+
+    /* ── What We Do (dark, full-bleed) ── */
+    .what-we-do {
+      background: var(--text);
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    .wwd-header { padding-bottom: 0.5rem; }
+    .wwd-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.8rem;
+      padding-bottom: 1.8rem;
+      padding-right: 3.5rem;
+      text-decoration: none;
+      color: var(--bg);
+    }
+    .wwd-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--bg);
+    }
+    .wwd-arrow {
+      font-size: 20px;
+      color: var(--bg);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+    .wwd-row:hover .wwd-arrow { transform: translateX(5px); }
+
+    /* ── Site footer ──
+         Three columns: About/copyright · Contact · Services */
+    .site-footer {
+      padding-top: 1.5rem;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1.4fr auto auto;
+      column-gap: 0.75rem;
+      align-items: start;
+    }
 
     .footer-col {
       display: flex;
       flex-direction: column;
+      align-self: start;
     }
 
-    .footer-col-left {
-      align-items: flex-start;
-      transform: scale(0.9);
-      transform-origin: bottom left;
+    .footer-desc {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+      margin-top: -0.2em;
     }
 
-    .footer-col-right {
-      align-items: flex-end;
+    .footer-copyright {
+      font-family: var(--font-mono);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.5px;
     }
 
-    /* ── World clock / weather block ── */
-    .station {
+    .footer-heading {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-links {
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-      /* Small uniform nudge down to match the contact block's top/bottom —
-         purely visual (transform), doesn't touch layout, alignment, or
-         font-size, and applies consistently across every breakpoint since
-         it's on .station itself rather than a per-breakpoint wrapper.
-         Adjust this single value up/down if it needs to move further. */
-      transform: translateY(3px);
+      gap: 0.55rem;
     }
 
-    /* City + time rows reveal independently of the weather row — the time's
-       font-size is derived from the city label, not from the weather fetch,
-       so it shouldn't be held hostage by a slow/hung network request. */
-    .station-row:nth-child(1),
-    .station-row:nth-child(2) {
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .station.clock-ready .station-row:nth-child(1),
-    .station.clock-ready .station-row:nth-child(2) {
-      opacity: 1;
-    }
-
-    /* Weather row (icon + temperature) reveals once the fetch settles. */
-    .station-row:nth-child(3) {
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .station.is-ready .station-row:nth-child(3) {
-      opacity: 1;
-    }
-
-    .station-row {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .station-city {
+    .footer-links a {
       font-family: var(--font-body);
-      font-size: 18px;
-      line-height: 1;
-      letter-spacing: 2.7px;
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+
+    .footer-col--services {
+      margin-left: 2rem;
+    }
+
+    .footer-col--services .footer-links a {
       text-transform: uppercase;
-      color: #000000;
-      font-weight: 400;
-      position: relative;
-      top: -0.9px;
     }
 
-    .station-time {
-      font-family: var(--font-body);
-      font-size: 34.2px;
-      letter-spacing: 0.9px;
-      color: #000000;
-      font-weight: 400;
-      font-variant-numeric: tabular-nums;
+/* ── Dial In (dark, full-bleed) ── */
+    .by-appointment {
+      background: #170006;
+      padding-top: 5.5rem;
+      padding-bottom: 5.5rem;
     }
-
-    .station-meta {
+    .ba-inner {
       display: flex;
-      align-items: center;
-      gap: 6.3px;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+    }
+    .ba-left {
+      flex: 0 0 33%;
+      max-width: 33%;
+    }
+    .ba-left .section-title {
+      margin-bottom: 3.4rem;
+    }
+    .ba-text {
       font-family: var(--font-body);
-      font-size: 27px;
-      letter-spacing: 0.9px;
-      color: #000000;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--bg);
+      margin-bottom: 1.2rem;
     }
-
-    .station-icon {
-      width: 32.4px;
-      height: 32.4px;
-      flex-shrink: 0;
+    .ba-text:last-child {
+      margin-bottom: 0;
     }
-    .station-icon img {
+    .ba-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3.5rem;
+    }
+    .ooo-link {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--bg);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    .ba-clocks-table {
+      border-collapse: collapse;
+      table-layout: fixed;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .ba-clocks-table.is-ready {
+      opacity: 1;
+    }
+    .ba-col {
+      /* width is set dynamically via JS to match the time row's actual
+         rendered width — see matchBaColumnWidths() */
+    }
+    .ba-col-spacer {
+      width: 38px;
+    }
+    .ba-clocks-table td {
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      padding: 7px 0;
+      text-align: center;
+      vertical-align: middle;
+      font-family: var(--font-body);
+      color: var(--bg);
+    }
+    .ba-clocks-table .ba-cell {
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    /* City name row — shared alignment rules only. Font size is set
+       per-city below so each one can be edited independently. */
+    .ba-clocks-table .ba-cell-city {
+      vertical-align: top;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .ba-clocks-table .ba-cell-city-london {
+      font-size: 10px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-clocks-table .ba-cell-city-ny {
+      font-size: 9.5px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-clocks-table .ba-cell-city-paris {
+      font-size: 10px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .ba-city-inner {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .ba-clocks-table .ba-cell-time {
+      font-size: 25px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: none;
+      font-variant-numeric: tabular-nums;
+      vertical-align: bottom;
+      padding-top: 4px;
+      padding-bottom: 0;
+    }
+    .ba-time-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 100%;
+    }
+    .ba-clocks-table .ba-cell-weather {
+      font-size: 19px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      text-transform: none;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      padding-bottom: 0;
+    }
+    .ba-icon {
+      display: inline-block;
+      width: 23px;
+      height: 23px;
+      vertical-align: text-bottom;
+      margin-right: 12px;
+    }
+    .ba-icon img {
       width: 100%;
       height: 100%;
       display: block;
       object-fit: contain;
     }
 
-    /* Clickable retry — only appears in place of the icon when the weather
-       fetch has failed. Sized to fill .station-icon exactly (100%/100%), so
-       it automatically matches the normal icon's dimensions at every
-       breakpoint without needing its own separate size rules. Same hairline
-       stroke treatment as the lightbox close/submit icons for consistency. */
-    .station-refresh-btn {
-      display: block;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
-    }
-
-    .station-refresh-btn svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--text);
-      stroke-width: 1.4;
-      stroke-linecap: butt;
-      stroke-linejoin: miter;
-      fill: none;
-      shape-rendering: geometricPrecision;
-    }
-
-    /* Error state (same treatment as the Play page's weather reel): when the
-       weather fetch fails, the icon slot becomes the retry button and a small
-       "weather / update" note sits to its left, bottom-aligned, with the
-       temperature hidden. */
-    .station-meta.is-error {
+    /* Error state (ported from the Play page's weather reel): when the
+       weather fetch fails, the icon slot becomes a hairline refresh button
+       and a small "weather / update" note sits to its left, bottom-aligned,
+       centred together in the cell. */
+    .ba-weather-inner { display: inline; }
+    .ba-clocks-table .ba-cell-weather.is-error .ba-weather-inner {
+      display: flex;
+      justify-content: center;
       align-items: flex-end;
       gap: 13.5px;
     }
-    .station-meta.is-error [data-icon] { order: 2; }
-    .station-meta.is-error .station-refresh-text { order: 1; }
-    /* The empty temperature span would otherwise still take part in the
-       flex layout (including its share of the gap), so drop it entirely. */
-    .station-meta.is-error [data-temp] { display: none; }
-    .station-refresh-text {
+    .ba-clocks-table .ba-cell-weather.is-error [data-icon] {
+      order: 2;
+      margin-right: 0;
+    }
+    .ba-clocks-table .ba-cell-weather.is-error .ba-refresh-text {
+      order: 1;
+    }
+    /* The empty temperature span would still take part in the flex layout
+       (including its share of the gap), so drop it while in error state. */
+    .ba-clocks-table .ba-cell-weather.is-error [data-temp] {
+      display: none;
+    }
+    .ba-refresh-text {
       display: none;
       flex-direction: column;
       font-family: var(--font-mono);
@@ -713,193 +620,246 @@
       letter-spacing: 0.5px;
       text-transform: lowercase;
       text-align: left;
-      color: var(--text);
+      color: var(--bg);
       white-space: normal;
     }
-    .station-meta.is-error .station-refresh-text { display: flex; }
+    .ba-clocks-table .ba-cell-weather.is-error .ba-refresh-text {
+      display: flex;
+    }
+    /* Clickable retry: fills the .ba-icon slot exactly, hairline stroke,
+       no fill. Uses var(--bg) because this block sits on the dark background. */
+    .ba-refresh-btn {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    .ba-refresh-btn svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: var(--bg);
+      stroke-width: 1.4;
+      stroke-linecap: butt;
+      stroke-linejoin: miter;
+      fill: none;
+      shape-rendering: geometricPrecision;
+    }
 
-    /* ── Description block ── */
-  .footer-desc {
-  max-width: 420px;
-  font-family: var(--font-body);
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 1.15;
-  color: var(--text);
-  text-align: left;
-  margin: 0 0 14px 0;
+    @media (max-width: 650px) {
+      .ba-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.5rem;
+      }
+      .ba-left { flex: 1 1 auto; max-width: 100%; }
+      .ba-right { align-items: flex-start; width: 100%; }
+      .ba-clocks-table td { padding: 8px 0; }
+    }
+
+@media (max-width: 500px) {
+  .site-footer {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1.75rem;
+  }
+  .footer-col:first-child {
+    grid-column: 1 / -1;
+  }
+  .footer-col--services {
+    margin-left: 0;
+  }
+  .footer-links a {
+    white-space: normal;
+  }
+  .footer-copyright {
+    font-size: 12px;
+  }
 }
 
-/* ── Contact block ── */
-.contact-block {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  text-align: left;
-}
+    /* ── Services page additions ── */
 
-    .contact-label {
+    .services-hero {
+      padding-top: 4rem;
+      padding-bottom: 2rem;
+    }
+    .page-title {
       font-family: var(--font-body);
-      font-size: 15px;
+      font-weight: 400;
+      font-size: clamp(22px, 3.8vw, 27px);
+      line-height: 1.1;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text);
+    }
+    .services-hero .page-title {
+      max-width: 85%;
+      margin: 0 0 1.4rem;
+    }
+    .services-hero .page-body {
+      margin: 0;
+    }
+    .services-hero .page-body {
+      max-width: 85%;
+      font-size: 17.5px;
       font-weight: 400;
     }
+    @media (max-width: 650px) {
+      .services-hero {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+      }
+      .services-hero .page-body {
+        max-width: 100%;
+        font-size: 17.5px;
+      }
+    }
 
-    .contact-line {
-      font-family: var(--font-body);
-      font-size: 16.5px;
-      color: #000000;
+    .category-section {
+      padding-top: 2rem;
+      padding-bottom: 7rem;
+    }
+    /* Own class, styled like .section-title (mono, small, uppercase),
+       used specifically for the Brand / Experience / Production labels */
+    .category-heading {
+      font-family: var(--font-mono);
       font-weight: 300;
+      font-size: 15px;
+      line-height: 1.1;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 3.25rem;
+      max-width: 85%;
+    }
+    .category-heading--spaced {
+      margin-top: 5.5rem;
     }
 
-    .contact-link {
-      color: #000000 !important;
+    .service-list {
+      list-style: none;
+      padding-left: 2.5rem;
+    }
+    .service-item {
+      margin-bottom: 3.25rem;
+    }
+    .service-item:last-child {
+      margin-bottom: 0;
+    }
+    .service-item summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .service-item summary::-webkit-details-marker { display: none; }
+    .service-item summary::marker { content: ""; }
+
+    .service-toggle {
+      position: relative;
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    .service-toggle::before,
+    .service-toggle::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: var(--text);
+      transform: translate(-50%, -50%);
+    }
+    .service-toggle::before {
+      width: 15px;
+      height: 1px;
+    }
+    .service-toggle::after {
+      width: 1px;
+      height: 15px;
+      transition: transform 0.2s ease;
+    }
+    details[open] .service-toggle::after {
+      transform: translate(-50%, -50%) scaleY(0);
+    }
+    .service-item.inactive .service-toggle::before,
+    .service-item.inactive .service-toggle::after {
+      background: #8B8C78;
+      opacity: 0.7;
+    }
+    .service-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    a.service-name {
       text-decoration: underline;
+      text-underline-offset: 3px;
     }
-    .contact-link:visited,
-    .contact-link:active,
-    .contact-link:hover {
-      color: #000000 !important;
+    .service-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: var(--text);
+      max-width: calc(85% - 0.375rem);
+      margin-top: 0.7rem;
+      padding-left: 1.5rem;
     }
-
-    @media (max-width: 760px) {
-      img { max-width: 165px; }
-      .site-footer {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "desc desc" "contact weather";
-        align-items: start;
-        gap: 45px 12px;
-        padding: 20px;
-      }
-      .footer-row { display: contents; }
-      .footer-col-left {
-        align-items: flex-start;
-        transform: none;
-        align-self: stretch;
-      }
-      .footer-col-right {
-        align-items: flex-end;
-        transform: none;
-        align-self: stretch;
-      }
-      .contact-block {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-      .station {
-        height: 100%;
-        justify-content: space-between;
-      }
-      .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
-      .contact-block { text-align: left; }
-      .station-city { font-size: 15px; letter-spacing: 2px; }
-      .station-time { font-size: 28px; }
-      .station-meta { font-size: 22px; }
-      .station-icon { width: 22px; height: 22px; }
-      /* Row gap tightened (8px -> 5.5px) so the weather block, and therefore the
-         contact block that stretches to match it, comes out at 82px tall. */
-      .station { width: auto; gap: 5.5px; }
-
-      .lightbox-box {
-        align-items: flex-end;
-        justify-content: center;
-        padding-right: 0;
-      }
-      .lightbox-content {
-        padding-bottom: 25px;
-        transform: translateY(32px);
-      }
+    .service-item.inactive .service-name,
+    .service-item.inactive .service-desc {
+      color: #8B8C78;
+      opacity: 0.65;
+    }
+    .service-more-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-top: 0.9rem;
+      margin-left: 1.5rem;
+    }
+    @media (max-width: 650px) {
+      .service-list { padding-left: 1.25rem; }
+      .service-desc { max-width: 100%; }
+    }
+    @media (max-width: 650px) and (orientation: portrait) {
+      .service-desc { max-width: calc(83.333% - 0.2083rem); }
     }
 
-    /* ── Phone landscape (short viewport): keep the compact single-row
-         footer instead of the tall stacked portrait layout. Capped at
-         max-height so tablets in landscape (which have plenty of room)
-         keep the normal desktop-style footer untouched. ── */
-    @media (orientation: landscape) and (max-height: 500px) {
-      img { max-width: 110px; }
+    .service-guide-link {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      margin-top: 1.5rem;
+    }
 
-      .ticker { height: 42px; padding: 0 12px 0 20px; }
-      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
-
-      .site-nav { top: 24px; padding: 36px 20px 14px 20px; width: 33.33vw; }
-
-      .site-footer {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "desc weather" "contact weather";
-        align-items: end;
-        gap: 0;
-        padding: 14px 24px;
-      }
-
-      .footer-row { display: contents; }
-      .footer-col-left {
-        grid-area: contact;
-        align-items: flex-start;
-        transform: none;
-        align-self: end;
-      }
-      .footer-col-right {
-        grid-area: weather;
-        align-items: flex-end;
-        transform: none;
-        align-self: end;
-      }
-
-      .footer-desc {
-        text-align: left;
-        font-size: 12px;
-        line-height: 1.15;
-        max-width: 280px;
-        margin: 0 0 16px 0;
-        justify-self: start;
-      }
-
-      .contact-block { gap: 4px; text-align: left; }
-      .contact-label { font-size: 10px; letter-spacing: 1.5px; }
-      .contact-line { font-size: 11px; }
-
-      .station { gap: 3px; }
-      .station-city { font-size: 11px; letter-spacing: 1.5px; }
-      .station-time { font-size: 18px; }
-      .station-meta { font-size: 14px; gap: 4px; }
-      .station-icon { width: 14px; height: 14px; }
-      /* Error state scaled down with the icon so the note + retry icon still fit the narrow row */
-      .station-meta.is-error { gap: 6px; }
-      .station-refresh-text { font-size: 8px; }
-
-      .lightbox-close {
-        top: 0;
-      }
-
-      .lightbox-box {
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0 0 0 24px;
-      }
-      .lightbox-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 40px;
-        font-size: 15px;
-      }
-      .lightbox-copy {
-        flex: 1 1 0;
-        max-width: 340px;
-      }
-      .lightbox-heading {
-        font-size: 17px;
-      }
-
-      .lightbox-form {
-        flex: 1 1 0;
-        max-width: 300px;
-      }
-
+    /* ── Desktop only: main section fonts -0.5px ──
+       Excludes header, Dial In, footer, and the Brand / Experience / Production headings.
+       Skips landscape phones, same as the header rule above. */
+    @media (min-width: 651px) and (not ((orientation: landscape) and (max-height: 500px))) {
+      .services-hero .page-body { font-size: 17px; }      /* was 17.5px */
+      .service-name             { font-size: 15.5px; }    /* was 16px   */
+      .service-desc             { font-size: 15px; }      /* was 15.5px */
+      .service-more-link        { font-size: 11.5px; }    /* was 12px   */
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -920,548 +880,328 @@
 </script>
 </head>
 <body>
-  <h1 style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Creative direction for conceptually ambitious brands.</h1>
+<div class="page">
 
-  <div class="ticker">
-    <div class="ticker-quote-wrap">
-      <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
-    </div>
-    <button type="button" class="ticker-icon-btn" id="tickerLightboxTrigger" aria-label="Open lightbox">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M3,6 L21,12 L3,18 L6.2,12 Z"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
-    <div class="lightbox-box">
-      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <line x1="5" y1="5" x2="19" y2="19"/>
-          <line x1="19" y1="5" x2="5" y2="19"/>
-        </svg>
+  <div class="container site-header-wrap">
+    <header class="site-header">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
       </button>
-      <div class="lightbox-content" id="lightboxContent">
-        <div class="lightbox-copy">
-          <p class="lightbox-heading">Thoughtline</p>
-          <p>A creative prompt subscription.<br>A bite of incentive via SMS.</p>
-          <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
-          <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
-          <p>Just thoughts. No wrong answers.<br>(No replies at all, actually &ndash; it&rsquo;s one-way.)</p>
-        </div>
-        <form class="lightbox-form" id="lightboxForm" novalidate>
-          <div class="form-field" data-field="name">
-            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
-            <div class="form-error-msg">Required.</div>
-          </div>
-          <div class="form-row">
-            <div class="form-field form-field--code" data-field="areaCode">
-              <div class="code-input-wrap">
-                <span class="code-prefix" aria-hidden="true">+</span>
-                <input type="text" name="areaCode" placeholder="000" autocomplete="tel-country-code" inputmode="numeric" pattern="[0-9]*" maxlength="3" required>
-              </div>
-              <div class="form-error-msg">Required.</div>
-            </div>
-            <div class="form-field form-field--number" data-field="number">
-              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
-              <div class="form-error-msg">Required.</div>
-            </div>
-          </div>
-          <div class="form-consent" data-field="consent">
-            <label class="consent-label">
-              <input type="checkbox" name="consent" required>
-              <span class="consent-box" aria-hidden="true"></span>
-              <span class="consent-text">I agree to receive SABI&rsquo;s weekly prompts by SMS. I understand that I can unsubscribe anytime by texting STOP. I've read the <a href="https://sabi.london/legal" target="_blank" class="consent-link">privacy policy</a>.</span>
-            </label>
-            <div class="form-error-msg consent-error-msg">Required.</div>
-          </div>
-          <button type="submit" class="lightbox-submit" aria-label="Submit">
-            <svg viewBox="0 0 60 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M14 4 L14 14 Q14 20 20 20 L56 20"/>
-              <polyline points="44 10 56 20 44 30"/>
-            </svg>
-          </button>
-        </form>
-        <p class="form-success" id="formSuccess">You&rsquo;re on the list :)<br>Text you l8r</p>
+      <a href="https://sabi.london/" class="site-name">S A B I</a>
+    </header>
+
+    <nav class="menu-accordion" id="menuAccordion">
+      <div class="menu-list">
+        <a href="https://sabi.london/about">About</a>
+        <a class="active" aria-current="page" aria-disabled="true">Services</a>
+        <a href="https://play.sabi.london/">Play</a>
       </div>
+    </nav>
+
+    <div class="full-divider header-divider-inset"></div>
+  </div>
+
+  <!-- ── Section: Services intro (tall, editorial) ── -->
+  <div class="container section services-hero">
+    <div class="page-body">
+      <p>
+        We see you. The brands for the kind of consumer that finds things before everyone else does. The early adopters. The Particular.<br>Nothing gets past them, so we’ve got ideas for everything: End-to-end creative services from strategy to design.
+      </p>
     </div>
   </div>
 
-  <nav class="site-nav">
-    <a href="https://sabi.london/about" class="nav-link">About</a>
-    <a href="https://sabi.london/services/"class="nav-link">Services</a>
-    <a href="https://play.sabi.london/" class="nav-link">Play</a>
-  </nav>
+  <!-- ── Section: All services, grouped but not divided ── -->
+  <div class="container category-section">
 
-  <img src="sabi-logo.png" alt="SABI">
+    <h3 class="category-heading">Brand</h3>
+    <ul class="service-list">
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Brand Strategy</span></summary>
+          <p class="service-desc">Scouting unique opportunities for your intellectual property, content strategy, and market presence. </p>
+          <a href="https://sabi.london/services/brand-strategy/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">World Building</span></summary>
+          <p class="service-desc">Imagining a universe with your target customer at the centre of it. Mythology, ethos, and aesthetic.
+</p>
+          <a href="https://sabi.london/services/world-building/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+       <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Space</span></summary>
+          <p class="service-desc">A world in 3D. Designing physical spaces and installations with a point of view.
+</p>
+        </details>
+      </li>
+    </ul>
 
-  <footer class="site-footer">
-    <p class="footer-desc">A creative consultancy offering strategy and design <br class="desc-break">for culture-shaping presence and storytelling.</p>
+    <h3 class="category-heading category-heading--spaced">Experience</h3>
+    <ul class="service-list">
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Sound</span></summary>
+          <p class="service-desc">Musical programming for ambient audio. Tracklisting and mixing to set the tone for your spaces and events.</p>
+        </details>
+      </li>
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Events</span></summary>
+          <p class="service-desc">Designing and programming real-world occasions for your community; Social moments for brand legacy.
+</p>
+        </details>
+      </li>
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Community &amp; Partnerships</span></summary>
+          <p class="service-desc">50 first impressions – peers, partners, and platforms – for cultural currency.</p>
+          <a href="https://sabi.london/services/community-and-partnerships/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+    </ul>
 
-    <div class="footer-row">
-      <div class="footer-col footer-col-left">
-        <div class="contact-block">
-          <span class="contact-label">Contact</span>
-          <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
-          <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
-        </div>
+    <h3 class="category-heading category-heading--spaced">Production</h3>
+    <ul class="service-list">
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Copy</span></summary>
+          <p class="service-desc">Scripting your brand voice and framing your message for emotional resonance.</p>
+          <a href="https://sabi.london/services/copy/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Campaign</span></summary>
+          <p class="service-desc">Directing visual stories. Evocative, curated image research and narrative framing.</p>
+          <a href="https://sabi.london/services/campaign/" class="service-more-link">More info →</a>
+        </details>
+      </li>
+      <li class="service-item inactive">
+        <details>
+          <summary><span class="service-toggle" aria-hidden="true"></span><span class="service-name">Editions</span></summary>
+          <p class="service-desc">Your brand signature made tactile; merch, collateral and other special editions to remember you by.
+</p>
+        </details>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ── Section: Dial In (dark, full-bleed) ── -->
+  <section class="by-appointment">
+    <div class="container-wide ba-inner">
+      <div class="ba-left">
+        <h2 class="section-title light">Dial In</h2>
+        <p class="ba-text">The Out-of-Office experience.</p>
+        <p class="ba-text">Schedule a weekend discovery call to explore new perspectives on creative strategy.</p>
       </div>
-
-      <div class="footer-col footer-col-right">
-        <div class="station" id="station">
-          <div class="station-row">
-            <span class="station-city">London</span>
-          </div>
-          <div class="station-row">
-            <span class="station-time" data-time>--:--</span>
-          </div>
-          <div class="station-row">
-            <span class="station-meta">
-              <span class="station-icon" data-icon></span>
-              <span data-temp>--°C</span>
-              <span class="station-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span>
-            </span>
-          </div>
-        </div>
+      <div class="ba-right">
+        <a href="https://calendar.app.google/bSuyD2e3U2jy2S786" class="ooo-link" target="_blank" rel="noopener">OOO Hours →</a>
+        <table class="ba-clocks-table">
+          <colgroup>
+            <col class="ba-col">
+            <col class="ba-col-spacer">
+            <col class="ba-col">
+            <col class="ba-col-spacer">
+            <col class="ba-col">
+          </colgroup>
+          <tbody>
+            <tr>
+              <td class="ba-cell ba-cell-city ba-cell-city-london" data-city="London"><span class="ba-city-inner"><span>L</span><span>o</span><span>n</span><span>d</span><span>o</span><span>n</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-city ba-cell-city-ny" data-city="NY"><span class="ba-city-inner"><span>N</span><span>e</span><span>w</span><span>&nbsp;</span><span>Y</span><span>o</span><span>r</span><span>k</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-city ba-cell-city-paris" data-city=" Paris "><span class="ba-city-inner"><span>P</span><span>a</span><span>r</span><span>i</span><span>s</span></span></td>
+            </tr>
+            <tr>
+              <td class="ba-cell ba-cell-time" data-city="London" id="time-London"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-time" data-city="NY" id="time-NY"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-time" data-city="Paris" id="time-Paris"><span class="ba-time-inner"><span data-h1>-</span><span data-h2>-</span><span class="ba-time-colon">:</span><span data-m1>-</span><span data-m2>-</span></span></td>
+            </tr>
+            <tr>
+              <td class="ba-cell ba-cell-weather" data-city="London" id="weather-London"><span class="ba-weather-inner"><span class="ba-icon" data-icon></span><span data-temp>--°C</span><span class="ba-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-weather" data-city="NY" id="weather-NY"><span class="ba-weather-inner"><span class="ba-icon" data-icon></span><span data-temp>--°C</span><span class="ba-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span></span></td>
+              <td class="ba-spacer"></td>
+              <td class="ba-cell ba-cell-weather" data-city="Paris" id="weather-Paris"><span class="ba-weather-inner"><span class="ba-icon" data-icon></span><span data-temp>--°C</span><span class="ba-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span></span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    // ── Typewriter quote reel (replaces the old scrolling ticker) ──
-    const TICKER_QUOTES = [
-      'All the good ideas are outside',
-      'No detail too casual',
-      'Signed, on and off paper',
-      'We saw you see it first',
-      'Tuesday afternoons are cancelled',
-      'The business of good impressions'
-      // Add a 6th quote here as another string in the array, if needed.
-    ];
+  <div class="full-divider"></div>
 
-    const TYPE_SPEED_MS = 83;      // per character, typing (1.5x slower than before)
-    const DELETE_SPEED_MS = 45;    // per character, deleting (1.5x slower than before)
-    const HOLD_MS = 3500;          // pause once fully typed
-    const GAP_MS = 400;            // pause once fully deleted, before next quote
+  <div class="container container--footer">
+    <footer class="site-footer">
+      <div class="footer-col">
+        <p class="footer-desc">A creative consultancy offering strategy and design<br>for culture-shaping presence and storytelling.</p>
+        <p class="footer-copyright">© 2026 SABI LDN</p>
+      </div>
 
-    const tickerQuoteEl = document.getElementById('tickerQuote');
+      <div class="footer-col">
+        <p class="footer-heading">Contact</p>
+        <div class="footer-links">
+          <a href="mailto:office@sabi.london" target="_blank" rel="noopener">office@sabi.london</a>
+          <a href="tel:+447400192837">+44 7400 192837</a>
+          <a href="https://calendar.app.google/itHV85cwLfoDmH7x5">OOO Hours</a>
+        </div>
+      </div>
 
-    function typewriterLoop(index = 0) {
-      const quote = TICKER_QUOTES[index];
-      let charIndex = 0;
+      <div class="footer-col footer-col--services">
+        <p class="footer-heading">Services</p>
+        <div class="footer-links">
+          <a href="https://sabi.london/services/brand-strategy/">Brand Strategy</a>
+          <a href="https://sabi.london/services/world-building/">World Building</a>
+          <a href="https://sabi.london/services/copy/">Copy</a>
+          <a href="https://sabi.london/services/community-and-partnerships/">Community &amp; Partnerships</a>
+          <a href="https://sabi.london/services/campaign/">Campaign</a>
+        </div>
+      </div>
+    </footer>
+  </div>
 
-      function typeChar() {
-        tickerQuoteEl.textContent = quote.slice(0, charIndex);
-        charIndex++;
-        if (charIndex <= quote.length) {
-          setTimeout(typeChar, TYPE_SPEED_MS);
-        } else {
-          setTimeout(deleteChar, HOLD_MS);
-        }
-      }
+</div>
 
-      function deleteChar() {
-        charIndex--;
-        tickerQuoteEl.textContent = quote.slice(0, charIndex);
-        if (charIndex > 0) {
-          setTimeout(deleteChar, DELETE_SPEED_MS);
-        } else {
-          const nextIndex = (index + 1) % TICKER_QUOTES.length;
-          setTimeout(() => typewriterLoop(nextIndex), GAP_MS);
-        }
-      }
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const menuAccordion = document.getElementById('menuAccordion');
 
-      typeChar();
-    }
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = menuAccordion.classList.toggle('open');
+    menuBtn.classList.toggle('open', isOpen);
+    menuBtn.setAttribute('aria-expanded', isOpen);
+  });
+</script>
 
-    if (tickerQuoteEl && TICKER_QUOTES.length) {
-      typewriterLoop(0);
-    }
+<script>
+  // ── Dial In: London / New York clocks + weather ──
+  const BA_ICONS = {
+    clear: 'clear',
+    moon: 'moon',
+    partlyCloudy: 'partlyCloudy',
+    partlyCloudyNight: 'partlyCloudyNight',
+    cloud: 'cloud',
+    fog: 'fog',
+    rain: 'rain',
+    snow: 'snow',
+    storm: 'storm'
+  };
 
-    // ── Lightbox, triggered by the ticker's arrow icon ──
-    const smsLightbox = document.getElementById('smsLightbox');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const tickerLightboxTrigger = document.getElementById('tickerLightboxTrigger');
+  function baIconForCode(code, isDay) {
+    if (code === 0) return isDay ? BA_ICONS.clear : BA_ICONS.moon;
+    if ([1, 2].includes(code)) return isDay ? BA_ICONS.partlyCloudy : BA_ICONS.partlyCloudyNight;
+    if (code === 3) return BA_ICONS.cloud;
+    if ([45, 48].includes(code)) return BA_ICONS.fog;
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return BA_ICONS.rain;
+    if ([71, 73, 75, 77, 85, 86].includes(code)) return BA_ICONS.snow;
+    if ([95, 96, 99].includes(code)) return BA_ICONS.storm;
+    return BA_ICONS.cloud;
+  }
 
-    function openLightbox() {
-      smsLightbox.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
+  const BA_CITIES = [
+    { id: 'London', lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
+    { id: 'NY', lat: 40.7128, lon: -74.0060, tz: 'America/New_York' },
+    { id: 'Paris', lat: 48.8566, lon: 2.3522, tz: 'Europe/Paris' }
+  ];
 
-    function closeLightbox() {
-      smsLightbox.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-
-    tickerLightboxTrigger.addEventListener('click', openLightbox);
-    lightboxClose.addEventListener('click', closeLightbox);
-
-    smsLightbox.addEventListener('click', (e) => {
-      if (e.target === smsLightbox) closeLightbox();
+  function baUpdateClock(city) {
+    const timeCell = document.getElementById('time-' + city.id);
+    if (!timeCell) return;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', {
+      timeZone: city.tz,
+      hour: '2-digit',
+      minute: '2-digit'
     });
+    const [hh, mm] = timeStr.split(':');
+    timeCell.querySelector('[data-h1]').textContent = hh[0];
+    timeCell.querySelector('[data-h2]').textContent = hh[1];
+    timeCell.querySelector('[data-m1]').textContent = mm[0];
+    timeCell.querySelector('[data-m2]').textContent = mm[1];
+  }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && smsLightbox.classList.contains('is-open')) {
-        closeLightbox();
-      }
-    });
-
-    // ── Sign-up form: digits-only area code, and custom validation that
-    //    only flags a field once a submit attempt has actually failed ──
-    const lightboxForm = document.getElementById('lightboxForm');
-    const areaCodeInput = lightboxForm.querySelector('input[name="areaCode"]');
-    const formSuccess = document.getElementById('formSuccess');
-    const lightboxContent = document.getElementById('lightboxContent');
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzDo7B7pz9AsWq5Wd5lRDh37Pyhe6dqL_-Uyx-vQkAPbAIpoexq47138wB_Rv7iMLb6w/exec';
-
-    areaCodeInput.addEventListener('input', () => {
-      areaCodeInput.value = areaCodeInput.value.replace(/\D/g, '').slice(0, 3);
-    });
-
-    function fieldWrapper(field) {
-      return field.closest('[data-field]');
+  async function baUpdateWeather(city) {
+    const weatherCell = document.getElementById('weather-' + city.id);
+    if (!weatherCell) return;
+    try {
+      const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current=temperature_2m,weather_code,is_day`);
+      const data = await res.json();
+      const temp = Math.round(data.current.temperature_2m);
+      const code = data.current.weather_code;
+      const isDay = data.current.is_day === 1;
+      weatherCell.classList.remove('is-error');
+      weatherCell.querySelector('[data-temp]').textContent = `${temp}°C`;
+      const iconName = baIconForCode(code, isDay);
+      weatherCell.querySelector('[data-icon]').innerHTML =
+        `<img src="/icons-cream/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
+    } catch (e) {
+      weatherCell.classList.add('is-error');
+      weatherCell.querySelector('[data-temp]').textContent = '';
+      weatherCell.querySelector('[data-icon]').innerHTML =
+        `<button type="button" class="ba-refresh-btn" aria-label="Retry weather">
+           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+             <polyline points="1 4 1 10 7 10"/>
+             <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+           </svg>
+         </button>`;
+      const retryBtn = weatherCell.querySelector('.ba-refresh-btn');
+      if (retryBtn) retryBtn.addEventListener('click', () => baUpdateWeather(city));
     }
+  }
 
-    function clearError(field) {
-      const wrapper = fieldWrapper(field);
-      if (!wrapper) return;
-      wrapper.classList.remove('has-error');
-      const codeWrap = wrapper.querySelector('.code-input-wrap');
-      if (codeWrap) codeWrap.classList.remove('has-error');
-      if (wrapper.classList.contains('consent-label')) wrapper.classList.remove('has-error');
+  // Size the three filled columns (London/New York/Paris) to exactly
+  // match the time row's actual rendered width, so those three come out
+  // identical. The two empty spacer columns are sized separately in CSS
+  // (.ba-col-spacer) and left untouched here. Measured live rather than
+  // hardcoded, since the real width depends on the page's actual
+  // font/letter-spacing. NARROW_BY trims a bit off that measured width
+  // so the time's hh/mm don't spread too far apart.
+  const BA_COL_NARROW_BY = 60; 
+
+  function matchBaColumnWidths() {
+    const table = document.querySelector('.ba-clocks-table');
+    const cols = table ? table.querySelectorAll('.ba-col') : [];
+    const timeCell = document.getElementById('time-London');
+    if (!table || !cols.length || !timeCell) return;
+
+    // Measure unconstrained first, so a previous run's fixed width
+    // doesn't distort this one.
+    cols.forEach((col) => { col.style.width = ''; });
+    table.style.tableLayout = 'auto';
+    const naturalWidth = timeCell.getBoundingClientRect().width;
+    table.style.tableLayout = 'fixed';
+
+    if (naturalWidth > 0) {
+      const narrowedWidth = naturalWidth + 6;
+      cols.forEach((col) => { col.style.width = narrowedWidth + 'px'; });
     }
+  }
 
-    lightboxForm.querySelectorAll('input').forEach((input) => {
-      const evt = input.type === 'checkbox' ? 'change' : 'input';
-      input.addEventListener(evt, () => clearError(input));
-    });
-
-    lightboxForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      let firstInvalid = null;
-
-      lightboxForm.querySelectorAll('[required]').forEach((input) => {
-        const isCheckbox = input.type === 'checkbox';
-        const invalid = isCheckbox ? !input.checked : input.value.trim() === '';
-        const wrapper = fieldWrapper(input);
-        if (!wrapper) return;
-
-        if (invalid) {
-          wrapper.classList.add('has-error');
-          const codeWrap = wrapper.querySelector('.code-input-wrap');
-          if (codeWrap) codeWrap.classList.add('has-error');
-          if (!firstInvalid) firstInvalid = input;
-        } else {
-          wrapper.classList.remove('has-error');
-          const codeWrap = wrapper.querySelector('.code-input-wrap');
-          if (codeWrap) codeWrap.classList.remove('has-error');
-        }
+  async function baInit() {
+    const weatherPromises = BA_CITIES.map((city) => {
+      baUpdateClock(city);
+      setInterval(() => baUpdateClock(city), 1000);
+      return baUpdateWeather(city).then(() => {
+        setInterval(() => baUpdateWeather(city), 5 * 60 * 1000);
       });
-
-      if (firstInvalid) {
-        firstInvalid.focus();
-        return;
-      }
-
-      // All valid — assemble the payload with keys matching the Google Sheet
-      // column headers exactly, then send to Google Apps Script.
-      const payload = {
-        'TIMESTAMP': new Date().toISOString(),
-        'NAME': lightboxForm.querySelector('input[name="name"]').value.trim(),
-        'COUNTRY CODE': '+' + areaCodeInput.value.trim(),
-        'MOBILE NUMBER': lightboxForm.querySelector('input[name="number"]').value.trim(),
-        'CONSENT': true
-      };
-
-      // Show success immediately — don't wait on the network request.
-      // Disabling the button too is a second safeguard: even a very fast
-      // double-click can't fire this handler twice once it's disabled.
-      const submitBtn = lightboxForm.querySelector('.lightbox-submit');
-      if (submitBtn) submitBtn.disabled = true;
-
-      // On the mobile layout the lightbox is bottom-anchored, so if the
-      // form (tall) is simply swapped for the success message (short)
-      // the whole block collapses and re-anchors lower on screen,
-      // dragging the heading/copy down with it. Locking in the box's
-      // current height before hiding the form keeps the heading/copy
-      // exactly where they were, and lets the success message land in
-      // the space the form used to occupy (right where "Name" was).
-      if (window.matchMedia('(max-width: 760px)').matches) {
-        lightboxContent.style.minHeight = lightboxContent.offsetHeight + 'px';
-      }
-      lightboxForm.style.display = 'none';
-      formSuccess.classList.add('is-visible');
-
-      // no-cors: Apps Script doesn't send CORS headers back, so the response
-      // is opaque — we can't read it, but the request still goes through.
-      // Fired without awaiting it, so a slow/cold-start Apps Script response
-      // can't hold up the UI.
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      }).catch((err) => console.error('Sign-up submit failed', err));
     });
+    await Promise.all(weatherPromises);
+    matchBaColumnWidths();
+    const table = document.querySelector('.ba-clocks-table');
+    if (table) table.classList.add('is-ready');
+  }
 
-    // ── Hairline weather icons, matched to Open-Meteo WMO weather codes ──
-    const ICONS = {
-      clear: 'clear',
-      moon: 'moon',
-      partlyCloudy: 'partlyCloudy',
-      partlyCloudyNight: 'partlyCloudyNight',
-      cloud: 'cloud',
-      fog: 'fog',
-      rain: 'rain',
-      snow: 'snow',
-      storm: 'storm'
-    };
+  baInit();
+  window.addEventListener('resize', matchBaColumnWidths);
+</script>
 
-    function iconForCode(code, isDay) {
-      if (code === 0) return isDay ? ICONS.clear : ICONS.moon;
-      if ([1,2].includes(code)) return isDay ? ICONS.partlyCloudy : ICONS.partlyCloudyNight;
-      if (code === 3) return ICONS.cloud;
-      if ([45,48].includes(code)) return ICONS.fog;
-      if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return ICONS.rain;
-      if ([71,73,75,77,85,86].includes(code)) return ICONS.snow;
-      if ([95,96,99].includes(code)) return ICONS.storm;
-      return ICONS.cloud;
-    }
-
-    const LONDON = { lat: 51.5074, lon: -0.1278, tz: 'Europe/London' };
-    const panel = document.querySelector('.station');
-
-    function updateClock() {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-GB', {
-        timeZone: LONDON.tz,
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      panel.querySelector('[data-time]').textContent = timeStr;
-      // Re-fit the time font-size to match the city label's width every tick —
-      // not just on load/resize — since different digits render at slightly
-      // different widths and the match would otherwise go stale between ticks.
-      // Guarded to only run after the initial reveal so it doesn't race the
-      // webfont-loading sequencing handled in initClockReveal() below.
-      if (panel.classList.contains('clock-ready')) {
-        matchStationRowWidths();
-      }
-    }
-
-    // City + time reveal: waits only on webfonts (needed so the width-match
-    // measures against real font metrics, not a fallback font), never on the
-    // weather fetch. This is what actually needs to happen "together" with
-    // the city row, since the time's font-size is derived from it.
-    async function initClockReveal() {
-      if (document.fonts && document.fonts.ready) {
-        await document.fonts.ready;
-      }
-      matchStationRowWidths();
-      matchLeftColumnHeightToStation();
-      panel.classList.add('clock-ready');
-    }
-
-    async function updateWeather() {
-      try {
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LONDON.lat}&longitude=${LONDON.lon}&current=temperature_2m,weather_code,is_day`);
-        const data = await res.json();
-        const temp = Math.round(data.current.temperature_2m);
-        const code = data.current.weather_code;
-        const isDay = data.current.is_day === 1;
-        panel.querySelector('.station-meta').classList.remove('is-error');
-        panel.querySelector('[data-temp]').textContent = `${temp}°C`;
-        const iconName = iconForCode(code, isDay);
-        panel.querySelector('[data-icon]').innerHTML =
-          `<img src="icons/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
-      } catch (e) {
-        panel.querySelector('.station-meta').classList.add('is-error');
-        panel.querySelector('[data-temp]').textContent = '';
-        panel.querySelector('[data-icon]').innerHTML =
-          `<button type="button" class="station-refresh-btn" aria-label="Retry weather">
-             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-               <polyline points="1 4 1 10 7 10"/>
-               <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-             </svg>
-           </button>`;
-        const retryBtn = panel.querySelector('.station-refresh-btn');
-        if (retryBtn) retryBtn.addEventListener('click', updateWeather);
-      } finally {
-        // Same webfont-readiness guard as initClockReveal(), applied here so
-        // the weather row's icon/temperature width-match is also measured
-        // against real font metrics rather than a fallback font.
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-        panel.classList.add('is-ready');
-      }
-    }
-
-    updateClock();
-    initClockReveal();
-    updateWeather();
-    setInterval(updateClock, 1000);
-    // No periodic refresh — a failed fetch now shows a clickable retry icon
-    // instead (see the catch block above), which is a more direct fix for
-    // the one scenario this interval was actually covering.
-
-    // ── Force all three station rows (city/time/meta) to share the exact same width ──
-    function matchStationRowWidths() {
-      const cityEl = document.querySelector('.station-city');
-      const timeEl = document.querySelector('.station-time');
-      const metaEl = document.querySelector('.station-meta');
-      if (!cityEl || !timeEl || !metaEl) return;
-
-      // Reset any previous scaling before measuring fresh
-      timeEl.style.fontSize = '';
-      metaEl.style.fontSize = '';
-
-      const cityWidth = cityEl.getBoundingClientRect().width;
-
-      const timeWidth = timeEl.getBoundingClientRect().width;
-      const timeFontSize = parseFloat(getComputedStyle(timeEl).fontSize);
-      if (timeWidth > 0) {
-        const newTimeSize = timeFontSize * (cityWidth / timeWidth);
-        timeEl.style.fontSize = newTimeSize + 'px';
-      }
-
-      const metaIcon = metaEl.querySelector('.station-icon');
-      const metaTemp = metaEl.querySelector('[data-temp]');
-      if (metaIcon && metaTemp) {
-        const iconWidth = metaIcon.getBoundingClientRect().width;
-        const gapPx = parseFloat(getComputedStyle(metaEl).gap) || 0;
-        const tempWidth = metaTemp.getBoundingClientRect().width;
-        const tempFontSize = parseFloat(getComputedStyle(metaTemp).fontSize) || parseFloat(getComputedStyle(metaEl).fontSize);
-        const availableForText = cityWidth - iconWidth - gapPx;
-        if (tempWidth > 0 && availableForText > 0) {
-          const newTempSize = tempFontSize * (availableForText / tempWidth);
-          metaTemp.style.fontSize = newTempSize + 'px';
-        }
-      }
-    }
-
-    window.addEventListener('load', matchStationRowWidths);
-
-    // The very first measurement can run before the Typekit font
-    // ('owners-text') has actually finished loading — if it measures
-    // against the browser's fallback font instead, the font-size scale
-    // it calculates is wrong once the real font swaps in. Re-run once
-    // the real webfont is confirmed loaded to correct for that.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-      });
-    }
-
-    // Debounced instead of running on every single resize tick — rotating
-    // a phone fires a burst of resize events while the viewport is still
-    // mid-transition, and measuring during that burst risks writing an
-    // unstable font-size value.
-    let stationResizeTimer;
-    function scheduleMatchStationRowWidths() {
-      clearTimeout(stationResizeTimer);
-      stationResizeTimer = setTimeout(matchStationRowWidths, 250);
-    }
-    window.addEventListener('resize', scheduleMatchStationRowWidths);
-
-    // ── On mobile, centre the logo within the empty space between nav and footer.
-    //    On desktop, leave it to the default flex centering (dead-centre of the page). ──
-    function centreLogoInMainBlock() {
-      const logo = document.querySelector('img');
-      const nav = document.querySelector('.site-nav');
-      const footer = document.querySelector('.site-footer');
-      if (!logo || !nav || !footer) return;
-
-      const isPhone = window.innerWidth <= 760 ||
-        (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
-
-      const navBottom = nav.getBoundingClientRect().bottom;
-      const footerHeight = footer.getBoundingClientRect().height;
-      const viewportHeight = window.innerHeight;
-      const gapMid = navBottom + (viewportHeight - navBottom - footerHeight) / 2;
-
-      if (!isPhone) {
-        // Desktop: split the difference between dead-centre of the full
-        // viewport and the centre of the nav/footer gap.
-        const trueMid = viewportHeight / 2;
-        const blendedMid = (trueMid + gapMid) / 2;
-
-        logo.style.position = 'fixed';
-        logo.style.left = '50%';
-        logo.style.top = blendedMid + 'px';
-        logo.style.transform = 'translate(-50%, -50%)';
-        return;
-      }
-
-      logo.style.position = 'fixed';
-      logo.style.left = '50%';
-      logo.style.top = gapMid + 'px';
-      logo.style.transform = 'translate(-50%, -50%)';
-    }
-
-    window.addEventListener('load', centreLogoInMainBlock);
-    window.addEventListener('resize', centreLogoInMainBlock);
-    setTimeout(centreLogoInMainBlock, 100);
-
-    // ── Desktop only: match total height of (description + contact) to the weather block ──
-    function matchLeftColumnHeightToStation() {
-      const desc = document.querySelector('.footer-desc');
-      const contact = document.querySelector('.footer-col-left');
-      const station = document.querySelector('.station');
-      if (!desc || !contact || !station) return;
-
-      // Always clear any previously-written inline values FIRST, before the
-      // desktop-only check below. Rotating a phone to landscape can push its
-      // width over 760px, letting this function run and write a custom
-      // gap/margin for that wide layout — then rotating back to portrait
-      // (width <= 760) was hitting the early return below and leaving that
-      // leftover landscape-calculated spacing permanently baked in. This is
-      // the actual cause of the block appearing taller after rotating back.
-      desc.style.marginBottom = '';
-      station.style.gap = '';
-
-      if (window.innerWidth <= 760) return;
-
-      const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
-      const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
-
-      const stationHeight = station.getBoundingClientRect().height;
-      const descHeight = desc.getBoundingClientRect().height;
-      const contactHeight = contact.getBoundingClientRect().height;
-      const leftTotal = descHeight + baseMarginBottom + contactHeight;
-
-      const diff = leftTotal - stationHeight;
-
-      if (diff > 0) {
-        // Left column is taller — stretch the station's internal gaps to match
-        const extraPerGap = diff / 2; // 2 gaps between the 3 station rows
-        station.style.gap = (baseStationGap + extraPerGap) + 'px';
-      } else {
-        // Station is taller or equal — grow the description's margin to match
-        desc.style.marginBottom = (baseMarginBottom - diff) + 'px';
-      }
-    }
-
-    window.addEventListener('load', matchLeftColumnHeightToStation);
-
-    let leftColumnResizeTimer;
-    function scheduleMatchLeftColumnHeightToStation() {
-      clearTimeout(leftColumnResizeTimer);
-      leftColumnResizeTimer = setTimeout(matchLeftColumnHeightToStation, 250);
-    }
-    window.addEventListener('resize', scheduleMatchLeftColumnHeightToStation);
-
-    // Settle delay after rotation, same reasoning as the station width matcher above.
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => {
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-      }, 300);
-    });
-
-  </script>
 </body>
 </html>
