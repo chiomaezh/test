@@ -1404,23 +1404,22 @@
       const navBottom = nav.getBoundingClientRect().bottom;
       const footerHeight = footer.getBoundingClientRect().height;
       const viewportHeight = window.innerHeight;
-      const gapHeight = viewportHeight - navBottom - footerHeight;
-      let gapMid = navBottom + gapHeight / 2;
-
-      // Phone portrait: keep the logo's "frame" (the space between nav and footer)
-      // roughly square, as it is in Safari. Browsers without a bottom toolbar
-      // (e.g. Instagram's in-app browser) leave a much taller gap, so cap it at
-      // about the screen width. SQUARE_LIMIT 1.05 leaves Safari untouched.
-      // EXTRA_SHARE: 0 = logo sits in the top square (extra space goes below it),
-      // 1 = logo stays dead-centre of the full tall gap (old behaviour), 0.5 = halfway.
-      const SQUARE_LIMIT = 1.05;
-      const EXTRA_SHARE = 0.35;
+      // Phone portrait: keep the proportions of the page like Safari, where the distance
+      // between the bottom of the nav and the top of the description is about the screen
+      // width. Browsers with no bottom toolbar (e.g. Instagram's in-app browser) give a
+      // taller page, so instead of stretching that gap, the footer block is lifted off the
+      // bottom edge by the extra amount. The logo is then centred in the (now Safari-sized) gap.
+      // GAP_TO_WIDTH: target gap as a fraction of screen width (Safari measures ~0.95).
+      const GAP_TO_WIDTH = 0.96;
+      footer.style.bottom = '';
       const isPhonePortrait = window.innerWidth <= 760 && viewportHeight > window.innerWidth;
-      const maxGap = window.innerWidth * SQUARE_LIMIT;
-      if (isPhonePortrait && gapHeight > maxGap) {
-        const extra = gapHeight - maxGap;
-        gapMid = navBottom + maxGap / 2 + extra * EXTRA_SHARE;
+      if (isPhonePortrait) {
+        const naturalGap = footer.getBoundingClientRect().top - navBottom;
+        const targetGap = window.innerWidth * GAP_TO_WIDTH;
+        if (naturalGap > targetGap) footer.style.bottom = (naturalGap - targetGap) + 'px';
       }
+      const footerTop = footer.getBoundingClientRect().top;
+      const gapMid = navBottom + (footerTop - navBottom) / 2;
 
       if (!isPhone) {
         // Desktop: split the difference between dead-centre of the full
