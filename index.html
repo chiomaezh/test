@@ -1419,6 +1419,9 @@
       // TOP_SHARE: fraction of the extra height given to the top (0.5 = half and half).
       const GAP_TO_WIDTH = 0.96;
       const TOP_SHARE = 0.5;
+      // BOTTOM_TRIM: fraction of the remaining empty space under the contact/weather blocks
+      // that is moved to the top as well (0.35 = take 35% of it off the bottom, add to the top).
+      const BOTTOM_TRIM = 0.35;
       const isPhonePortrait = window.innerWidth <= 760 && viewportHeight > window.innerWidth;
       let navShift = 0;
       if (isPhonePortrait) {
@@ -1426,7 +1429,12 @@
         const targetGap = window.innerWidth * GAP_TO_WIDTH;
         if (naturalGap > targetGap) {
           const extra = naturalGap - targetGap;
-          navShift = extra * TOP_SHARE;
+          // Empty space under the contact/weather blocks if split evenly (footer padding + lift),
+          // then BOTTOM_TRIM of it is moved to the top instead.
+          const evenLift = extra * (1 - TOP_SHARE);
+          const bottomEmpty = parseFloat(getComputedStyle(footer).paddingBottom) + evenLift;
+          const moveToTop = Math.min(bottomEmpty * BOTTOM_TRIM, evenLift);
+          navShift = extra * TOP_SHARE + moveToTop;
           footer.style.bottom = (extra - navShift) + 'px';
           if (ticker) {
             ticker.style.height = (ticker.getBoundingClientRect().height + navShift) + 'px';
