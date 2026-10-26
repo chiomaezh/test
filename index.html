@@ -918,6 +918,23 @@
       }
 
     }
+
+    /* ── Phone modes (portrait + landscape): ticker strip padding above and below the
+         typewriter text increased by 0.3x. The strip grows by 0.3 x (its height minus the text
+         height) and the nav moves down by the same amount so the spacing below it is unchanged.
+         Kept after the other phone rules so it wins the cascade. ── */
+    @media (max-width: 760px) {
+      .ticker { height: 42.5px; }   /* was 36px, text 14.5px */
+      .site-nav { top: 42.5px; }    /* was 36px */
+    }
+    @media (max-width: 560px) {
+      .ticker { height: 50.5px; }   /* was 42px, text 13.5px */
+      .site-nav { top: 38.5px; }    /* was 30px */
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      .ticker { height: 50.5px; }   /* was 42px, text 13.5px */
+      .site-nav { top: 32.5px; }    /* was 24px */
+    }
   </style>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
