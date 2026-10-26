@@ -1401,23 +1401,41 @@
       const isPhone = window.innerWidth <= 760 ||
         (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
 
-      const navBottom = nav.getBoundingClientRect().bottom;
-      const footerHeight = footer.getBoundingClientRect().height;
+      const ticker = document.querySelector('.ticker');
       const viewportHeight = window.innerHeight;
+
+      // Clear anything this function set on a previous run, so measurements start from the CSS defaults.
+      footer.style.bottom = '';
+      nav.style.top = '';
+      if (ticker) { ticker.style.height = ''; ticker.style.paddingTop = ''; }
+
       // Phone portrait: keep the proportions of the page like Safari, where the distance
       // between the bottom of the nav and the top of the description is about the screen
       // width. Browsers with no bottom toolbar (e.g. Instagram's in-app browser) give a
-      // taller page, so instead of stretching that gap, the footer block is lifted off the
-      // bottom edge by the extra amount. The logo is then centred in the (now Safari-sized) gap.
+      // taller page, so the extra height is shared between two places instead of stretching
+      // the gap: half goes to the top of the ticker strip (extra dark space above the
+      // typewriter text, nav moves down with it) and half lifts the footer off the bottom edge.
       // GAP_TO_WIDTH: target gap as a fraction of screen width (Safari measures ~0.95).
+      // TOP_SHARE: fraction of the extra height given to the top (0.5 = half and half).
       const GAP_TO_WIDTH = 0.96;
-      footer.style.bottom = '';
+      const TOP_SHARE = 0.5;
       const isPhonePortrait = window.innerWidth <= 760 && viewportHeight > window.innerWidth;
+      let navShift = 0;
       if (isPhonePortrait) {
-        const naturalGap = footer.getBoundingClientRect().top - navBottom;
+        const naturalGap = footer.getBoundingClientRect().top - nav.getBoundingClientRect().bottom;
         const targetGap = window.innerWidth * GAP_TO_WIDTH;
-        if (naturalGap > targetGap) footer.style.bottom = (naturalGap - targetGap) + 'px';
+        if (naturalGap > targetGap) {
+          const extra = naturalGap - targetGap;
+          navShift = extra * TOP_SHARE;
+          footer.style.bottom = (extra - navShift) + 'px';
+          if (ticker) {
+            ticker.style.height = (ticker.getBoundingClientRect().height + navShift) + 'px';
+            ticker.style.paddingTop = navShift + 'px';
+          }
+          nav.style.top = (parseFloat(getComputedStyle(nav).top) + navShift) + 'px';
+        }
       }
+      const navBottom = nav.getBoundingClientRect().bottom;
       const footerTop = footer.getBoundingClientRect().top;
       const gapMid = navBottom + (footerTop - navBottom) / 2;
 
