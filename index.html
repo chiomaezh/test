@@ -1507,6 +1507,8 @@
           // stays pinned left and the temperature right instead of the text filling the row.
           const phoneLandscape = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
           if (phoneLandscape) newTempSize = Math.min(newTempSize, 14);
+          // PC only: temperature +1px on screen (divided by the block's scale to get the CSS value)
+          if (isPC && pcScale > 0 && pcScale !== 1) newTempSize += 1 / pcScale;
           metaTemp.style.fontSize = newTempSize + 'px';
         }
       }
