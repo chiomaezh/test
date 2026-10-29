@@ -597,7 +597,8 @@
        and phone landscape keep their own layouts below. */
     @media (min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px))) {
       .station {
-        height: 115px;
+        height: var(--pc-station-h, 115px);
+        gap: 0;
         justify-content: space-between;
         /* PC only: JS scales the whole weather block down (see matchStationRowWidths) so it is
            exactly as tall as the contact block, anchored on the bottom-right corner so its
@@ -1418,26 +1419,32 @@
       timeEl.style.fontSize = '';
       metaEl.style.fontSize = '';
 
-      // ── PC only: weather block height = contact block height ──
-      // Work out the scale factor (contact block's on-screen height / the weather block's own
-      // height), give LONDON the same on-screen letter-spacing as CONTACT, measure everything
-      // unscaled, then apply the scale at the very end of this function.
+      // ── PC only: scale the weather block down proportionally so LONDON is the same font size
+      //    as CONTACT, with the same letter-spacing, and make the block exactly as tall as the
+      //    contact block (rows spread to fill it), bottoms aligned. Everything is measured unscaled,
+      //    and the scale is applied at the very end of this function. ──
       const stationEl = document.getElementById('station');
       const isPC = window.matchMedia('(min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px)))').matches;
       let pcScale = 1;
       cityEl.style.letterSpacing = '';
-      if (stationEl) stationEl.style.transform = '';
+      if (stationEl) {
+        stationEl.style.transform = '';
+        stationEl.style.removeProperty('--pc-station-h');
+      }
       if (isPC && stationEl) {
         const contactCol = document.querySelector('.footer-col-left');
         const contactLabel = document.querySelector('.contact-label');
-        const stationH = stationEl.offsetHeight;
-        const contactH = contactCol ? contactCol.getBoundingClientRect().height : 0;
-        if (stationH > 0 && contactH > 0 && contactLabel) {
-          pcScale = contactH / stationH;
-          // CONTACT's on-screen letter-spacing (its own spacing x the contact block's 0.9 scale)
+        if (contactCol && contactLabel) {
+          const contactH = contactCol.getBoundingClientRect().height;
           const contactScale = contactCol.offsetHeight ? contactH / contactCol.offsetHeight : 1;
+          const contactFont = parseFloat(getComputedStyle(contactLabel).fontSize) * contactScale;
           const contactSpacing = (parseFloat(getComputedStyle(contactLabel).letterSpacing) || 0) * contactScale;
-          cityEl.style.letterSpacing = (contactSpacing / pcScale) + 'px';
+          const cityFont = parseFloat(getComputedStyle(cityEl).fontSize);
+          if (contactH > 0 && contactFont > 0 && cityFont > 0) {
+            pcScale = contactFont / cityFont;
+            cityEl.style.letterSpacing = (contactSpacing / pcScale) + 'px';
+            stationEl.style.setProperty('--pc-station-h', (contactH / pcScale) + 'px');
+          }
         }
       }
 
@@ -1487,7 +1494,7 @@
         }
       }
 
-      // PC only: apply the scale (keeps the existing 3px downward nudge)
+      // PC only: apply the proportional scale (keeps the existing 3px downward nudge)
       if (isPC && stationEl && pcScale !== 1) {
         stationEl.style.transform = 'translateY(3px) scale(' + pcScale + ')';
       }
