@@ -1432,6 +1432,8 @@
       const isPC = window.matchMedia('(min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px)))').matches;
       let pcScale = 1;
       cityEl.style.letterSpacing = '';
+      const contactBlockEl = document.querySelector('.contact-block');
+      if (contactBlockEl) contactBlockEl.style.gap = '';
       if (stationEl) {
         stationEl.style.transform = '';
         stationEl.style.removeProperty('--pc-station-h');
@@ -1440,6 +1442,16 @@
         const contactCol = document.querySelector('.footer-col-left');
         const contactLabel = document.querySelector('.contact-label');
         if (contactCol && contactLabel) {
+          // PC only: make the contact block 10% taller by opening up the gaps between its rows
+          // evenly (text sizes unchanged). The weather block then matches this taller height.
+          const naturalH = contactCol.getBoundingClientRect().height;
+          const naturalScale = contactCol.offsetHeight ? naturalH / contactCol.offsetHeight : 1;
+          if (contactBlockEl && naturalH > 0) {
+            const rowGaps = Math.max(contactBlockEl.children.length - 1, 1);
+            const baseGap = parseFloat(getComputedStyle(contactBlockEl).rowGap) || 0;
+            const extraPerGap = (naturalH * 0.10) / rowGaps / naturalScale;
+            contactBlockEl.style.gap = (baseGap + extraPerGap) + 'px';
+          }
           const contactH = contactCol.getBoundingClientRect().height;
           const contactScale = contactCol.offsetHeight ? contactH / contactCol.offsetHeight : 1;
           const contactFont = parseFloat(getComputedStyle(contactLabel).fontSize) * contactScale;
