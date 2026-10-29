@@ -4,14 +4,14 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A London-based creative consultancy for brands with ambitious imagination. Strategy, communications, production, and design services for culture-shaping presence and storytelling.">
+  <meta name="description" content="A London-based creative consultancy offering strategy, communications, and design for culture-shaping presence and storytelling.">
 
   <meta property="og:title" content="SABI">
-  <meta property="og:description" content="A creative consultancy for brands with ambitious imagination.">
+  <meta property="og:description" content="A creative consultancy for conceptually ambitious brands.">
   <meta property="og:image" content="/favicon.png">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SABI">
-  <meta name="twitter:description" content="A creative consultancy for brands with ambitious imagination.">
+  <meta name="twitter:description" content="A creative consultancy for conceptually ambitious brands.">
   <meta name="twitter:image" content="/favicon.png">
 
   <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
@@ -223,7 +223,7 @@
       padding-bottom: 0;
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 16px;
+      font-size: 17px;
       line-height: 1.5;
       color: var(--bg);
       text-align: left;
@@ -232,7 +232,7 @@
     .lightbox-heading {
       font-family: var(--font-mono);
       font-weight: 300;
-      font-size: 16px;
+      font-size: 20px;
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--bg);
@@ -592,16 +592,6 @@
       transform: translateY(3px);
     }
 
-    /* Desktop / PC only: the weather block has its own fixed height (115px) and
-       is no longer stretched to match the left column. Phone portrait (<=760px)
-       and phone landscape keep their own layouts below. */
-    @media (min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px))) {
-      .station {
-        height: 115px;
-        justify-content: space-between;
-      }
-    }
-
     /* City + time rows reveal independently of the weather row — the time's
        font-size is derived from the city label, not from the weather fetch,
        so it shouldn't be held hostage by a slow/hung network request. */
@@ -632,9 +622,9 @@
 
     .station-city {
       font-family: var(--font-body);
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1;
-      letter-spacing: 4.1px;
+      letter-spacing: 2.7px;
       text-transform: uppercase;
       color: #000000;
       font-weight: 400;
@@ -700,39 +690,11 @@
       shape-rendering: geometricPrecision;
     }
 
-    /* Error state (same treatment as the Play page's weather reel): when the
-       weather fetch fails, the icon slot becomes the retry button and a small
-       "weather / update" note sits to its left, bottom-aligned, with the
-       temperature hidden. */
-    .station-meta.is-error {
-      align-items: flex-end;
-      gap: 13.5px;
-    }
-    .station-meta.is-error [data-icon] { order: 2; }
-    .station-meta.is-error .station-refresh-text { order: 1; }
-    /* The empty temperature span would otherwise still take part in the
-       flex layout (including its share of the gap), so drop it entirely. */
-    .station-meta.is-error [data-temp] { display: none; }
-    .station-refresh-text {
-      display: none;
-      flex-direction: column;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 10px;
-      line-height: 1.15;
-      letter-spacing: 0.5px;
-      text-transform: lowercase;
-      text-align: left;
-      color: var(--text);
-      white-space: normal;
-    }
-    .station-meta.is-error .station-refresh-text { display: flex; }
-
     /* ── Description block ── */
   .footer-desc {
   max-width: 420px;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 400;
   line-height: 1.15;
   color: var(--text);
@@ -750,7 +712,7 @@
 
     .contact-label {
       font-family: var(--font-body);
-      font-size: 14.5px;
+      font-size: 15px;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text);
@@ -759,7 +721,7 @@
 
     .contact-line {
       font-family: var(--font-body);
-      font-size: 16px;
+      font-size: 16.5px;
       color: #000000;
       font-weight: 300;
     }
@@ -780,7 +742,7 @@
         grid-template-columns: 1fr 1fr;
         grid-template-areas: "desc desc" "contact weather";
         align-items: start;
-        gap: 45px 12px;
+        gap: 40px 12px;
         padding: 20px;
       }
       .footer-row { display: contents; }
@@ -806,20 +768,11 @@
       }
       .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
       .contact-block { text-align: left; }
-      /* Base (desktop) sizes were lowered 0.5px; phone keeps its original sizes */
-      .contact-label { font-size: 15px; }
-      .contact-line { font-size: 16.5px; }
       .station-city { font-size: 15px; letter-spacing: 2px; }
       .station-time { font-size: 28px; }
       .station-meta { font-size: 22px; }
-      .station-icon { width: 23px; height: 23px; }
-      /* Icon pinned to the left edge of the label and temperature to the right edge,
-         so a one-digit temperature ("9°C") doesn't leave the icon floating inwards.
-         (Error state keeps its own layout.) */
-      .station-meta:not(.is-error) { width: 100%; justify-content: space-between; }
-      /* Row gap tightened (8px -> 5.5px) so the weather block, and therefore the
-         contact block that stretches to match it, comes out at 82px tall. */
-      .station { width: auto; gap: 5.5px; }
+      .station-icon { width: 22px; height: 22px; }
+      .station { width: auto; }
 
       .lightbox-box {
         align-items: flex-end;
@@ -884,9 +837,6 @@
       .station-time { font-size: 18px; }
       .station-meta { font-size: 14px; gap: 4px; }
       .station-icon { width: 14px; height: 14px; }
-      /* Error state scaled down with the icon so the note + retry icon still fit the narrow row */
-      .station-meta.is-error { gap: 6px; }
-      .station-refresh-text { font-size: 8px; }
 
       .lightbox-close {
         top: 0;
@@ -917,23 +867,6 @@
         max-width: 300px;
       }
 
-    }
-
-    /* ── Phone modes (portrait + landscape): ticker strip padding above and below the
-         typewriter text increased by 0.3x. The strip grows by 0.3 x (its height minus the text
-         height) and the nav moves down by the same amount so the spacing below it is unchanged.
-         Kept after the other phone rules so it wins the cascade. ── */
-    @media (max-width: 760px) {
-      .ticker { height: 42.5px; }   /* was 36px, text 14.5px */
-      .site-nav { top: 42.5px; }    /* was 36px */
-    }
-    @media (max-width: 560px) {
-      .ticker { height: 50.5px; }   /* was 42px, text 13.5px */
-      .site-nav { top: 38.5px; }    /* was 30px */
-    }
-    @media (orientation: landscape) and (max-height: 500px) {
-      .ticker { height: 50.5px; }   /* was 42px, text 13.5px */
-      .site-nav { top: 32.5px; }    /* was 24px */
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -980,7 +913,7 @@
           <p class="lightbox-heading">Thoughtline</p>
           <p>A creative prompt subscription.<br>A bite of incentive via SMS.</p>
           <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
-          <p>Hypotheticals about culture, enterprise,<br>marketing, and design.<br>50 words, 18 seconds read time.</p>
+          <p>Hypotheticals about culture, enterprise,<br>trends, marketing, and design.<br>50 words, 18 seconds read time.</p>
           <p>Just thoughts. No wrong answers.<br>(No replies at all, actually &ndash; it&rsquo;s one-way.)</p>
         </div>
         <form class="lightbox-form" id="lightboxForm" novalidate>
@@ -1024,7 +957,7 @@
   <nav class="site-nav">
     <a href="https://sabi.london/about" class="nav-link">About</a>
     <a href="https://sabi.london/services/"class="nav-link">Services</a>
-    <a href="https://sabi.london/projects/" class="nav-link">Index</a>
+    <a href="https://play.sabi.london/" class="nav-link">Play</a>
   </nav>
 
   <img src="sabi-logo.png" alt="SABI">
@@ -1053,7 +986,6 @@
             <span class="station-meta">
               <span class="station-icon" data-icon></span>
               <span data-temp>--°C</span>
-              <span class="station-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span>
             </span>
           </div>
         </div>
@@ -1303,13 +1235,11 @@
         const temp = Math.round(data.current.temperature_2m);
         const code = data.current.weather_code;
         const isDay = data.current.is_day === 1;
-        panel.querySelector('.station-meta').classList.remove('is-error');
         panel.querySelector('[data-temp]').textContent = `${temp}°C`;
         const iconName = iconForCode(code, isDay);
         panel.querySelector('[data-icon]').innerHTML =
           `<img src="icons/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
       } catch (e) {
-        panel.querySelector('.station-meta').classList.add('is-error');
         panel.querySelector('[data-temp]').textContent = '';
         panel.querySelector('[data-icon]').innerHTML =
           `<button type="button" class="station-refresh-btn" aria-label="Retry weather">
@@ -1370,13 +1300,7 @@
         const tempFontSize = parseFloat(getComputedStyle(metaTemp).fontSize) || parseFloat(getComputedStyle(metaEl).fontSize);
         const availableForText = cityWidth - iconWidth - gapPx;
         if (tempWidth > 0 && availableForText > 0) {
-          let newTempSize = tempFontSize * (availableForText / tempWidth);
-          // Phone portrait only: the temperature is capped at 21px so narrow digits
-          // (e.g. "11°C") don't blow it up to the size of the time. It can still
-          // shrink below 20px if the text is ever too wide to fit the row.
-          const phonePortrait = window.innerWidth <= 760 &&
-            !window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
-          if (phonePortrait) newTempSize = Math.min(newTempSize, 21);
+          const newTempSize = tempFontSize * (availableForText / tempWidth);
           metaTemp.style.fontSize = newTempSize + 'px';
         }
       }
@@ -1418,51 +1342,10 @@
       const isPhone = window.innerWidth <= 760 ||
         (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
 
-      const ticker = document.querySelector('.ticker');
-      const viewportHeight = window.innerHeight;
-
-      // Clear anything this function set on a previous run, so measurements start from the CSS defaults.
-      footer.style.bottom = '';
-      nav.style.top = '';
-      if (ticker) { ticker.style.height = ''; ticker.style.paddingTop = ''; }
-
-      // Phone portrait: keep the proportions of the page like Safari, where the distance
-      // between the bottom of the nav and the top of the description is about the screen
-      // width. Browsers with no bottom toolbar (e.g. Instagram's in-app browser) give a
-      // taller page, so the extra height is shared between two places instead of stretching
-      // the gap: half goes to the top of the ticker strip (extra dark space above the
-      // typewriter text, nav moves down with it) and half lifts the footer off the bottom edge.
-      // GAP_TO_WIDTH: target gap as a fraction of screen width (Safari measures ~0.95).
-      // TOP_SHARE: fraction of the extra height given to the top (0.5 = half and half).
-      const GAP_TO_WIDTH = 0.96;
-      const TOP_SHARE = 0.5;
-      // BOTTOM_TRIM: fraction of the remaining empty space under the contact/weather blocks
-      // that is moved to the top as well (0.35 = take 35% of it off the bottom, add to the top).
-      const BOTTOM_TRIM = 0.35;
-      const isPhonePortrait = window.innerWidth <= 760 && viewportHeight > window.innerWidth;
-      let navShift = 0;
-      if (isPhonePortrait) {
-        const naturalGap = footer.getBoundingClientRect().top - nav.getBoundingClientRect().bottom;
-        const targetGap = window.innerWidth * GAP_TO_WIDTH;
-        if (naturalGap > targetGap) {
-          const extra = naturalGap - targetGap;
-          // Empty space under the contact/weather blocks if split evenly (footer padding + lift),
-          // then BOTTOM_TRIM of it is moved to the top instead.
-          const evenLift = extra * (1 - TOP_SHARE);
-          const bottomEmpty = parseFloat(getComputedStyle(footer).paddingBottom) + evenLift;
-          const moveToTop = Math.min(bottomEmpty * BOTTOM_TRIM, evenLift);
-          navShift = extra * TOP_SHARE + moveToTop;
-          footer.style.bottom = (extra - navShift) + 'px';
-          if (ticker) {
-            ticker.style.height = (ticker.getBoundingClientRect().height + navShift) + 'px';
-            ticker.style.paddingTop = navShift + 'px';
-          }
-          nav.style.top = (parseFloat(getComputedStyle(nav).top) + navShift) + 'px';
-        }
-      }
       const navBottom = nav.getBoundingClientRect().bottom;
-      const footerTop = footer.getBoundingClientRect().top;
-      const gapMid = navBottom + (footerTop - navBottom) / 2;
+      const footerHeight = footer.getBoundingClientRect().height;
+      const viewportHeight = window.innerHeight;
+      const gapMid = navBottom + (viewportHeight - navBottom - footerHeight) / 2;
 
       if (!isPhone) {
         // Desktop: split the difference between dead-centre of the full
@@ -1485,11 +1368,7 @@
 
     window.addEventListener('load', centreLogoInMainBlock);
     window.addEventListener('resize', centreLogoInMainBlock);
-    window.addEventListener('orientationchange', centreLogoInMainBlock);
-    // In-app browsers (Instagram etc.) can change their bar heights after load
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', centreLogoInMainBlock);
     setTimeout(centreLogoInMainBlock, 100);
-    setTimeout(centreLogoInMainBlock, 600);
 
     // ── Desktop only: match total height of (description + contact) to the weather block ──
     function matchLeftColumnHeightToStation() {
@@ -1510,19 +1389,12 @@
 
       if (window.innerWidth <= 760) return;
 
-      // Desktop / PC: weather block height is fixed in CSS (115px), so there is
-      // nothing to match. Only phone landscape (compact footer) still uses the matching below.
-      if (!window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches) return;
-
       const baseMarginBottom = parseFloat(getComputedStyle(desc).marginBottom);
       const baseStationGap = parseFloat(getComputedStyle(station).gap) || 8;
 
       const stationHeight = station.getBoundingClientRect().height;
       const descHeight = desc.getBoundingClientRect().height;
-      // offsetHeight = the real layout height. getBoundingClientRect() would return the
-      // visually scaled height (the contact column has transform: scale(0.9)), which made
-      // the weather block come out ~7px shorter than the left column.
-      const contactHeight = contact.offsetHeight;
+      const contactHeight = contact.getBoundingClientRect().height;
       const leftTotal = descHeight + baseMarginBottom + contactHeight;
 
       const diff = leftTotal - stationHeight;
@@ -1554,181 +1426,6 @@
       }, 300);
     });
 
-  </script>
-
-  <!-- ═══════════ Custom cursor: asterisk (experimental) ═══════════
-       Mouse / trackpad only (phones and tablets are untouched).
-       • Default: a solid ink asterisk (six club-shaped petals) exactly on the pointer, no lag.
-       • Over links and buttons: the asterisk turns 30° (vertical arm becomes horizontal, like a typewriter
-         keystroke) and grows slightly. Add data-cursor="active" to anything else that should react.
-       • Anything with data-cursor-note="…" also shows the text as a small typewriter footnote beside the pointer.
-         Opt-in per element; nothing uses it yet.
-       • Inverts whatever is underneath it, pixel by pixel (mix-blend-mode: difference): dark on paper, light on the
-         dark ticker / lightbox, split along the edge when it straddles both, and flipped over text.
-         Text fields keep the native cursor. -->
-  <style>
-    .sabi-cursor, .sabi-note {
-      position: fixed;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      z-index: 2147483000;
-      color: var(--text, #211D1D);
-    }
-    html.sabi-on-dark .sabi-note { color: var(--bg, #FAFBE3); }
-
-    /* The asterisk inverts whatever is under each part of it (mix-blend-mode: difference).
-       Paper-coloured source: over paper it comes out black, over the dark ticker / lightbox
-       it comes out light, and a star straddling both is split half and half. Dark text
-       under it flips to light, light text to dark. Must sit on .sabi-cursor itself (the
-       element with the stacking context), not on the svg inside it. */
-    html .sabi-cursor,
-    html.sabi-on-dark .sabi-cursor {
-      color: var(--bg, #FAFBE3);
-      mix-blend-mode: difference;
-    }
-
-    .sabi-cursor { width: 0; height: 0; opacity: 0; will-change: transform; }
-    .sabi-cursor.is-visible { opacity: 1; }
-    .sabi-cursor svg {
-      position: absolute;
-      left: -7.5px;              /* 15px mark, centre exactly on the pointer */
-      top: -7.5px;
-      width: 15px;               /* change these three numbers together to resize the star */
-      height: 15px;
-      overflow: visible;
-      transition: transform 0.15s cubic-bezier(.2,.7,.2,1);
-    }
-    .sabi-cursor svg * {
-      fill: currentColor;        /* solid, club-petal asterisk */
-      stroke: none;
-    }
-    .sabi-cursor.is-active svg               { transform: rotate(30deg) scale(1.25); }
-    .sabi-cursor.is-down svg                 { transform: scale(0.85); }
-    .sabi-cursor.is-active.is-down svg       { transform: rotate(30deg) scale(1.05); }
-
-    /* Footnote-style note (typewriter mono, paper background so it reads over anything) */
-    .sabi-note {
-      font-family: 'gemeli-mono', ui-monospace, Menlo, Consolas, monospace;
-      font-size: 11px;
-      line-height: 1.3;
-      letter-spacing: 0.02em;
-      max-width: 220px;
-      padding: 5px 8px;
-      background: var(--bg, #FAFBE3);
-      opacity: 0;
-      transition: opacity 0.12s ease;
-      will-change: transform;
-    }
-    html.sabi-on-dark .sabi-note { background: #170006; }
-    .sabi-note.is-visible { opacity: 1; }
-
-    /* Hide the native cursor only once the custom one is actually running */
-    html.sabi-cursor-on, html.sabi-cursor-on * { cursor: none !important; }
-    /* Over text fields: native cursor (I-beam) comes back, ours steps aside */
-    html.sabi-cursor-on.sabi-native, html.sabi-cursor-on.sabi-native * { cursor: auto !important; }
-    html.sabi-cursor-on.sabi-native .sabi-cursor,
-    html.sabi-cursor-on.sabi-native .sabi-note { opacity: 0; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .sabi-cursor svg, .sabi-note { transition: none; }
-    }
-  </style>
-  <script>
-    (function () {
-      // Only for devices with a real, hover-capable pointer.
-      var mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-      if (!mq.matches) return;
-
-      var root = document.documentElement;
-      var cursor = document.createElement('div');
-      cursor.className = 'sabi-cursor';
-      cursor.setAttribute('aria-hidden', 'true');
-      // Six club-shaped petals (narrow at the centre, swelling to a rounded tip),
-      // one drawn pointing up and rotated in 60° steps, plus a small hexagonal hub.
-      var PETAL = 'M-19 0C-19-100-43-150-43-225C-43-285-28-309 0-309C28-309 43-285 43-225C43-150 19-100 19 0Z';
-      var petals = '';
-      for (var i = 0; i < 6; i++) {
-        petals += '<path transform="rotate(' + (i * 60) + ')" d="' + PETAL + '"/>';
-      }
-      cursor.innerHTML =
-        '<svg viewBox="-330 -330 660 660" xmlns="http://www.w3.org/2000/svg">' +
-          petals +
-          '<polygon points="0,-62 54,-31 54,31 0,62 -54,31 -54,-31"/>' +
-        '</svg>';
-
-      var note = document.createElement('div');
-      note.className = 'sabi-note';
-      note.setAttribute('aria-hidden', 'true');
-
-      document.body.appendChild(note);
-      document.body.appendChild(cursor);
-
-      var ACTIVE_SEL = 'a, button, [role="button"], summary, label, [data-cursor="active"]';
-      var NATIVE_SEL = 'input, textarea, select, [contenteditable=""], [contenteditable="true"]';
-      var DARK_SEL   = '.ticker, .lightbox-overlay';
-
-      var x = -100, y = -100, queued = false;
-      var noteTarget = null, noteW = 0, noteH = 0;
-
-      function showNote(t) {
-        noteTarget = t;
-        note.textContent = t.getAttribute('data-cursor-note');
-        note.classList.add('is-visible');
-        noteW = note.offsetWidth; noteH = note.offsetHeight;
-        queue();
-      }
-      function hideNote() {
-        noteTarget = null;
-        note.classList.remove('is-visible');
-      }
-
-      function paint() {
-        queued = false;
-        cursor.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
-        if (noteTarget) {
-          var nx = x + 16, ny = y + 14;
-          if (nx + noteW > window.innerWidth - 8)  nx = x - 16 - noteW;   // flip near the right edge
-          if (ny + noteH > window.innerHeight - 8) ny = y - 14 - noteH;   // flip near the bottom edge
-          note.style.transform = 'translate3d(' + nx + 'px,' + ny + 'px,0)';
-        }
-      }
-      function queue() { if (!queued) { queued = true; requestAnimationFrame(paint); } }
-
-      window.addEventListener('mousemove', function (e) {
-        x = e.clientX; y = e.clientY;
-        queue();
-        if (!root.classList.contains('sabi-cursor-on')) root.classList.add('sabi-cursor-on');
-        cursor.classList.add('is-visible');
-      }, { passive: true });
-
-      document.addEventListener('mouseover', function (e) {
-        var t = e.target;
-        if (!(t instanceof Element)) return;
-        root.classList.toggle('sabi-native', !!t.closest(NATIVE_SEL));
-        root.classList.toggle('sabi-on-dark', !!t.closest(DARK_SEL));
-
-        var n = t.closest('[data-cursor-note]');
-        if (n) showNote(n); else if (noteTarget) hideNote();
-
-        cursor.classList.toggle('is-active', !!t.closest(ACTIVE_SEL) || !!n);
-      });
-
-      document.addEventListener('mousedown', function () { cursor.classList.add('is-down'); });
-      window.addEventListener('mouseup',   function () { cursor.classList.remove('is-down'); });
-
-      // Pointer leaves the window
-      root.addEventListener('mouseleave', function () { cursor.classList.remove('is-visible'); hideNote(); });
-      root.addEventListener('mouseenter', function () { cursor.classList.add('is-visible'); });
-
-      // If the device stops being mouse-driven, switch everything off
-      if (mq.addEventListener) mq.addEventListener('change', function (e) {
-        if (!e.matches) {
-          root.classList.remove('sabi-cursor-on', 'sabi-native', 'sabi-on-dark');
-          cursor.remove(); note.remove();
-        }
-      });
-    })();
   </script>
 </body>
 </html>
