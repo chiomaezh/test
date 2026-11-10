@@ -1,1645 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A London-based creative consultancy for brands with ambitious imagination. Strategy, communications, production, and design services for culture-shaping presence and storytelling.">
-
-  <meta property="og:title" content="SABI">
-  <meta property="og:description" content="A creative consultancy for brands with ambitious imagination.">
-  <meta property="og:image" content="/favicon.png">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="SABI">
-  <meta name="twitter:description" content="A creative consultancy for brands with ambitious imagination.">
-  <meta name="twitter:image" content="/favicon.png">
-
-  <link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
-  
-  <title>SABI | Brand Therapy</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    ::selection {
-      background: var(--text-select-bg);
-      color: var(--text-select-text);
-    }
-    ::-moz-selection {
-      background: var(--text-select-bg);
-      color: var(--text-select-text);
-    }
-
-    :root {
-      --bg: #FAFBE3;
-      --text: #211D1D;
-      --border: #423A3A;
-      --text-select-bg: #170006;
-      --text-select-text: #FFFFFF;
-      --font-body: 'owners-text', sans-serif;
-      --font-mono: 'gemeli-mono', serif;
-    }
-
-    body {
-      margin: 0;
-      height: 100vh;
-      background-color: var(--bg);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      font-family: var(--font-body);
-      color: var(--text);
-    }
-
-    img {
-      max-width: 220px;
-      width: 100%;
-      height: auto;
-      margin: 0 auto;
-      display: block;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-    }
-
-    /* ── Ticker strip (sits above the nav) ── */
-    .ticker {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 36px;
-      background: #170006;
-      overflow: hidden;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px 0 32px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-    }
-
-    /* ── Typewriter quote (replaces the old scrolling reel) ── */
-    .ticker-quote-wrap {
-      flex: 1 1 auto;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      overflow: hidden;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 14.5px;
-      letter-spacing: 1.8px;
-      line-height: 1;
-      color: var(--bg);
-    }
-
-    .ticker-quote {
-      font: inherit;
-      letter-spacing: inherit;
-      color: inherit;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: clip;
-    }
-
-    .ticker-cursor {
-      display: inline-block;
-      align-self: center;
-      width: 0.12em;
-      height: 1.35em;
-      margin-left: 3px;
-      background: currentColor;
-      animation: cursor-blink 0.9s step-end infinite;
-    }
-
-    @keyframes cursor-blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-cursor { animation: none; }
-    }
-
-    /* ── Send icon, top right of the strip, links to Substack ── */
-    .ticker-icon-btn {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      margin-left: 12px;
-      padding: 0;
-      background: none;
-      border: none;
-      color: var(--bg);
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .ticker-icon-btn svg {
-      width: 22px;
-      height: 22px;
-      display: block;
-      fill: var(--bg);
-      shape-rendering: geometricPrecision;
-    }
-
-    .ticker-icon-btn:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
-    }
-
-    /* ── Lightbox (blank shell, full page — wire up content here later) ── */
-    .lightbox-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(23, 0, 6, 0.95);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease;
-    }
-
-    .lightbox-overlay.is-open {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .lightbox-box {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 64px;
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: var(--bg);
-      padding: 0;
-    }
-
-    .lightbox-close svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--bg);
-      stroke-width: 0.6;
-      fill: none;
-      shape-rendering: geometricPrecision;
-    }
-
-    .lightbox-close:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
-    }
-
-    /* ── Lightbox copy ── */
-    .lightbox-content {
-      max-width: 380px;
-      padding-left: 24px;
-      padding-right: 24px;
-      padding-top: 0;
-      padding-bottom: 0;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 16px;
-      line-height: 1.5;
-      color: var(--bg);
-      text-align: left;
-    }
-
-    .lightbox-heading {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 16px;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--bg);
-      margin: 0 0 44px 0;
-    }
-
-    .lightbox-content p {
-      margin: 0 0 16px 0;
-    }
-
-    .lightbox-content p:last-child {
-      margin-bottom: 0;
-    }
-
-    .form-success {
-      display: none;
-    }
-
-    /* Needs to out-specificity ".lightbox-content p:last-child" above,
-       otherwise its margin-top gets silently reset to 0 and the success
-       message loses its gap above where the Name field used to sit. */
-    .lightbox-content .form-success {
-      margin: 60px 0 0;
-      font-family: var(--font-mono);
-      font-size: 17px;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-    }
-
-    .form-success.is-visible {
-      display: block;
-    }
-
-    /* ── Sign-up form (Name + phone number, underline style) ── */
-    .lightbox-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin: 40px 0 40px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 16px;
-      align-items: flex-end;
-      margin-top: 12px;
-    }
-
-    .form-field {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .form-field--code {
-      flex: 0 0 72px;
-    }
-
-    .lightbox-form input {
-      width: 100%;
-      display: block;
-      background: none;
-      border: none;
-      border-bottom: 1.6px solid var(--bg);
-      color: var(--bg);
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 18.5px;
-      letter-spacing: 1px;
-      line-height: 1.4;
-      padding: 6px 2px;
-      margin: 0;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      border-radius: 0;
-      transition: border-color 0.2s ease;
-    }
-
-    .lightbox-form input::placeholder {
-      color: rgba(250, 251, 227, 0.55);
-    }
-
-    /* Area code field: fixed "+" prefix that can't be deleted, only the
-       digits are part of the editable input */
-    .code-input-wrap {
-      display: flex;
-      align-items: baseline;
-      border-bottom: 1.6px solid var(--bg);
-      padding: 6px 2px;
-      transition: border-color 0.2s ease;
-    }
-
-    .code-prefix {
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 18.5px;
-      letter-spacing: 1px;
-      color: var(--bg);
-      flex: 0 0 auto;
-    }
-
-    .code-input-wrap input {
-      border-bottom: none;
-      padding: 0 0 0 2px;
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    /* Error state — only shown after a failed submit attempt */
-    .form-field.has-error input,
-    .code-input-wrap.has-error {
-      border-color: rgba(80, 41, 47, 0.85);
-    }
-
-    .form-error-msg {
-      visibility: hidden;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 10px;
-      letter-spacing: 0.5px;
-      color: #cb9593;
-      margin-top: 10px;
-    }
-
-    .form-field.has-error .form-error-msg,
-    .form-consent.has-error .form-error-msg {
-      visibility: visible;
-    }
-
-    /* ── Consent checkbox + small print ── */
-    .form-consent {
-      margin: 24px 0 0;
-    }
-
-    .consent-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .consent-label input[type="checkbox"] {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .consent-box {
-      flex: 0 0 auto;
-      width: 15px;
-      height: 15px;
-      margin-top: 2px;
-      border: 1.6px solid var(--bg);
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .consent-label input[type="checkbox"]:checked ~ .consent-box {
-      background-color: var(--bg);
-    }
-
-    .form-consent.has-error .consent-box {
-      border-color: rgb(80, 41, 47);
-    }
-
-    .consent-error-msg {
-      /* Indent to line up with the paragraph text, not the checkbox —
-         matches the checkbox width (15px) + the label's gap (10px). */
-      margin-left: 25px;
-    }
-
-    .consent-link {
-      color: inherit;
-      text-decoration: underline;
-    }
-
-    .consent-text {
-      flex: 1 1 auto;
-      min-width: 0;
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 12.5px;
-      letter-spacing: 0.3px;
-      line-height: 1.5;
-      color: var(--bg);
-      opacity: 0.85;
-    }
-
-    /* ── Submit button — hairline arrow, more to come later ── */
-    .lightbox-submit {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 53px;
-      height: 30px;
-      margin-left: auto;
-      margin-right: -2px;
-      margin-top: -13.7px;
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
-    }
-
-    .lightbox-submit svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--bg);
-      stroke-width: 1.4;
-      stroke-linecap: butt;
-      stroke-linejoin: miter;
-      fill: none;
-      shape-rendering: geometricPrecision;
-    }
-
-    .lightbox-submit:focus-visible {
-      outline: 1px solid var(--bg);
-      outline-offset: 2px;
-    }
-
-    /* ── Desktop only: split the lightbox into two columns — heading + copy
-         on the left, form fields on the right — both confined to the
-         centre three-fifths (60%) of the page, bottoms aligned ── */
-    @media (min-width: 761px) {
-      .lightbox-box {
-        justify-content: center;
-        padding-right: 0;
-      }
-
-      .lightbox-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 80px;
-        width: auto;
-        max-width: none;
-        padding-left: 0;
-        padding-right: 0;
-      }
-
-      .lightbox-copy {
-        flex: 1 1 0;
-        max-width: 380px;
-        text-align: right;
-      }
-
-      .lightbox-form {
-        flex: 1 1 0;
-        max-width: 320px;
-        margin: 0;
-      }
-    }
-
-    /* ── Top navigation ── */
-    .site-nav {
-      position: fixed;
-      top: 36px;
-      left: 0;
-      display: flex;
-      justify-content: space-between;
-      width: calc(20vw + 96px); /* was 33.33vw — narrower container = ~0.6x the space-between gap, same on both sides by construction */
-      padding: 28px 32px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-      animation-delay: 0.4s;
-    }
-
-    .nav-link {
-      font-family: var(--font-body);
-      font-weight: 500;
-      font-size: 13px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-    }
-    .nav-link:visited,
-    .nav-link:active,
-    .nav-link:hover {
-      color: var(--text);
-    }
-
-    @media (max-width: 560px) {
-      .ticker { height: 42px; padding: 0 12px 0 20px; }
-      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
-
-      .site-nav {
-        top: 30px;
-        width: auto;
-        right: 0;
-        padding: 26px 20px 20px 20px;
-        gap: 20px;
-      }
-      .nav-link { font-size: 13px; letter-spacing: 1px; }
-
-      .site-footer {
-        padding-bottom: 26px;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* ── Footer ── */
-    .site-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 28px;
-      opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
-      animation-delay: 0.4s;
-      font-family: var(--font-body);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas: "desc weather" "contact weather";
-      align-items: end;
-    }
-
-    .footer-desc { grid-area: desc; }
-    .footer-row { grid-area: contact; display: contents; }
-    .footer-col-left { grid-area: contact; }
-    .footer-col-right { grid-area: weather; }
-
-    .footer-col {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .footer-col-left {
-      align-items: flex-start;
-      transform: scale(0.9);
-      transform-origin: bottom left;
-    }
-
-    .footer-col-right {
-      align-items: flex-end;
-    }
-
-    /* ── World clock / weather block ── */
-    .station {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-      /* Small uniform nudge down to match the contact block's top/bottom —
-         purely visual (transform), doesn't touch layout, alignment, or
-         font-size, and applies consistently across every breakpoint since
-         it's on .station itself rather than a per-breakpoint wrapper.
-         Adjust this single value up/down if it needs to move further. */
-      transform: translateY(3px);
-    }
-
-    /* Desktop / PC only: the weather block has its own fixed height (115px) and
-       is no longer stretched to match the left column. Phone portrait (<=760px)
-       and phone landscape keep their own layouts below. */
-    @media (min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px))) {
-      .station {
-        height: var(--pc-station-h, 115px);
-        gap: 0;
-        justify-content: space-between;
-        /* PC only: JS scales the whole weather block down (see matchStationRowWidths) so it is
-           exactly as tall as the contact block, anchored on the bottom-right corner so its
-           bottom stays level with the bottom of the contact block. */
-        transform-origin: bottom right;
-      }
-      /* PC only: weather icon at 0.85x three times (32.4px -> 27.54px -> 23.409px -> 19.898px) */
-      .station-icon {
-        width: 19.898px;
-        height: 19.898px;
-      }
-    }
-
-    /* City + time rows reveal independently of the weather row — the time's
-       font-size is derived from the city label, not from the weather fetch,
-       so it shouldn't be held hostage by a slow/hung network request. */
-    .station-row:nth-child(1),
-    .station-row:nth-child(2) {
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .station.clock-ready .station-row:nth-child(1),
-    .station.clock-ready .station-row:nth-child(2) {
-      opacity: 1;
-    }
-
-    /* Weather row (icon + temperature) reveals once the fetch settles. */
-    .station-row:nth-child(3) {
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-    .station.is-ready .station-row:nth-child(3) {
-      opacity: 1;
-    }
-
-    .station-row {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .station-city {
-      font-family: var(--font-body);
-      font-size: 16px;
-      line-height: 1;
-      letter-spacing: 4.1px;
-      text-transform: uppercase;
-      color: #000000;
-      font-weight: 400;
-      position: relative;
-      top: -0.9px;
-    }
-
-    .station-time {
-      font-family: var(--font-body);
-      font-size: 34.2px;
-      letter-spacing: 0.9px;
-      color: #000000;
-      font-weight: 400;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .station-meta {
-      display: flex;
-      align-items: center;
-      gap: 6.3px;
-      font-family: var(--font-body);
-      font-size: 27px;
-      letter-spacing: 0.9px;
-      color: #000000;
-    }
-
-    .station-icon {
-      width: 32.4px;
-      height: 32.4px;
-      flex-shrink: 0;
-    }
-    .station-icon img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-    }
-
-    /* Clickable retry — only appears in place of the icon when the weather
-       fetch has failed. Sized to fill .station-icon exactly (100%/100%), so
-       it automatically matches the normal icon's dimensions at every
-       breakpoint without needing its own separate size rules. Same hairline
-       stroke treatment as the lightbox close/submit icons for consistency. */
-    .station-refresh-btn {
-      display: block;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
-    }
-
-    .station-refresh-btn svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      stroke: var(--text);
-      stroke-width: 1.4;
-      stroke-linecap: butt;
-      stroke-linejoin: miter;
-      fill: none;
-      shape-rendering: geometricPrecision;
-    }
-
-    /* Error state (same treatment as the Play page's weather reel): when the
-       weather fetch fails, the icon slot becomes the retry button and a small
-       "weather / update" note sits to its left, bottom-aligned, with the
-       temperature hidden. */
-    .station-meta.is-error {
-      align-items: flex-end;
-      gap: 13.5px;
-    }
-    .station-meta.is-error [data-icon] { order: 2; }
-    .station-meta.is-error .station-refresh-text { order: 1; }
-    /* The empty temperature span would otherwise still take part in the
-       flex layout (including its share of the gap), so drop it entirely. */
-    .station-meta.is-error [data-temp] { display: none; }
-    .station-refresh-text {
-      display: none;
-      flex-direction: column;
-      font-family: var(--font-mono);
-      font-weight: 300;
-      font-size: 10px;
-      line-height: 1.15;
-      letter-spacing: 0.5px;
-      text-transform: lowercase;
-      text-align: left;
-      color: var(--text);
-      white-space: normal;
-    }
-    .station-meta.is-error .station-refresh-text { display: flex; }
-
-    /* ── Description block ── */
-  .footer-desc {
-  max-width: 420px;
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.15;
-  color: var(--text);
-  text-align: left;
-  margin: 0 0 14px 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="https://use.typekit.net/bwp0bbg.css">
+<title>+bureau — SABI</title>
+<meta name="description" content="+bureau, a curated business directory by SABI London.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFBE3;--text:#211D1D;--border:#423A3A;--dark:#170006;
+  --tint:rgba(33,29,29,.07);--sel:rgba(183,184,168,.4);
+  --font-body:'owners-text',sans-serif;--font-mono:'gemeli-mono',ui-monospace,monospace;
+  --font-logo:'all-round-gothic',sans-serif;--gutter:32px;
 }
+::selection{background:var(--sel)}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font-body);font-weight:350;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+a{color:var(--text)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.mono{font-family:var(--font-mono);font-weight:300}
+.up{text-transform:uppercase}
 
-/* ── Contact block ── */
-.contact-block {
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  text-align: left;
+/* strip */
+.strip{height:36px;background:var(--dark);color:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 var(--gutter);font-family:var(--font-mono);font-weight:300;font-size:12.5px;letter-spacing:1.6px;text-transform:uppercase}
+.strip a{color:var(--bg);text-decoration:none}
+
+/* header */
+.head{display:flex;justify-content:space-between;align-items:center;padding:20px var(--gutter);border-bottom:.5px solid var(--border)}
+.logo{font-family:var(--font-logo);font-weight:400;font-size:30px;line-height:1;letter-spacing:0;text-transform:lowercase;text-decoration:none}
+.nav{display:flex;gap:36px}
+.nav a,.nav button{font-weight:500;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none}
+.nav .on{opacity:.4;pointer-events:none}
+.head-r{display:flex;justify-content:flex-end;gap:28px;align-items:center}
+.head-r button,.head-r a{font-weight:500;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none}
+.count-pill{font-family:var(--font-mono);font-weight:300;font-size:11px;background:var(--tint);padding:3px 7px;border-radius:5px;margin-left:6px;letter-spacing:1px}
+a:hover,button:hover{opacity:.7}
+
+main{flex:1;display:flex;flex-direction:column}
+.view{display:none;flex:1}
+.view.on{display:flex}
+
+/* ── Search: newspaper columns, wide-bleed lists ── */
+.search{display:grid;grid-template-columns:minmax(230px,21%) 1fr;flex:1;width:100%}
+.rail{border-right:.5px solid var(--border);padding:0 var(--gutter)}
+.rail-in{position:sticky;top:0;padding:32px 0;display:flex;flex-direction:column;gap:28px;min-height:calc(100vh - 36px - 72px);min-height:calc(100dvh - 36px - 72px)}
+.tag-label{display:inline-block;align-self:flex-start;background:var(--tint);font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:1.3px;line-height:1.2;text-transform:uppercase;padding:8px 14px;border-radius:6px}
+.intro{font-size:15px;line-height:1.5;font-weight:400;max-width:30ch}
+.counter{margin-top:0}
+.counter-n{font-family:var(--font-body);font-weight:300;font-size:clamp(70px,calc(9vw - 2px),130px);line-height:.9;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.counter-l{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase;margin-top:10px}
+.chosen{display:flex;flex-wrap:wrap;gap:6px;min-height:28px}
+.chip{display:inline-flex;gap:8px;align-items:center;font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:var(--text);color:var(--bg);padding:6px 9px;border-radius:5px}
+.chip i{font-style:normal;opacity:.7}
+.chip.ghost{background:transparent;color:var(--text);opacity:.5;padding-left:0}
+.go{font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 22px;border-radius:6px;color:var(--bg);background:#2E000D;border:.5px solid #2E000D;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.go:hover{opacity:1;background:#1f0009}
+.go[hidden]{display:none}
+.go-head{padding:11px 18px;gap:16px}
+.go[disabled]{opacity:.35;cursor:not-allowed}
+.hint{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.5px;line-height:1.5;margin-top:-14px}
+.hint:empty{display:none}
+
+.fields{padding:32px var(--gutter);display:flex;flex-direction:column;gap:44px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid var(--border);padding-bottom:12px;margin-bottom:6px}
+.sec-h h2{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase}
+.sec-h span{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;opacity:.6}
+.cat-list{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
+.opt{display:flex;gap:14px;align-items:baseline;text-align:left;width:100%;border-bottom:.5px solid var(--border);padding:12px 8px;font-family:var(--font-mono);font-weight:300;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;transition:opacity .15s}
+.opt .n{font-size:11px;opacity:.55;min-width:2ch}
+.opt:hover{background:var(--tint);opacity:1}
+.opt[aria-pressed=true]{background:var(--text);color:var(--bg);opacity:1}
+.opt[aria-pressed=true]:hover{background:var(--text)}
+.opt[disabled]{opacity:.28;cursor:not-allowed;pointer-events:none}
+.opt[aria-pressed=true][disabled]{opacity:1;pointer-events:auto;cursor:pointer;background:transparent;color:var(--text);outline:1px dashed var(--border);outline-offset:-3px;text-decoration:line-through}
+.opt:focus-visible,.go:focus-visible,.nav a:focus-visible{outline:2px solid var(--text);outline-offset:-2px}
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
+.pill{font-family:var(--font-mono);font-weight:300;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;border:.5px solid var(--border);border-radius:6px;padding:8px 12px;transition:opacity .15s}
+.pill:hover{background:var(--tint);opacity:1}
+.pill[aria-pressed=true]{background:var(--text);color:var(--bg)}
+.pill.off{opacity:.3}
+.pill.off:hover{opacity:.6}
+.pill[disabled]{opacity:.28;cursor:not-allowed;pointer-events:none}
+.pill[aria-pressed=true][disabled]{opacity:1;pointer-events:auto;cursor:pointer;background:transparent;color:var(--text);text-decoration:line-through;border-style:dashed}
+
+/* ── Results ── */
+.wide{width:100%;padding:32px var(--gutter);display:flex;flex-direction:column;gap:28px}
+.r-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.back{font-weight:400;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid var(--border);padding-bottom:2px;white-space:nowrap;display:inline-block}
+.r-title{font-weight:400;font-size:clamp(21px,3vw,25px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
+.rows{border-top:.5px solid var(--border)}
+.row{display:grid;grid-template-columns:48px minmax(160px,1.1fr) 2.2fr minmax(120px,.8fr) minmax(140px,.9fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
+.row:hover{background:var(--tint);opacity:1}
+.row .i,.row .m{font-family:var(--font-mono);font-weight:300;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
+.row .nm{font-weight:500;font-size:16px;letter-spacing:.2px}
+.row .ds{font-weight:300;font-size:14px;line-height:1.55}
+.row .m{opacity:.8;line-height:1.5}
+.row .bk{justify-self:end;font-family:var(--font-mono);font-size:16px}
+.rows .row.hd{font-family:var(--font-mono);font-size:11px;letter-spacing:1.3px;text-transform:uppercase;opacity:.6;padding-top:12px;padding-bottom:12px;pointer-events:none}
+.more{align-self:center;border:.5px solid var(--border);border-radius:6px;padding:12px 22px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+.empty{font-family:var(--font-mono);font-weight:300;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:60px 0;text-align:center}
+
+/* ── Profile ── */
+.prof{display:grid;grid-template-columns:minmax(200px,22%) 1fr minmax(260px,30%);width:100%;flex:1}
+.prof>div{padding:32px var(--gutter)}
+.prof>div+div{border-left:.5px solid var(--border)}
+.p-name{font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.05;letter-spacing:.5px;margin:20px 0 24px}
+.p-desc{font-weight:300;font-size:16px;line-height:1.75;max-width:60ch}
+.imprint dl{display:grid;grid-template-columns:110px 1fr;row-gap:14px;column-gap:16px;margin-top:20px}
+.imprint dt{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;opacity:.6;padding-top:2px}
+.imprint dd{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:.8px;text-transform:uppercase;line-height:1.6}
+.imprint .sp{height:12px;grid-column:1/-1}
+.bm{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;margin-top:28px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;border:.5px solid var(--border);border-radius:6px;padding:13px 18px}
+.bm[aria-pressed=true]{background:var(--text);color:var(--bg)}
+.sim{margin-top:56px}
+.sim-i{display:grid;grid-template-columns:32px 1fr;column-gap:12px;padding:14px 0;border-bottom:.5px solid var(--border);text-decoration:none;text-align:left;width:100%}
+.sim-i:first-of-type{border-top:.5px solid var(--border)}
+.sim-i .i{font-family:var(--font-mono);font-weight:300;font-size:11px;opacity:.6;padding-top:3px}
+.sim-i b{font-weight:500;font-size:15px}
+.sim-i p{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.8px;text-transform:uppercase;opacity:.7;margin-top:5px;line-height:1.5}
+
+/* footer */
+.foot{padding:28px var(--gutter);border-top:.5px solid var(--border);display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;font-size:13px}
+.foot p{font-weight:400;font-size:15px;line-height:1.5}
+.foot .c{font-family:var(--font-mono);font-weight:300;font-size:13px;letter-spacing:.5px;margin-top:.6rem}
+.foot nav{display:flex;gap:2.5rem;align-items:flex-start}
+.foot nav a{font-weight:300;font-size:13px}
+
+@media(max-width:1000px){
+  .search{grid-template-columns:1fr}
+  .rail{border-right:0;border-bottom:.5px solid var(--border)}
+  .rail-in{position:static;min-height:0}
+  .counter-n{font-size:82px}
+  .prof{grid-template-columns:1fr}
+  .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
+  .row{grid-template-columns:36px 1fr 36px;row-gap:6px}
+  .row .ds,.row .m{grid-column:2/3}
+  .row .bk{grid-row:1;grid-column:3}
+  .row.hd{display:none}
 }
-
-    .contact-label {
-      font-family: var(--font-body);
-      font-size: 14.5px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text);
-      font-weight: 400;
-    }
-
-    .contact-line {
-      font-family: var(--font-body);
-      font-size: 16px;
-      color: #000000;
-      font-weight: 300;
-    }
-
-    .contact-link {
-      color: #000000 !important;
-      text-decoration: underline;
-    }
-    .contact-link:visited,
-    .contact-link:active,
-    .contact-link:hover {
-      color: #000000 !important;
-    }
-
-    @media (max-width: 760px) {
-      img { max-width: 165px; }
-      .site-footer {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "desc desc" "contact weather";
-        align-items: start;
-        gap: 45px 12px;
-        padding: 20px;
-      }
-      .footer-row { display: contents; }
-      .footer-col-left {
-        align-items: flex-start;
-        transform: none;
-        align-self: stretch;
-      }
-      .footer-col-right {
-        align-items: flex-end;
-        transform: none;
-        align-self: stretch;
-      }
-      .contact-block {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-      .station {
-        height: 100%;
-        justify-content: space-between;
-      }
-      .footer-desc { text-align: center; font-size: 15px; max-width: none; margin: 0 0 4px 0; justify-self: center; }
-      .contact-block { text-align: left; }
-      /* Base (desktop) sizes were lowered 0.5px; phone keeps its original sizes */
-      .contact-label { font-size: 15px; }
-      .contact-line { font-size: 16.5px; }
-      .station-city { font-size: 15px; letter-spacing: 2px; }
-      .station-time { font-size: 28px; }
-      .station-meta { font-size: 22px; }
-      .station-icon { width: 23px; height: 23px; }
-      /* Icon pinned to the left edge of the label and temperature to the right edge,
-         so a one-digit temperature ("9°C") doesn't leave the icon floating inwards.
-         (Error state keeps its own layout.) */
-      .station-meta:not(.is-error) { width: 100%; justify-content: space-between; }
-      /* Row gap tightened (8px -> 5.5px) so the weather block, and therefore the
-         contact block that stretches to match it, comes out at 82px tall. */
-      .station { width: auto; gap: 5.5px; }
-
-      .lightbox-box {
-        align-items: flex-end;
-        justify-content: center;
-        padding-right: 0;
-      }
-      .lightbox-content {
-        padding-bottom: 25px;
-        transform: translateY(32px);
-      }
-    }
-
-    /* ── Phone landscape (short viewport): keep the compact single-row
-         footer instead of the tall stacked portrait layout. Capped at
-         max-height so tablets in landscape (which have plenty of room)
-         keep the normal desktop-style footer untouched. ── */
-    @media (orientation: landscape) and (max-height: 500px) {
-      img { max-width: 110px; }
-
-      .ticker { height: 42px; padding: 0 12px 0 20px; }
-      .ticker-quote-wrap { font-size: 13.5px; letter-spacing: 1.6px; }
-
-      .site-nav { top: 24px; padding: 36px 20px 14px 20px; width: 33.33vw; }
-
-      .site-footer {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "desc weather" "contact weather";
-        align-items: end;
-        gap: 0;
-        padding: 14px 24px;
-      }
-
-      .footer-row { display: contents; }
-      .footer-col-left {
-        grid-area: contact;
-        align-items: flex-start;
-        transform: none;
-        align-self: end;
-      }
-      .footer-col-right {
-        grid-area: weather;
-        align-items: flex-end;
-        transform: none;
-        align-self: end;
-      }
-
-      .footer-desc {
-        text-align: left;
-        font-size: 12px;
-        line-height: 1.15;
-        max-width: 280px;
-        margin: 0 0 16px 0;
-        justify-self: start;
-      }
-
-      .contact-block { gap: 4px; text-align: left; }
-      .contact-label { font-size: 10px; letter-spacing: 1.5px; }
-      .contact-line { font-size: 11px; }
-
-      /* Weather block scaled down (all sizes x 10/11, same proportions as before) so LONDON
-         is the same size as CONTACT (10px). Its height is matched to the contact block in JS
-         (matchLeftColumnHeightToStation) and its 3px visual nudge is removed so the bottoms align. */
-      .station { gap: 2.7px; transform: none; justify-content: space-between; }
-      .station-city { font-size: 10px; letter-spacing: 1.36px; }
-      .station-time { font-size: 16.4px; line-height: 1; }
-      /* Weather row laid out like portrait: icon pinned to the left edge of the LONDON column,
-         temperature to the right edge, icon about 1.1x the temperature size (portrait is 23px
-         icon / 21px temperature; scaled by 10/15 for the smaller LONDON that is 15.3px / 14px). */
-      .station-meta { font-size: 14px; gap: 3.6px; line-height: 1; }
-      .station-meta:not(.is-error) { width: 100%; justify-content: space-between; }
-      .station-icon { width: 15.3px; height: 15.3px; }
-      /* Error state scaled down with the icon so the note + retry icon still fit the narrow row */
-      .station-meta.is-error .station-icon { width: 12.7px; height: 12.7px; }
-      .station-meta.is-error { gap: 5.5px; }
-      .station-refresh-text { font-size: 7.3px; }
-
-      .lightbox-close {
-        top: 0;
-      }
-
-      .lightbox-box {
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0 0 0 24px;
-      }
-      .lightbox-content {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 40px;
-        font-size: 15px;
-      }
-      .lightbox-copy {
-        flex: 1 1 0;
-        max-width: 340px;
-      }
-      .lightbox-heading {
-        font-size: 17px;
-      }
-
-      .lightbox-form {
-        flex: 1 1 0;
-        max-width: 300px;
-      }
-
-    }
-
-    /* ── Phone portrait: the whole page layout is pure CSS, no scripts. ──
-         .stage is one fixed full-screen column holding, top to bottom: ticker, nav, logo zone,
-         footer. Ticker and nav sit at the very top, the footer at the very bottom, and the
-         logo zone takes all the space in between with the logo centred in it.
-         Outside phone portrait .stage / .logo-zone are display: contents, so nothing changes. */
-    .stage, .logo-zone { display: contents; }
-
-    @media (max-width: 760px) and (orientation: portrait) {
-      .stage { position: fixed; inset: 0; display: flex; flex-direction: column; }
-      /* empty spacer under the footer: nothing by default */
-      .stage::after { content: ''; flex: 0 0 0px; min-height: 0; }
-      /* Twitter/X app: the page already ends above the tweet panel, but the app's floating bar
-         (sabi.london / X / refresh) still overlaps roughly the bottom 70px of the page. Keep the
-         space under the footer at least this tall so the contact and weather blocks stay clear
-         and tappable. */
-      .in-twitter .stage::after { min-height: 56px; }
-      /* Instagram / TikTok in-app browsers: the page sits flush to the bottom of the screen, so
-         add space under the footer that matches the space above the contact/weather blocks
-         (45px grid gap). The footer already has 20px bottom padding, so 25px more = 45px. */
-      .in-instagram .stage::after,
-      .in-tiktok .stage::after,
-      .in-app .stage::after { min-height: 25px; }
-
-      .ticker { position: relative; flex: 0 0 auto; }
-      .site-nav { position: static; flex: 0 0 auto; }
-      .logo-zone { display: grid; place-items: center; flex: 1 1 0px; min-height: 0; }
-      .logo-zone img { position: static; transform: none; }
-      .site-footer { position: static; flex: 0 0 auto; }
-    }
-    /* nav overlaps the bottom 12px of the (taller) ticker on narrow phones, as before */
-    @media (max-width: 560px) and (orientation: portrait) {
-      .site-nav { margin-top: -12px; }
-    }
-    /* wider portrait: nav has 28px under its text but the footer only 20px above its text */
-    @media (min-width: 561px) and (max-width: 760px) and (orientation: portrait) {
-      .logo-zone img { transform: translateY(-4px); }
-    }
-  </style>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZHK592471"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-9ZHK592471');
-</script>
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "xxr0mg59uq");
-</script>
-  <script>
-    // Twitter/X's in-app browser floats its own bar and a tweet panel over the bottom of the page.
-    // Flag it once (before first paint) so the CSS can keep the footer clear of that bar.
-    // Adding ?twitter to the address forces it on, handy for testing in Safari.
-    if (/Twitter/i.test(navigator.userAgent) || /[?&]twitter\b/.test(location.search)) {
-      document.documentElement.classList.add('in-twitter');
-    }
-    // Instagram and TikTok in-app browsers: same idea, flagged so the CSS can add bottom space.
-    // ?instagram / ?tiktok force them on for testing in Safari.
-    if (/Instagram/i.test(navigator.userAgent) || /[?&]instagram\b/.test(location.search)) {
-      document.documentElement.classList.add('in-instagram');
-    }
-    if (/musical_ly|BytedanceWebview|TikTok|trill/i.test(navigator.userAgent) || /[?&]tiktok\b/.test(location.search)) {
-      document.documentElement.classList.add('in-tiktok');
-    }
-    // Catch-all for any other in-app browser (TikTok when it doesn't name itself, Facebook, LinkedIn, etc.).
-    // Real iPhone browsers (Safari, Chrome, Firefox) all include "Safari/" in their user agent; in-app
-    // webviews usually don't. On Android, in-app webviews are marked "; wv)". Twitter/X is excluded
-    // because it has its own spacing above. ?inapp forces it on for testing.
-    (function () {
-      var ua = navigator.userAgent;
-      var isTwitter = document.documentElement.classList.contains('in-twitter');
-      var iosInApp = /iPhone|iPod/.test(ua) && !/Safari\//.test(ua);
-      var androidInApp = /Android/.test(ua) && /; wv\)/.test(ua);
-      if (!isTwitter && (iosInApp || androidInApp || /[?&]inapp\b/.test(location.search))) {
-        document.documentElement.classList.add('in-app');
-      }
-    })();
-  </script>
+@media(max-width:720px){
+  :root{--gutter:20px}
+  .head{grid-template-columns:auto 1fr;gap:12px}
+  .nav{display:none}
+  .strip{font-size:11px;letter-spacing:1.2px}
+  .logo{font-size:26px}
+  .cat-list{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
-  <h1 style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">Creative direction for conceptually ambitious brands.</h1>
 
-  <div class="lightbox-overlay" id="smsLightbox" role="dialog" aria-modal="true" aria-label="Lightbox">
-    <div class="lightbox-box">
-      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <line x1="5" y1="5" x2="19" y2="19"/>
-          <line x1="19" y1="5" x2="5" y2="19"/>
-        </svg>
-      </button>
-      <div class="lightbox-content" id="lightboxContent">
-        <div class="lightbox-copy">
-          <p class="lightbox-heading">Thoughtline</p>
-          <p>A creative prompt subscription.<br>A bite of incentive via SMS.</p>
-          <p>Weekly dispatch, Tuesdays 12:00 GMT.</p>
-          <p>Hypotheticals about culture, enterprise,<br>marketing, and design.<br>50 words, 18 seconds read time.</p>
-          <p>Just thoughts. No wrong answers.<br>(No replies at all, actually &ndash; it&rsquo;s one-way.)</p>
-        </div>
-        <form class="lightbox-form" id="lightboxForm" novalidate>
-          <div class="form-field" data-field="name">
-            <input type="text" name="name" placeholder="Name" autocomplete="name" autocorrect="off" spellcheck="false" required>
-            <div class="form-error-msg">Required.</div>
-          </div>
-          <div class="form-row">
-            <div class="form-field form-field--code" data-field="areaCode">
-              <div class="code-input-wrap">
-                <span class="code-prefix" aria-hidden="true">+</span>
-                <input type="text" name="areaCode" placeholder="000" autocomplete="tel-country-code" inputmode="numeric" pattern="[0-9]*" maxlength="3" required>
-              </div>
-              <div class="form-error-msg">Required.</div>
-            </div>
-            <div class="form-field form-field--number" data-field="number">
-              <input type="tel" name="number" placeholder="Number" autocomplete="tel-national" inputmode="numeric" required>
-              <div class="form-error-msg">Required.</div>
-            </div>
-          </div>
-          <div class="form-consent" data-field="consent">
-            <label class="consent-label">
-              <input type="checkbox" name="consent" required>
-              <span class="consent-box" aria-hidden="true"></span>
-              <span class="consent-text">I agree to receive SABI&rsquo;s weekly prompts by SMS. I understand that I can unsubscribe anytime by texting STOP. I've read the <a href="https://sabi.london/legal" target="_blank" class="consent-link">privacy policy</a>.</span>
-            </label>
-            <div class="form-error-msg consent-error-msg">Required.</div>
-          </div>
-          <button type="submit" class="lightbox-submit" aria-label="Submit">
-            <svg viewBox="0 0 60 34" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M14 4 L14 14 Q14 20 20 20 L56 20"/>
-              <polyline points="44 10 56 20 44 30"/>
-            </svg>
-          </button>
-        </form>
-        <p class="form-success" id="formSuccess">You&rsquo;re on the list :)<br>Text you l8r</p>
-      </div>
-    </div>
+<div class="strip"><span id="stripTxt">A curated directory for consumer enterprise and luxury</span><a href="https://sabi.london/">← sabi.london</a></div>
+
+<header class="head">
+  <a class="logo" href="#/" aria-label="+bureau">+bureau</a>
+  <div class="head-r">
+    <button class="go go-head" id="goBtn" type="button"><span>See results</span><span aria-hidden="true">→</span></button>
   </div>
+</header>
 
-  <div class="stage">
-    <div class="ticker">
-      <div class="ticker-quote-wrap">
-        <span class="ticker-quote" id="tickerQuote" aria-live="polite"></span><span class="ticker-cursor" aria-hidden="true"></span>
-      </div>
-      <button type="button" class="ticker-icon-btn" id="tickerLightboxTrigger" aria-label="Open lightbox">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M3,6 L21,12 L3,18 L6.2,12 Z"/>
-        </svg>
-      </button>
-    </div>
-
-    <nav class="site-nav">
-      <a href="https://sabi.london/about" class="nav-link">About</a>
-      <a href="https://sabi.london/services/"class="nav-link">Services</a>
-      <a href="https://sabi.london/projects/" class="nav-link">Index</a>
-    </nav>
-
-    <div class="logo-zone">
-      <img src="sabi-logo.png" alt="SABI">
-    </div>
-
-    <footer class="site-footer">
-      <p class="footer-desc">A creative consultancy offering direction and design <br class="desc-break">for culture-shaping presence and storytelling.</p>
-
-      <div class="footer-row">
-        <div class="footer-col footer-col-left">
-          <div class="contact-block">
-            <span class="contact-label">Contact</span>
-            <a href="mailto:office@sabi.london" target="_blank" rel="noopener" class="contact-line contact-link">office@sabi.london</a>
-            <a href="tel:+447400192837" class="contact-line contact-link">+44 7400 192837</a>
-          </div>
+<main>
+  <!-- SEARCH -->
+  <section class="view" id="v-search" aria-label="Search">
+    <div class="search">
+      <aside class="rail"><div class="rail-in">
+        <div class="counter">
+          <div class="counter-n" id="counterN">0</div>
+          <div class="counter-l" id="counterL">search results</div>
         </div>
-
-        <div class="footer-col footer-col-right">
-          <div class="station" id="station">
-            <div class="station-row">
-              <span class="station-city">London</span>
-            </div>
-            <div class="station-row">
-              <span class="station-time" data-time>--:--</span>
-            </div>
-            <div class="station-row">
-              <span class="station-meta">
-                <span class="station-icon" data-icon></span>
-                <span data-temp>--°C</span>
-                <span class="station-refresh-text" data-refresh-text hidden>WEATHER<br>UPDATE</span>
-              </span>
-            </div>
-          </div>
+        <p class="hint mono" id="hint"></p>
+        <div>
+          <div class="chosen" id="chosen" aria-live="polite"></div>
+        </div>
+        <p class="intro" id="intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+      </div></aside>
+      <div class="fields">
+        <div>
+          <div class="sec-h"><h2>Categories</h2><span id="catMeta"></span></div>
+          <div class="cat-list" id="catList"></div>
+        </div>
+        <div>
+          <div class="sec-h"><h2>Tags</h2><span id="tagMeta"></span></div>
+          <div class="tag-list" id="tagList"></div>
         </div>
       </div>
-    </footer>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="view" id="v-results" aria-label="Results"><div class="wide" id="resultsBox"></div></section>
+
+  <!-- PROFILE -->
+  <section class="view" id="v-profile" aria-label="Company profile"><div class="prof" id="profBox"></div></section>
+
+  <!-- SAVED -->
+  <section class="view" id="v-saved" aria-label="Saved"><div class="wide" id="savedBox"></div></section>
+</main>
+
+<footer class="foot">
+  <div>
+    <p>+bureau is a curated directory by SABI London,<br>made to demystify and connect the world of consumer enterprise.<br>Selected by hand, not exhaustive.</p>
+    <p class="c">© 2026 SABI LDN</p>
   </div>
+  <nav><a href="mailto:office@sabi.london">office@sabi.london</a><a href="https://sabi.london/">sabi.london</a></nav>
+</footer>
 
-  <script>
-    // ── Typewriter quote reel (replaces the old scrolling ticker) ──
-    const TICKER_QUOTES = [
-      'All the good ideas are outside',
-      'No detail too casual',
-      'Signed, on and off paper',
-      'We saw you see it first',
-      'Tuesday afternoons are cancelled',
-      'The business of good impressions'
-      // Add a 6th quote here as another string in the array, if needed.
-    ];
+<script>
+/* ════════════════════════════════════════════════════════════
+   CONFIG — the open decisions from the brief live here so they are
+   easy to change while testing against real data.
+   ════════════════════════════════════════════════════════════ */
+var CONFIG = {
+  MIN_CATEGORIES: 1,   // a search needs at least this many categories
+  MAX_CATEGORIES: 3,
+  MAX_TAGS: 5,         // at most this many tags can be selected (for now)
+   // ...and allows at most this many
+  CAT_LOGIC: 'OR',     // selected categories: a company needs ANY of them
+  TAG_LOGIC: 'OR',     // selected tags (on top of the category match): 'OR' = company needs ANY selected tag, 'AND' = ALL
+  DIM_TAGS: true,      // dim (still clickable) tags that no company in the selected categories has
+  PAGE_SIZE: 10,
+  MAX_BOOKMARKS: 50
+};
 
-    const TYPE_SPEED_MS = 83;      // per character, typing (1.5x slower than before)
-    const DELETE_SPEED_MS = 45;    // per character, deleting (1.5x slower than before)
-    const HOLD_MS = 3500;          // pause once fully typed
-    const GAP_MS = 400;            // pause once fully deleted, before next quote
+var CATS = ['Legal','Environment & Sustainability','Health & Safety','Consumer & Market Insights','Sales & Merchandising','Space','Public Relations','Events','Virtual Reality (VR) & Augmented Reality (AR) Services','Consulting & Mentoring','Finance','Creative Content & Production','Media','Curation & Sourcing','Human Resources & Education','Networking & Community'];
+var TAGS = ['Food & Beverage','Beauty & Cosmetics','Fashion & Accessories','Health & Wellness','Art & Design','Private Equity','Venture Capital','Employee Training','Consulting','Mentoring','Editorial','Books & Publishing','Technology','Investor','Sample sales','Showroom','Wholesale','Hospitality','Social Media','Trend forecasting','Research','Advertising','Resale','Content production','Travel','Retail','Job board','Influencer marketing','Affiliate marketing','Sports','Casting','Model management','Talent management','Coworking space','Studio space','Vintage & Antiques','Press & News','Creative direction','Grants & Awards','AI','Real estate',"Member's club",'Email marketing','Newsletter','E-commerce','Shipping & fulfilment','Office resources','Recruitment','Translation','Tax','Accounting','Intellectual property','Website','Brand partnerships','Exhibition space','Appointments','Licensing','Trade show','Automotive','Photography & Videography','Entertainment','Portfolio','Private transport','Business accelerator','Storage','Media training','Meeting space','Music'];
 
-    const tickerQuoteEl = document.getElementById('tickerQuote');
+/* ════════════════════════════════════════════════════════════
+   DATA — the 30-company sample, loaded exactly as exported from the sheet.
+   Columns: Category | Company | Details | Tags | Similar | Ethos | Model | HQ (City) | Country
+   (the stray "Category / Company…" header row halfway down the sheet is skipped)
+   In production this is served from a rate-limited server API, never shipped as a client-side file.
+   ════════════════════════════════════════════════════════════ */
+var RAW = [
+  ["Legal", "Mishcon de Reya", "Mishcon de Reya is a global law firm specialising in intellectual property. They help owners and founders create, protect and commercially leverage intellectual property, providing full legal services with a team well-versed on digital health, life sciences and other technologies.", "Office resources, Intellectual property", "The Fashion Law", "", "", "", ""],
+  ["Public Relations & Communications", "ICANN Lookup", "A free service, allows users to look up publicly available registration data for domain names, including information about registration, IP networks, and more.", "Research, Intellectual property, Office resources, Website", "WHO.IS, Similarweb", "", "", "", ""],
+  ["Public Relations & Communications", "Lucien Pagès", "Lucien Pagès is a PR and communications agency in the fashion, lifestyle and beauty space, equipped with the experience to build strong presence for brands in a global consumer landscape.", "Fashion & Accessories, Beauty & Cosmetics", "Marquis, Karla Otto, Purple PR", "", "", "", ""],
+  ["Public Relations & Communications, Legal", "Companies House", "Also find overseas registries here.", "Research, Office resources", "ICANN Lookup, Similarweb, WHO.IS", "", "", "", ""],
+  ["Public Relations & Communications", "WHO.IS", "A public directory that allows you to look up information about a domain name or IP address, including the registrant's contact details, registration dates, and the registrar.", "Research, Intellectual property, Office resources, Website", "ICANN Lookup, Similarweb", "", "", "", ""],
+  ["Public Relations & Communications, Human Resources & Education, Media", "Fashion and Beauty Monitor", "A leading PR solutions provider for the fashion, beauty, and lifestyle industries, offering a database of over 60,000 contacts to help with outreach, building relationships, engaging audiences, and researching contacts.Also advertises media companies seeking brand partnerships (see twitter).", "Job board, Beauty & Cosmetics, Editorial, Fashion & Accessories, Affiliate marketing, Appointments", "Calibre Careers, BoF Careers", "", "", "", ""],
+  ["Events, Spaces", "Uncommon", "A platform to discover beautifully curated, unique private office, meeting and event spaces in London. Uncommon has a detailed and strong commitment to sustainability and has incorporated ESG strategies into their business model.", "Office resources, Hospitality", "", "", "", "London", "United Kingdom"],
+  ["Finance", "True Beauty Ventures", "True Beauty Ventures is a sector specialised emerging growth fund in beauty and wellness consumer brands. They aim to leave a positive impact both on beauty and on VC, by emphasising a need for sustainability and diversity.", "Venture Capital, Beauty & Cosmetics, Health & Wellness, Investor", "Imaginary Ventures, Beach House Group, TSG Consumer Partners", "", "", "", ""],
+  ["Finance", "General Atlantic", "Leading private equity specialising in growth equity across tech, healthcare, life sciences, financial services, consumer brands, climate, and sustainable infrastructure", "Beauty & Cosmetics, Health & Wellness, Investor, Technology, Travel, Hospitality, Private Equity", "", "", "", "", ""],
+  ["Finance", "TSG Consumer Partners", "A well-established private equity firm investing exclusively in consumer companies, particularly in the Health & Wellness, Home & Auto, Food & Beverage, Restaurants and Beauty & Personal Care sectors. TSG offers more than capital into a business; they are a hands-on firm offering consultancy services on brand building, product innovation, and more.", "Fashion & Accessories, Beauty & Cosmetics, Hospitality, Health & Wellness, Private Equity, Investor", "Sandbridge Capital, Manzanita Captial, Future Laboratory, L Catterton", "", "", "", ""],
+  ["Finance", "Sandbridge Capital", "Private Equity Firm strategically partnering with global brands in the luxury, disruptive consumer-based technologies, beauty, and health and wellness segments.", "Venture Capital, Beauty & Cosmetics, Health & Wellness, Investor, Private Equity", "Beach House Group, Imaginary Ventures, Oakley Capital, True Beauty Ventures", "", "", "", ""],
+  ["Spaces, Events", "Argyll", "Office space", "Office resources, Real estate", "", "", "", "", ""],
+  ["Spaces", "Working From", "Flexible coworking space with meeting rooms. Locations in London, Brussels, Chicago, and Dubai.", "Coworking space, Office resources", "Oneder", "", "", "London", "United Kingdom"],
+  ["Spaces, Events", "Oneder", "Offices, meeting rooms, and event spaces in London.", "Office resources", "Convene, Working From", "", "", "", ""],
+  ["Spaces, Networking & Community", "Pavilion Club", "A private members' clubs offering luxurious workspaces and social amenities, designed for professionals, creatives, and corporate teams.", "Coworking space, Office resources", "NeueHouse, Convene, Somerset House, Mills Fabrica", "", "", "", ""],
+  ["Spaces, Environment & Sustainability, Networking & Community", "Mills Fabrica", "Solutions platform accelerating techstyle and agrifood technology innovations and startups for sustainability and social impact.", "Coworking space, Technology, Investor, Office resources", "Convene, Pavilion Club, NeueHouse, Somerset House", "", "", "", ""],
+  ["Consumer & Market Insights, Media", "Dazed Beyond Beauty Report", "Beauty industry market and trends report by Dazed Media", "Beauty & Cosmetics, Research, Press & News", "BoF x McKinsey & Co State of Fashion, HURS WHite Paper on Women's Media, The Lyst Index", "", "", "", ""],
+  ["Consumer & Market Insights, Media", "BoF x McKinsey & Co State of Fashion", "Beauty industry market and trends report by the Business of Fashion in collaboration with McKinsey", "Fashion & Accessories, Beauty & Cosmetics, Research, Press & News", "Dazed Beyond Beauty Report, HURS WHite Paper on Women's Media", "Open source", "", "", ""],
+  ["Consumer & Market Insights, Media", "Cosmetics Business", "A leading B2B publication, part of HPCi Media, that focuses on the cosmetics and personal care industry. It serves as a resource for industry professionals, covering the entire product creation lifecycle, from ingredients and packaging to regulation and retail.", "Beauty & Cosmetics, Health & Wellness, Research, Press & News", "Beauty Independent, Business of Fashion, Retail Dive, Little Black Book, Morning Brew", "", "", "", ""],
+  ["Media, Public Relations & Communications", "Fashion Network", "An online platform providing news and information for professionals in the fashion, luxury, and beauty industries.", "News, Fashion & Accessories", "Fashion and Beauty Monitor, DIARY Directory, Little Black Book, Retail Dive, Business of Fashion", "", "", "", ""],
+  ["Consumer & Market Insights, Media", "HURS WHite Paper on Women's Media", "Industry, market, and trends report on Women's Media by HURS", "Beauty & Cosmetics, Health & Wellness, Research, Press & News", "Dazed Beyond Beauty Report, BoF x McKinsey & Co State of Fashion", "Open source", "", "", ""],
+  ["Sales & Merchandising, Events", "ihateironing", "On-demand laundry and drycleaning service", "Fashion & Accessories, Hospitality, Retail, Travel, Office resources", "Sojo", "", "", "", ""],
+  ["Sales & Merchandising, Events", "Laundrette NYC", "Same-day laundry pick-up and delivery.", "Fashion & Accessories, Hospitality, Retail, Travel, Office resources", "Sojo, ihateironing, La Sirène", "", "", "", ""],
+  ["Sales & Merchandising, Events", "La Sirène", "A high-end, sustainable luxury garment care boutique and \"spa for your clothes\" originating from Paris with a London boutique located in Mayfair. It specializes in eco-friendly cleaning, delicate alterations, and artisanal restoration for couture and designer items.", "Fashion & Accessories, Hospitality, Retail, Travel, Office resources", "", "", "", "", ""],
+  ["Sales & Merchandising, Environment & Sustainability", "Sojo", "Clothing repair service platform for brands to promote circularity.", "Fashion & Accessories, Hospitality, Retail, Office resources", "ihateironing", "Black owned", "", "", ""],
+  ["Human Resources & Education", "London Software Training", "Software training courses and classes run by field experts for in-house corporate training and for individual career development in their East London facility.", "Employee Training, Technology, Office resources", "", "", "", "London", "United Kingdom"],
+  ["Environment & Sustainability", "Chris Lefteri CMF Consulting", "A design consulting firm specialising in colours, materials, and finish research for brands and designers. They offer a unique perspective on the intersection between material and design, helping brands optimise their operation and manufacturing processes.", "Consulting, Art & Design, Research", "Earth Partner", "", "", "London", "United Kingdom"],
+  ["Finance, Consulting & Mentoring", "Bridge Mentorship by True Beauty Ventures", "A collaboration between Beauty Independent and True Beauty Ventures, is a 6-month accelerator program designed to help emerging beauty and wellness brands in North America become \"funding ready\". It provides structured mentorship, coaching, and access to a network of industry experts, service providers, and investors", "Mentoring, Consulting, Venture Capital, Private Equity, Business accelerator", "Glossier for Good, True Beauty Ventures, Diet Paratha Family Tree Mentoring, Beauty Independent", "", "", "", ""],
+  ["Public Relations & Communications", "Forster Jones & Associates", "Strategic global communications and policy advice for individuals or companies", "Consulting, Talent management", "Marquis", "Black owned", "", "", ""],
+  ["Spaces, Events", "Lighthouse Club", "Private member's club for recovery and wellness targeted to creative professionals.", "Member's club, Hospitality", "Mills Fabrica, Uncommon", "", "", "", ""],
+  ["Consulting & Mentoring, Human Resources & Education, Networking & Community", "Diet Paratha Family Tree Mentoring", "Diet Paratha’s Family Tree mentoring programme creates impactful opportunities by providing pathways to develop creative careers. Alongside distributing grants to talent, ensuring they have the resources to create art and build sustainable careers.", "Mentoring", "Black Seed VC, Black Ambition, Glossier for Good, Fifteen Percent Pledge", "Asian owned", "", "", ""]
+];
 
-    function typewriterLoop(index = 0) {
-      const quote = TICKER_QUOTES[index];
-      let charIndex = 0;
+/* The sample uses a few labels that differ from the taxonomy in the brief.
+   They are mapped here so those companies stay reachable; edit or empty this to see the raw behaviour. */
+var ALIAS_CAT = {'Public Relations & Communications':'Public Relations','Spaces':'Space'};
+var ALIAS_TAG = {'News':'Press & News'};
 
-      function typeChar() {
-        tickerQuoteEl.textContent = quote.slice(0, charIndex);
-        charIndex++;
-        if (charIndex <= quote.length) {
-          setTimeout(typeChar, TYPE_SPEED_MS);
-        } else {
-          setTimeout(deleteChar, HOLD_MS);
-        }
-      }
+function list(s,alias){
+  var out=[];
+  (s||'').split(',').forEach(function(x){
+    x=x.trim(); if(!x)return;
+    x=(alias&&alias[x])||x;
+    if(out.indexOf(x)<0)out.push(x);
+  });
+  return out;
+}
+var DB = RAW.map(function(r,i){
+  return {id:i,name:r[1],cats:list(r[0],ALIAS_CAT),desc:r[2],tags:list(r[3],ALIAS_TAG),similar:list(r[4]),ethos:list(r[5]),model:r[6],city:r[7],country:r[8]};
+});
 
-      function deleteChar() {
-        charIndex--;
-        tickerQuoteEl.textContent = quote.slice(0, charIndex);
-        if (charIndex > 0) {
-          setTimeout(deleteChar, DELETE_SPEED_MS);
-        } else {
-          const nextIndex = (index + 1) % TICKER_QUOTES.length;
-          setTimeout(() => typewriterLoop(nextIndex), GAP_MS);
-        }
-      }
+/* ═══ State ═══ */
+var selCats={}, selTags={}, shown=CONFIG.PAGE_SIZE, lastResults=[];
+function keys(o){return Object.keys(o)}
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
 
-      typeChar();
-    }
+/* ═══ Search logic (single place — swap as decisions are made) ═══ */
+function matches(c,cats,tags){
+  /* (company has ANY selected category) AND (company has the selected tag(s)); no category = no results */
+  if(!cats.length) return false;
+  var okC = CONFIG.CAT_LOGIC==='OR'
+    ? cats.some(function(x){return c.cats.indexOf(x)>-1})
+    : cats.every(function(x){return c.cats.indexOf(x)>-1});
+  if(!okC) return false;
+  if(!tags.length) return true;
+  return CONFIG.TAG_LOGIC==='OR'
+    ? tags.some(function(x){return c.tags.indexOf(x)>-1})
+    : tags.every(function(x){return c.tags.indexOf(x)>-1});
+}
+function run(cats,tags){return DB.filter(function(c){return matches(c,cats,tags)})}
+function count(cats,tags){return run(cats,tags).length}
 
-    if (tickerQuoteEl && TICKER_QUOTES.length) {
-      typewriterLoop(0);
-    }
+/* ═══ Saved (per device / browser; no saved searches by design) ═══ */
+function getSaved(){try{return JSON.parse(localStorage.getItem('bureau.saved')||'[]')}catch(e){return window.__saved||[]}}
+function setSaved(a){window.__saved=a;try{localStorage.setItem('bureau.saved',JSON.stringify(a))}catch(e){}}
+function isSaved(id){return getSaved().indexOf(id)>-1}
+function toggleSaved(id){
+  var a=getSaved(), i=a.indexOf(id);
+  if(i>-1)a.splice(i,1); else { if(a.length>=CONFIG.MAX_BOOKMARKS){alert('Saved limit reached ('+CONFIG.MAX_BOOKMARKS+').');return} a.push(id) }
+  setSaved(a);
+}
 
-    // ── Lightbox, triggered by the ticker's arrow icon ──
-    const smsLightbox = document.getElementById('smsLightbox');
-    const lightboxClose = document.getElementById('lightboxClose');
-    const tickerLightboxTrigger = document.getElementById('tickerLightboxTrigger');
+/* ═══ Search view ═══ */
+function renderSearch(){
+  var cats=keys(selCats), tags=keys(selTags);
+  var total=(cats.length+tags.length)? count(cats,tags) : 0;
+  $('counterN').textContent=total;
+  $('counterL').textContent=total===1?'search result':'search results';
 
-    function openLightbox() {
-      smsLightbox.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
+  /* Categories: once the maximum is chosen, the rest are locked (unclickable).
+     Tags: greyed out and locked until a category is chosen; after that, dimmed (still clickable) only if no company in the chosen categories has that tag. Any number of tags can be selected. */
+  var atMax=cats.length>=CONFIG.MAX_CATEGORIES, atMaxT=tags.length>=CONFIG.MAX_TAGS;
+  $('catList').innerHTML=CATS.map(function(c){return optBtn(c,'cat','pill',false,atMax&&!selCats[c])}).join('');
+  $('tagList').innerHTML=TAGS.map(function(t){
+    if(!cats.length) return optBtn(t,'tag','pill',true,!selTags[t]);          /* no category: all tags greyed; unselected ones locked */
+    var dim=CONFIG.DIM_TAGS&&count(cats,[t])===0;                            /* greyed if no company in the chosen categories has it (selected tags too; they stay removable) */
+    return optBtn(t,'tag','pill',dim,dim||(atMaxT&&!selTags[t]))}).join('');
+  $('catMeta').textContent=cats.length?cats.length+' / '+CONFIG.MAX_CATEGORIES+' selected':CATS.length+' categories';
+  $('tagMeta').textContent=tags.length?tags.length+' / '+CONFIG.MAX_TAGS+' selected':TAGS.length+' tags';
 
-    function closeLightbox() {
-      smsLightbox.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
+  var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
+  $('chosen').innerHTML=chips||'<span class="chip ghost">No selections made</span>';
 
-    tickerLightboxTrigger.addEventListener('click', openLightbox);
-    lightboxClose.addEventListener('click', closeLightbox);
+  var n=cats.length+tags.length;
+  $('goBtn').hidden = false;                      /* always visible in the header on the search page; enabled once a category is chosen */
+  $('goBtn').disabled = cats.length<CONFIG.MIN_CATEGORIES || total===0;
+  $('intro').hidden = n>0;                         /* instruction text goes away once the user starts selecting */
+  $('hint').textContent = (n>0&&cats.length>0&&total===0) ? 'No matches. Remove a selection.' : '';
+}
+function optBtn(label,type,cls,dim,locked){
+  var sel=(type==='cat'?selCats:selTags)[label];
+  return '<button type="button" class="'+cls+(dim?' off':'')+'" data-type="'+type+'" data-v="'+esc(label)+'" aria-pressed="'+(!!sel)+'"'+(locked?' disabled':'')+'><span>'+esc(label)+'</span></button>';
+}
+function chip(v,type){return '<button type="button" class="chip" data-type="'+type+'" data-v="'+esc(v)+'" aria-label="Remove '+esc(v)+'">'+esc(v)+' <i>×</i></button>'}
+/* When categories change, drop any selected tag that no company in the remaining categories has,
+   so a greyed-out tag always looks (and is) unselected. */
+function pruneTags(){
+  var cats=keys(selCats);
+  keys(selTags).forEach(function(t){ if(!cats.length||count(cats,[t])===0) delete selTags[t]; });
+}
+function toggle(type,v){
+  if(type==='tag'&&!selTags[v]&&(!keys(selCats).length||count(keys(selCats),[v])===0))return;   /* greyed-out tags can never be selected */
+  var o=type==='cat'?selCats:selTags;
+  if(o[v])delete o[v]; else { if(type==='cat'&&keys(selCats).length>=CONFIG.MAX_CATEGORIES)return; if(type==='tag'&&keys(selTags).length>=CONFIG.MAX_TAGS)return; o[v]=1; }
+  if(type==='cat') pruneTags();
+  renderSearch();
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-type]'); if(!b||b.disabled)return;
+  if(b.closest('#v-search')) toggle(b.dataset.type,b.dataset.v);
+  else if(b.closest('#resultsBox')&&b.classList.contains('chip')) { toggle(b.dataset.type,b.dataset.v); if(keys(selCats).length>=CONFIG.MIN_CATEGORIES) renderResults(); else location.hash='#/'; }
+});
+$('goBtn').addEventListener('click',function(){ if(!$('goBtn').disabled){shown=CONFIG.PAGE_SIZE;location.hash='#/results'} });
 
-    smsLightbox.addEventListener('click', (e) => {
-      if (e.target === smsLightbox) closeLightbox();
-    });
+/* ═══ Results view ═══ */
+function renderResults(){
+  var cats=keys(selCats), tags=keys(selTags);
+  lastResults=run(cats,tags);
+  var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
+  var rows=lastResults.slice(0,shown).map(function(c,i){
+    return '<a class="row" href="#/c/'+c.id+'"><span class="i">'+pad(i+1)+'</span><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(hq(c))+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
+  }).join('');
+  $('resultsBox').innerHTML=
+    '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen" style="max-width:640px;justify-content:flex-end">'+chips+'</div></div>'+
+    (lastResults.length?'<div class="rows"><div class="row hd"><span>No.</span><span>Company</span><span>Details</span><span>HQ</span><span>Ethos</span><span></span></div>'+rows+'</div>':'<p class="empty">No matches</p>')+
+    (lastResults.length>shown?'<button class="more" id="moreBtn" type="button">Show more ('+(lastResults.length-shown)+')</button>':'');
+  var m=$('moreBtn'); if(m)m.onclick=function(){shown+=CONFIG.PAGE_SIZE;renderResults()};
+}
+function pad(n){return (n<10?'0':'')+n}
+function hq(c){return [c.city,c.country].filter(Boolean).join(', ')||'—'}
+function ethosTxt(c){return c.ethos.length?c.ethos.join(' · '):'—'}
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && smsLightbox.classList.contains('is-open')) {
-        closeLightbox();
-      }
-    });
+/* ═══ Profile view ═══ */
+function similar(c){
+  /* Order: 1) the curated "Similar" column, 2) companies that list this one as similar,
+     3) automatic fallback (shared categories weigh most, then shared tags, then description words).
+     The brief leaves the final mechanism open (curated / automated / hybrid). */
+  var out=[], seen={}; seen[c.id]=1;
+  var low=function(x){return x.toLowerCase()};
+  var byName={}; DB.forEach(function(o){byName[low(o.name)]=o});
+  c.similar.forEach(function(n){var o=byName[low(n)]; if(o&&!seen[o.id]){seen[o.id]=1;out.push({o:o,why:'Curated link'})}});
+  DB.forEach(function(o){ if(!seen[o.id]&&o.similar.some(function(n){return low(n)===low(c.name)})){seen[o.id]=1;out.push({o:o,why:'Lists '+c.name+' as similar'})} });
+  var tokens=c.desc.toLowerCase().split(/\W+/).filter(function(w){return w.length>5});
+  DB.filter(function(o){return !seen[o.id]}).map(function(o){
+    var sc=o.cats.filter(function(x){return c.cats.indexOf(x)>-1}), st=o.tags.filter(function(x){return c.tags.indexOf(x)>-1});
+    var dw=tokens.filter(function(w){return o.desc.toLowerCase().indexOf(w)>-1}).length;
+    var why=sc.length?'Shares category: '+sc.slice(0,2).join(', '):'Shares tags: '+st.slice(0,3).join(', ');
+    if(sc.length&&st.length)why+=' · '+st.slice(0,2).join(', ');
+    return {o:o,why:why,score:sc.length*3+st.length*2+dw*.5};
+  }).filter(function(x){return x.score>=3}).sort(function(a,b){return b.score-a.score}).forEach(function(x){out.push(x)});
+  return out.slice(0,5);
+}
+function renderProfile(id){
+  var c=DB[id]; if(!c){location.hash='#/';return}
+  var sim=similar(c);
+  var simHtml=sim.map(function(x,i){
+    return '<a class="sim-i" href="#/c/'+x.o.id+'"><span class="i">'+pad(i+1)+'</span><span><b>'+esc(x.o.name)+'</b><p>'+esc(x.why)+'</p></span></a>';
+  }).join('');
+  var back=lastResults.length?'<a class="back" href="#/results">← Back to results</a>':'<a class="back" href="#/">← Search</a>';
+  var dash=function(a){return a.length?esc(a.join(' / ')):'—'};
+  $('profBox').innerHTML=
+    '<div>'+back+'<p class="mono up" style="font-size:11px;letter-spacing:1.3px;margin-top:28px;opacity:.6">Imprint</p>'+
+      '<div class="imprint"><dl><dt>HQ</dt><dd>'+esc(hq(c))+'</dd><dt>Founder</dt><dd>—</dd><dt>Website</dt><dd>—</dd></dl></div></div>'+
+    '<div><span class="tag-label">'+esc(c.cats[0]||'')+'</span><h1 class="p-name">'+esc(c.name)+'</h1><p class="p-desc">'+esc(c.desc)+'</p>'+
+      '<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:44px"><dt>Categories</dt><dd>'+dash(c.cats)+'</dd><dt>Tags</dt><dd>'+dash(c.tags)+'</dd><dt>Ethos</dt><dd>'+dash(c.ethos)+'</dd><dt>Model</dt><dd>'+(esc(c.model)||'—')+'</dd></dl></div>'+
+      '</div>'+
+    '<div><span class="tag-label">Similar leads</span><div class="sim">'+(simHtml||'<p class="mono" style="font-size:12px">No credible matches yet.</p>')+'</div></div>';
+}
 
-    // ── Sign-up form: digits-only area code, and custom validation that
-    //    only flags a field once a submit attempt has actually failed ──
-    const lightboxForm = document.getElementById('lightboxForm');
-    const areaCodeInput = lightboxForm.querySelector('input[name="areaCode"]');
-    const formSuccess = document.getElementById('formSuccess');
-    const lightboxContent = document.getElementById('lightboxContent');
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzDo7B7pz9AsWq5Wd5lRDh37Pyhe6dqL_-Uyx-vQkAPbAIpoexq47138wB_Rv7iMLb6w/exec';
+/* ═══ Saved view ═══ */
+function renderSaved(){
+  var a=getSaved().map(function(i){return DB[i]}).filter(Boolean);
+  $('savedBox').innerHTML='<div><a class="back" href="#/">← Search</a><h1 class="r-title">Saved ('+a.length+'/'+CONFIG.MAX_BOOKMARKS+')</h1></div>'+
+    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="i">'+pad(i+1)+'</span><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(hq(c))+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
+    '<p class="mono" style="font-size:11px;letter-spacing:.8px;opacity:.6">Saved companies live on this device only.</p>';
+}
 
-    areaCodeInput.addEventListener('input', () => {
-      areaCodeInput.value = areaCodeInput.value.replace(/\D/g, '').slice(0, 3);
-    });
-
-    function fieldWrapper(field) {
-      return field.closest('[data-field]');
-    }
-
-    function clearError(field) {
-      const wrapper = fieldWrapper(field);
-      if (!wrapper) return;
-      wrapper.classList.remove('has-error');
-      const codeWrap = wrapper.querySelector('.code-input-wrap');
-      if (codeWrap) codeWrap.classList.remove('has-error');
-      if (wrapper.classList.contains('consent-label')) wrapper.classList.remove('has-error');
-    }
-
-    lightboxForm.querySelectorAll('input').forEach((input) => {
-      const evt = input.type === 'checkbox' ? 'change' : 'input';
-      input.addEventListener(evt, () => clearError(input));
-    });
-
-    lightboxForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      let firstInvalid = null;
-
-      lightboxForm.querySelectorAll('[required]').forEach((input) => {
-        const isCheckbox = input.type === 'checkbox';
-        const invalid = isCheckbox ? !input.checked : input.value.trim() === '';
-        const wrapper = fieldWrapper(input);
-        if (!wrapper) return;
-
-        if (invalid) {
-          wrapper.classList.add('has-error');
-          const codeWrap = wrapper.querySelector('.code-input-wrap');
-          if (codeWrap) codeWrap.classList.add('has-error');
-          if (!firstInvalid) firstInvalid = input;
-        } else {
-          wrapper.classList.remove('has-error');
-          const codeWrap = wrapper.querySelector('.code-input-wrap');
-          if (codeWrap) codeWrap.classList.remove('has-error');
-        }
-      });
-
-      if (firstInvalid) {
-        firstInvalid.focus();
-        return;
-      }
-
-      // All valid — assemble the payload with keys matching the Google Sheet
-      // column headers exactly, then send to Google Apps Script.
-      const payload = {
-        'TIMESTAMP': new Date().toISOString(),
-        'NAME': lightboxForm.querySelector('input[name="name"]').value.trim(),
-        'COUNTRY CODE': '+' + areaCodeInput.value.trim(),
-        'MOBILE NUMBER': lightboxForm.querySelector('input[name="number"]').value.trim(),
-        'CONSENT': true
-      };
-
-      // Show success immediately — don't wait on the network request.
-      // Disabling the button too is a second safeguard: even a very fast
-      // double-click can't fire this handler twice once it's disabled.
-      const submitBtn = lightboxForm.querySelector('.lightbox-submit');
-      if (submitBtn) submitBtn.disabled = true;
-
-      // On the mobile layout the lightbox is bottom-anchored, so if the
-      // form (tall) is simply swapped for the success message (short)
-      // the whole block collapses and re-anchors lower on screen,
-      // dragging the heading/copy down with it. Locking in the box's
-      // current height before hiding the form keeps the heading/copy
-      // exactly where they were, and lets the success message land in
-      // the space the form used to occupy (right where "Name" was).
-      if (window.matchMedia('(max-width: 760px)').matches) {
-        lightboxContent.style.minHeight = lightboxContent.offsetHeight + 'px';
-      }
-      lightboxForm.style.display = 'none';
-      formSuccess.classList.add('is-visible');
-
-      // no-cors: Apps Script doesn't send CORS headers back, so the response
-      // is opaque — we can't read it, but the request still goes through.
-      // Fired without awaiting it, so a slow/cold-start Apps Script response
-      // can't hold up the UI.
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      }).catch((err) => console.error('Sign-up submit failed', err));
-    });
-
-    // ── Hairline weather icons, matched to Open-Meteo WMO weather codes ──
-    const ICONS = {
-      clear: 'clear',
-      moon: 'moon',
-      partlyCloudy: 'partlyCloudy',
-      partlyCloudyNight: 'partlyCloudyNight',
-      cloud: 'cloud',
-      fog: 'fog',
-      rain: 'rain',
-      snow: 'snow',
-      storm: 'storm'
-    };
-
-    function iconForCode(code, isDay) {
-      if (code === 0) return isDay ? ICONS.clear : ICONS.moon;
-      if ([1,2].includes(code)) return isDay ? ICONS.partlyCloudy : ICONS.partlyCloudyNight;
-      if (code === 3) return ICONS.cloud;
-      if ([45,48].includes(code)) return ICONS.fog;
-      if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return ICONS.rain;
-      if ([71,73,75,77,85,86].includes(code)) return ICONS.snow;
-      if ([95,96,99].includes(code)) return ICONS.storm;
-      return ICONS.cloud;
-    }
-
-    const LONDON = { lat: 51.5074, lon: -0.1278, tz: 'Europe/London' };
-    const panel = document.querySelector('.station');
-
-    function updateClock() {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-GB', {
-        timeZone: LONDON.tz,
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      panel.querySelector('[data-time]').textContent = timeStr;
-      // Re-fit the time font-size to match the city label's width every tick —
-      // not just on load/resize — since different digits render at slightly
-      // different widths and the match would otherwise go stale between ticks.
-      // Guarded to only run after the initial reveal so it doesn't race the
-      // webfont-loading sequencing handled in initClockReveal() below.
-      if (panel.classList.contains('clock-ready')) {
-        matchStationRowWidths();
-      }
-    }
-
-    // City + time reveal: waits only on webfonts (needed so the width-match
-    // measures against real font metrics, not a fallback font), never on the
-    // weather fetch. This is what actually needs to happen "together" with
-    // the city row, since the time's font-size is derived from it.
-    async function initClockReveal() {
-      if (document.fonts && document.fonts.ready) {
-        await document.fonts.ready;
-      }
-      matchStationRowWidths();
-      matchLeftColumnHeightToStation();
-      panel.classList.add('clock-ready');
-    }
-
-    async function updateWeather() {
-      try {
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LONDON.lat}&longitude=${LONDON.lon}&current=temperature_2m,weather_code,is_day`);
-        const data = await res.json();
-        const temp = Math.round(data.current.temperature_2m);
-        const code = data.current.weather_code;
-        const isDay = data.current.is_day === 1;
-        panel.querySelector('.station-meta').classList.remove('is-error');
-        panel.querySelector('[data-temp]').textContent = `${temp}°C`;
-        const iconName = iconForCode(code, isDay);
-        panel.querySelector('[data-icon]').innerHTML =
-          `<img src="icons/${iconName}.png" alt="" width="256" height="256" onerror="this.style.display='none'">`;
-      } catch (e) {
-        panel.querySelector('.station-meta').classList.add('is-error');
-        panel.querySelector('[data-temp]').textContent = '';
-        panel.querySelector('[data-icon]').innerHTML =
-          `<button type="button" class="station-refresh-btn" aria-label="Retry weather">
-             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-               <polyline points="1 4 1 10 7 10"/>
-               <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-             </svg>
-           </button>`;
-        const retryBtn = panel.querySelector('.station-refresh-btn');
-        if (retryBtn) retryBtn.addEventListener('click', updateWeather);
-      } finally {
-        // Same webfont-readiness guard as initClockReveal(), applied here so
-        // the weather row's icon/temperature width-match is also measured
-        // against real font metrics rather than a fallback font.
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-        panel.classList.add('is-ready');
-      }
-    }
-
-    updateClock();
-    initClockReveal();
-    updateWeather();
-    setInterval(updateClock, 1000);
-    // No periodic refresh — a failed fetch now shows a clickable retry icon
-    // instead (see the catch block above), which is a more direct fix for
-    // the one scenario this interval was actually covering.
-
-    // ── Force all three station rows (city/time/meta) to share the exact same width ──
-    function matchStationRowWidths() {
-      const cityEl = document.querySelector('.station-city');
-      const timeEl = document.querySelector('.station-time');
-      const metaEl = document.querySelector('.station-meta');
-      if (!cityEl || !timeEl || !metaEl) return;
-
-      // Reset any previous scaling before measuring fresh
-      timeEl.style.fontSize = '';
-      metaEl.style.fontSize = '';
-
-      // ── PC only: scale the weather block down proportionally so LONDON is the same font size
-      //    as CONTACT, with the same letter-spacing, and make the block exactly as tall as the
-      //    contact block (rows spread to fill it), bottoms aligned. Everything is measured unscaled,
-      //    and the scale is applied at the very end of this function. ──
-      const stationEl = document.getElementById('station');
-      const isPC = window.matchMedia('(min-width: 761px) and (not ((orientation: landscape) and (max-height: 500px)))').matches;
-      let pcScale = 1;
-      cityEl.style.letterSpacing = '';
-      const contactBlockEl = document.querySelector('.contact-block');
-      if (contactBlockEl) contactBlockEl.style.gap = '';
-      if (stationEl) {
-        stationEl.style.transform = '';
-        stationEl.style.removeProperty('--pc-station-h');
-      }
-      if (isPC && stationEl) {
-        const contactCol = document.querySelector('.footer-col-left');
-        const contactLabel = document.querySelector('.contact-label');
-        if (contactCol && contactLabel) {
-          // PC only: make the contact block 10% taller by opening up the gaps between its rows
-          // evenly (text sizes unchanged). The weather block then matches this taller height.
-          const naturalH = contactCol.getBoundingClientRect().height;
-          const naturalScale = contactCol.offsetHeight ? naturalH / contactCol.offsetHeight : 1;
-          if (contactBlockEl && naturalH > 0) {
-            const rowGaps = Math.max(contactBlockEl.children.length - 1, 1);
-            const baseGap = parseFloat(getComputedStyle(contactBlockEl).rowGap) || 0;
-            const extraPerGap = (naturalH * 0.10) / rowGaps / naturalScale;
-            contactBlockEl.style.gap = (baseGap + extraPerGap) + 'px';
-          }
-          const contactH = contactCol.getBoundingClientRect().height;
-          const contactScale = contactCol.offsetHeight ? contactH / contactCol.offsetHeight : 1;
-          const contactFont = parseFloat(getComputedStyle(contactLabel).fontSize) * contactScale;
-          const contactSpacing = (parseFloat(getComputedStyle(contactLabel).letterSpacing) || 0) * contactScale;
-          const cityFont = parseFloat(getComputedStyle(cityEl).fontSize);
-          if (contactH > 0 && contactFont > 0 && cityFont > 0) {
-            pcScale = contactFont / cityFont;
-            cityEl.style.letterSpacing = (contactSpacing / pcScale) + 'px';
-            stationEl.style.setProperty('--pc-station-h', (contactH / pcScale) + 'px');
-          }
-        }
-      }
-
-      const cityWidth = cityEl.getBoundingClientRect().width;
-
-      const timeWidth = timeEl.getBoundingClientRect().width;
-      const timeFontSize = parseFloat(getComputedStyle(timeEl).fontSize);
-      if (timeWidth > 0) {
-        const newTimeSize = timeFontSize * (cityWidth / timeWidth);
-        timeEl.style.fontSize = newTimeSize + 'px';
-      }
-
-      // Error state ("weather update" note + retry icon): line the left edge of the note up
-      // with the left edge of LONDON by adjusting the gap between the note and the icon.
-      // (Right edge stays pinned: the icon already lines up with the right of LONDON.)
-      metaEl.style.gap = '';
-      if (metaEl.classList.contains('is-error')) {
-        const noteEl = metaEl.querySelector('[data-refresh-text]');
-        if (noteEl && noteEl.getClientRects().length) {
-          const baseGap = parseFloat(getComputedStyle(metaEl).gap) || 0;
-          const diff = cityEl.getBoundingClientRect().left - noteEl.getBoundingClientRect().left;
-          if (Math.abs(diff) > 0.5) metaEl.style.gap = Math.max(3, baseGap - diff) + 'px';
-        }
-      }
-
-      const metaIcon = metaEl.querySelector('.station-icon');
-      const metaTemp = metaEl.querySelector('[data-temp]');
-      if (metaIcon && metaTemp) {
-        const iconWidth = metaIcon.getBoundingClientRect().width;
-        const gapPx = parseFloat(getComputedStyle(metaEl).gap) || 0;
-        const tempWidth = metaTemp.getBoundingClientRect().width;
-        const tempFontSize = parseFloat(getComputedStyle(metaTemp).fontSize) || parseFloat(getComputedStyle(metaEl).fontSize);
-        const availableForText = cityWidth - iconWidth - gapPx;
-        if (tempWidth > 0 && availableForText > 0) {
-          let newTempSize = tempFontSize * (availableForText / tempWidth);
-          // Phone portrait only: the temperature is capped at 21px so narrow digits
-          // (e.g. "11°C") don't blow it up to the size of the time. It can still
-          // shrink below 20px if the text is ever too wide to fit the row.
-          const phonePortrait = window.innerWidth <= 760 &&
-            !window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
-          if (phonePortrait) newTempSize = Math.min(newTempSize, 21);
-          // Phone landscape: same idea at the scaled-down size (21px x 10/15 = 14px), so the icon
-          // stays pinned left and the temperature right instead of the text filling the row.
-          const phoneLandscape = window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
-          if (phoneLandscape) newTempSize = Math.min(newTempSize, 14);
-          // PC only: temperature +1px on screen (divided by the block's scale to get the CSS value)
-          if (isPC && pcScale > 0 && pcScale !== 1) newTempSize += 1 / pcScale;
-          metaTemp.style.fontSize = newTempSize + 'px';
-        }
-      }
-
-      // PC only: apply the proportional scale (keeps the existing 3px downward nudge)
-      if (isPC && stationEl && pcScale !== 1) {
-        stationEl.style.transform = 'translateY(3px) scale(' + pcScale + ')';
-      }
-    }
-
-    window.addEventListener('load', matchStationRowWidths);
-
-    // The very first measurement can run before the Typekit font
-    // ('owners-text') has actually finished loading — if it measures
-    // against the browser's fallback font instead, the font-size scale
-    // it calculates is wrong once the real font swaps in. Re-run once
-    // the real webfont is confirmed loaded to correct for that.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-      });
-    }
-
-    // Debounced instead of running on every single resize tick — rotating
-    // a phone fires a burst of resize events while the viewport is still
-    // mid-transition, and measuring during that burst risks writing an
-    // unstable font-size value.
-    let stationResizeTimer;
-    function scheduleMatchStationRowWidths() {
-      clearTimeout(stationResizeTimer);
-      stationResizeTimer = setTimeout(matchStationRowWidths, 250);
-    }
-    window.addEventListener('resize', scheduleMatchStationRowWidths);
-
-    // ── On mobile, centre the logo within the empty space between nav and footer.
-    //    On desktop, leave it to the default flex centering (dead-centre of the page). ──
-    function centreLogoInMainBlock() {
-      const logo = document.querySelector('img');
-      const nav = document.querySelector('.site-nav');
-      const footer = document.querySelector('.site-footer');
-      if (!logo || !nav || !footer) return;
-
-      // Phone portrait is laid out entirely in CSS (see .stage), so nothing to do here
-      // except clear anything left over from landscape / desktop.
-      if (window.matchMedia('(max-width: 760px) and (orientation: portrait)').matches) {
-        logo.style.position = '';
-        logo.style.left = '';
-        logo.style.top = '';
-        logo.style.transform = '';
-        return;
-      }
-
-      const isPhone = window.innerWidth <= 760 ||
-        (window.matchMedia('(orientation: landscape)').matches && window.innerHeight <= 500);
-
-      const navBottom = nav.getBoundingClientRect().bottom;
-      const footerTop = footer.getBoundingClientRect().top;
-      const gapMid = navBottom + (footerTop - navBottom) / 2;
-
-      if (!isPhone) {
-        // Desktop: split the difference between dead-centre of the full
-        // viewport and the centre of the nav/footer gap.
-        const trueMid = window.innerHeight / 2;
-        const blendedMid = (trueMid + gapMid) / 2;
-
-        logo.style.position = 'fixed';
-        logo.style.left = '50%';
-        logo.style.top = blendedMid + 'px';
-        logo.style.transform = 'translate(-50%, -50%)';
-        return;
-      }
-
-      logo.style.position = 'fixed';
-      logo.style.left = '50%';
-      logo.style.top = gapMid + 'px';
-      logo.style.transform = 'translate(-50%, -50%)';
-    }
-
-    window.addEventListener('load', centreLogoInMainBlock);
-    window.addEventListener('resize', centreLogoInMainBlock);
-    window.addEventListener('orientationchange', centreLogoInMainBlock);
-    setTimeout(centreLogoInMainBlock, 100);
-
-    // ── Desktop only: match total height of (description + contact) to the weather block ──
-    function matchLeftColumnHeightToStation() {
-      const desc = document.querySelector('.footer-desc');
-      const contact = document.querySelector('.footer-col-left');
-      const station = document.querySelector('.station');
-      if (!desc || !contact || !station) return;
-
-      // Always clear any previously-written inline values FIRST, before the
-      // desktop-only check below. Rotating a phone to landscape can push its
-      // width over 760px, letting this function run and write a custom
-      // gap/margin for that wide layout — then rotating back to portrait
-      // (width <= 760) was hitting the early return below and leaving that
-      // leftover landscape-calculated spacing permanently baked in. This is
-      // the actual cause of the block appearing taller after rotating back.
-      desc.style.marginBottom = '';
-      station.style.gap = '';
-      station.style.height = '';
-
-      // Only phone landscape (compact footer) uses the matching below. Desktop has its own
-      // fixed weather height in CSS, and phone portrait stretches both blocks to the same row.
-      if (!window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches) return;
-
-      // Phone landscape: the weather block is exactly as tall as the contact block, and both
-      // sit on the bottom of the footer, so their bottoms line up. The description is not
-      // touched, so it stays where it is. offsetHeight = the real layout height.
-      station.style.height = contact.offsetHeight + 'px';
-    }
-
-    window.addEventListener('load', matchLeftColumnHeightToStation);
-
-    let leftColumnResizeTimer;
-    function scheduleMatchLeftColumnHeightToStation() {
-      clearTimeout(leftColumnResizeTimer);
-      leftColumnResizeTimer = setTimeout(matchLeftColumnHeightToStation, 250);
-    }
-    window.addEventListener('resize', scheduleMatchLeftColumnHeightToStation);
-
-    // Settle delay after rotation, same reasoning as the station width matcher above.
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => {
-        matchStationRowWidths();
-        matchLeftColumnHeightToStation();
-      }, 300);
-    });
-
-  </script>
-
+/* ═══ Router ═══ */
+function route(){
+  var h=location.hash||'#/', m;
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});
+  var view='search';
+  if(h==='#/results'){ if(keys(selCats).length<CONFIG.MIN_CATEGORIES){location.hash='#/';return} view='results'; renderResults(); }
+  else if(m=h.match(/^#\/c\/(\d+)$/)){ view='profile'; renderProfile(+m[1]); }
+  else if(h==='#/saved'){ view='saved'; renderSaved(); }
+  else renderSearch();
+  if(view!=='search') $('goBtn').hidden=true;
+  $('v-'+view).classList.add('on');
+  window.scrollTo(0,0);
+  $('stripTxt').textContent = 'A curated directory for consumer enterprise and luxury';
+}
+window.addEventListener('hashchange',route);
+route();
+</script>
   <!-- ═══════════ Custom cursor: asterisk (experimental) ═══════════
        Mouse / trackpad only (phones and tablets are untouched).
        • Default: a solid ink asterisk (six club-shaped petals) exactly on the pointer, no lag.
@@ -1750,7 +560,7 @@
 
       var ACTIVE_SEL = 'a, button, [role="button"], summary, label, [data-cursor="active"]';
       var NATIVE_SEL = 'input, textarea, select, [contenteditable=""], [contenteditable="true"]';
-      var DARK_SEL   = '.ticker, .lightbox-overlay';
+      var DARK_SEL   = '.ticker, .lightbox-overlay, .strip';
 
       var x = -100, y = -100, queued = false;
       var noteTarget = null, noteW = 0, noteH = 0;
