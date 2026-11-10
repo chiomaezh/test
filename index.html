@@ -45,13 +45,14 @@ main{flex:1;display:flex;flex-direction:column}
 /* ── Search: newspaper columns, wide-bleed lists ── */
 .search{display:grid;grid-template-columns:minmax(230px,21%) 1fr;flex:1;width:100%}
 .rail{border-right:.5px solid var(--border);padding:0 var(--gutter)}
-.rail-in{position:sticky;top:0;padding:32px 0;display:flex;flex-direction:column;gap:28px;min-height:calc(100vh - 36px - 72px);min-height:calc(100dvh - 36px - 72px)}
+.rail-in{position:sticky;top:0;padding:32px 0 28px;display:flex;flex-direction:column;gap:28px;min-height:calc(100vh - 36px - 72px);min-height:calc(100dvh - 36px - 72px)}
 .tag-label{display:inline-block;align-self:flex-start;background:var(--tint);font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:1.3px;line-height:1.2;text-transform:uppercase;padding:8px 14px;border-radius:6px}
 .intro{font-size:15px;line-height:1.5;font-weight:400;max-width:30ch}
 .counter{margin-top:0}
 .counter-n{font-family:var(--font-body);font-weight:300;font-size:clamp(70px,calc(9vw - 2px),130px);line-height:.9;letter-spacing:-2px;font-variant-numeric:tabular-nums}
 .counter-l{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase;margin-top:10px}
-.chosen{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:28px}   /* one chip per row */
+.chosen{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+#chosen:empty{display:none}   /* one chip per row */
 .chip{display:inline-flex;gap:8px;align-items:center;font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:var(--text);color:var(--bg);padding:6px 9px;border-radius:5px}
 .chip i{font-style:normal;opacity:.7}
 .chip.ghost{background:transparent;color:var(--text);opacity:.5;padding-left:0}
@@ -62,6 +63,7 @@ main{flex:1;display:flex;flex-direction:column}
 .go[disabled]{opacity:.35;cursor:not-allowed}
 .hint{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.5px;line-height:1.5;margin-top:-14px}
 .hint:empty{display:none}
+.hint.dim{opacity:.5}
 
 .fields{padding:32px var(--gutter);display:flex;flex-direction:column;gap:44px}
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid var(--border);padding-bottom:12px;margin-bottom:6px}
@@ -129,10 +131,15 @@ main{flex:1;display:flex;flex-direction:column}
 .foot nav a{font-weight:300;font-size:13px}
 
 @media(max-width:1000px){
-  .search{grid-template-columns:1fr}
-  .rail{border-right:0;border-bottom:.5px solid var(--border)}
-  .rail-in{position:static;min-height:0}
-  .counter-n{font-size:82px}
+  /* Phone / tablet: header + the search-results panel stay pinned at the top while categories and tags scroll beneath */
+  .head{position:sticky;top:0;z-index:30;background:var(--bg);height:52px;padding-top:0;padding-bottom:0}
+  .search{display:block}
+  .rail{position:sticky;top:52px;z-index:20;background:var(--bg);border-right:0;border-bottom:.5px solid var(--border)}
+  .rail-in{position:static;min-height:0;padding:12px 0;gap:8px;max-height:36vh;max-height:36dvh;overflow-y:auto}
+  .counter{display:flex;align-items:baseline;gap:12px}
+  .counter-n{font-size:48px;letter-spacing:-1px}
+  .counter-l{margin-top:0}
+  .intro{font-size:13px}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
   .row{grid-template-columns:36px 1fr 36px;row-gap:6px}
@@ -141,6 +148,7 @@ main{flex:1;display:flex;flex-direction:column}
   .row.hd{display:none}
 }
 @media(max-width:720px){
+  .br-desk{display:none}
   :root{--gutter:20px}
   .head{grid-template-columns:auto 1fr;gap:12px}
   .nav{display:none}
@@ -172,9 +180,7 @@ main{flex:1;display:flex;flex-direction:column}
           <div class="counter-l" id="counterL">search results</div>
         </div>
         <p class="hint mono" id="hint"></p>
-        <div>
-          <div class="chosen" id="chosen" aria-live="polite"></div>
-        </div>
+        <div class="chosen" id="chosen" aria-live="polite"></div>
         <p class="intro" id="intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
       </div></aside>
       <div class="fields">
@@ -202,10 +208,9 @@ main{flex:1;display:flex;flex-direction:column}
 
 <footer class="foot">
   <div>
-    <p>+bureau is a curated directory by SABI London,<br>made to demystify and connect the world of consumer enterprise.<br>Selected by hand, not exhaustive.</p>
+    <p>+bureau is a curated directory by SABI London,<br>built to demystify and connect the world of consumer enterprise. <br class="br-desk">Selected by hand, not exhaustive.</p>
     <p class="c">© 2026 SABI LDN</p>
   </div>
-  <nav><a href="mailto:office@sabi.london">office@sabi.london</a><a href="https://sabi.london/">sabi.london</a></nav>
 </footer>
 
 <script>
@@ -345,13 +350,14 @@ function renderSearch(){
   $('tagMeta').textContent=tags.length?tags.length+' / '+CONFIG.MAX_TAGS+' selected':TAGS.length+' tags';
 
   var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
-  $('chosen').innerHTML=chips||'<span class="chip ghost">No selections made</span>';
+  $('chosen').innerHTML=chips;
 
   var n=cats.length+tags.length;
   $('goBtn').hidden = false;                      /* always visible in the header on the search page; enabled once a category is chosen */
   $('goBtn').disabled = cats.length<CONFIG.MIN_CATEGORIES || total===0;
   $('intro').hidden = n>0;                         /* instruction text goes away once the user starts selecting */
-  $('hint').textContent = (n>0&&cats.length>0&&total===0) ? 'No matches. Remove a selection.' : '';
+  $('hint').classList.toggle('dim',n===0);   /* "No selections made." is the faded grey it was before */
+  $('hint').textContent = n===0 ? 'No selections made.' : total===0 ? 'No results yet. Select more filters to find a match.' : '';   /* same slot under the counter for both messages */
 }
 function optBtn(label,type,cls,dim,locked){
   var sel=(type==='cat'?selCats:selTags)[label];
