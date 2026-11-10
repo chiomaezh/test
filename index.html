@@ -44,16 +44,16 @@ main{flex:1;display:flex;flex-direction:column}
 
 /* ── Search: newspaper columns, wide-bleed lists ── */
 /* Search page is a fixed-height app screen: strip, header and the results panel never scroll; only the categories/tags pane does */
-body.is-search{height:100vh;height:100dvh;overflow:hidden}
+body.is-search{height:100vh;height:100dvh;overflow:hidden;overscroll-behavior-x:none}
 body.is-search>.foot{display:none}
 body.is-search main,body.is-search .view.on{min-height:0}
 .search{display:grid;grid-template-columns:minmax(230px,21%) 1fr;grid-template-rows:minmax(0,1fr);flex:1;width:100%;min-height:0;overflow:hidden}
-.rail{border-right:.5px solid var(--border);padding:0 var(--gutter);overflow-y:auto;min-height:0}
+.rail{border-right:.5px solid var(--border);padding:0 var(--gutter);overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;min-height:0}
 .rail-in{padding:32px 0 28px;display:flex;flex-direction:column;gap:28px}
 .tag-label{display:inline-block;align-self:flex-start;background:var(--tint);font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:1.3px;line-height:1.2;text-transform:uppercase;padding:8px 14px;border-radius:6px}
 .intro{font-size:15px;line-height:1.5;font-weight:400;max-width:30ch}
 .counter{margin-top:0}
-.counter-n{font-family:var(--font-body);font-weight:300;font-size:clamp(70px,calc(9vw - 2px),130px);line-height:.9;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.counter-n{font-family:var(--font-body);font-weight:300;font-size:clamp(68px,calc(9vw - 4px),128px);line-height:.9;letter-spacing:-2px;font-variant-numeric:tabular-nums}
 .counter-l{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase;margin-top:10px}
 .chosen{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 #chosen:empty{display:none}   /* one chip per row */
@@ -69,7 +69,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .hint:empty{display:none}
 .hint.dim{opacity:.5}
 
-.fields{padding:32px var(--gutter) 0;display:flex;flex-direction:column;gap:44px;overflow-y:auto;min-height:0}
+.fields{padding:32px var(--gutter) 0;display:flex;flex-direction:column;gap:44px;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;min-height:0}
 .fields .foot{margin:0 calc(var(--gutter) * -1);flex:none}
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid var(--border);padding-bottom:12px;margin-bottom:6px}
 .sec-h h2{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase}
@@ -141,7 +141,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .search{display:flex;flex-direction:column}
   .rail{flex:none;max-height:58vh;max-height:58dvh;border-right:0;border-bottom:.5px solid var(--border)}
   .fields{flex:1}
-  .counter-n{font-size:82px}
+  #chosen{flex-direction:row;flex-wrap:wrap}   /* phone: selected filters sit side by side to save height */
+  .counter-n{font-size:80px}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
   .row{grid-template-columns:36px 1fr 36px;row-gap:6px}
