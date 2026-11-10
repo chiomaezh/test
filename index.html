@@ -43,9 +43,13 @@ main{flex:1;display:flex;flex-direction:column}
 .view.on{display:flex}
 
 /* ── Search: newspaper columns, wide-bleed lists ── */
-.search{display:grid;grid-template-columns:minmax(230px,21%) 1fr;flex:1;width:100%}
-.rail{border-right:.5px solid var(--border);padding:0 var(--gutter)}
-.rail-in{position:sticky;top:0;padding:32px 0 28px;display:flex;flex-direction:column;gap:28px;min-height:calc(100vh - 36px - 72px);min-height:calc(100dvh - 36px - 72px)}
+/* Search page is a fixed-height app screen: strip, header and the results panel never scroll; only the categories/tags pane does */
+body.is-search{height:100vh;height:100dvh;overflow:hidden}
+body.is-search>.foot{display:none}
+body.is-search main,body.is-search .view.on{min-height:0}
+.search{display:grid;grid-template-columns:minmax(230px,21%) 1fr;grid-template-rows:minmax(0,1fr);flex:1;width:100%;min-height:0;overflow:hidden}
+.rail{border-right:.5px solid var(--border);padding:0 var(--gutter);overflow-y:auto;min-height:0}
+.rail-in{padding:32px 0 28px;display:flex;flex-direction:column;gap:28px}
 .tag-label{display:inline-block;align-self:flex-start;background:var(--tint);font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:1.3px;line-height:1.2;text-transform:uppercase;padding:8px 14px;border-radius:6px}
 .intro{font-size:15px;line-height:1.5;font-weight:400;max-width:30ch}
 .counter{margin-top:0}
@@ -65,7 +69,8 @@ main{flex:1;display:flex;flex-direction:column}
 .hint:empty{display:none}
 .hint.dim{opacity:.5}
 
-.fields{padding:32px var(--gutter);display:flex;flex-direction:column;gap:44px}
+.fields{padding:32px var(--gutter) 0;display:flex;flex-direction:column;gap:44px;overflow-y:auto;min-height:0}
+.fields .foot{margin:0 calc(var(--gutter) * -1);flex:none}
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid var(--border);padding-bottom:12px;margin-bottom:6px}
 .sec-h h2{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:1.3px;text-transform:uppercase}
 .sec-h span{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;opacity:.6}
@@ -131,11 +136,12 @@ main{flex:1;display:flex;flex-direction:column}
 .foot nav a{font-weight:300;font-size:13px}
 
 @media(max-width:1000px){
-  /* Phone / tablet: header + the search-results panel stay pinned at the top while categories and tags scroll beneath */
+  /* Phone / tablet: header and the search-results panel stay frozen at the top; only categories and tags scroll beneath */
   .head{position:sticky;top:0;z-index:30;background:var(--bg);height:52px;padding-top:0;padding-bottom:0}
-  .search{display:block}
-  .rail{position:sticky;top:52px;z-index:20;background:var(--bg);border-right:0;border-bottom:.5px solid var(--border)}
-  .rail-in{position:static;min-height:0;padding:12px 0;gap:8px;max-height:36vh;max-height:36dvh;overflow-y:auto}
+  .search{display:flex;flex-direction:column}
+  .rail{flex:none;max-height:36vh;max-height:36dvh;border-right:0;border-bottom:.5px solid var(--border)}
+  .rail-in{padding:12px 0;gap:8px}
+  .fields{flex:1}
   .counter{display:flex;align-items:baseline;gap:12px}
   .counter-n{font-size:48px;letter-spacing:-1px}
   .counter-l{margin-top:0}
@@ -457,10 +463,13 @@ function route(){
   else if(h==='#/saved'){ view='saved'; renderSaved(); }
   else renderSearch();
   if(view!=='search') $('goBtn').hidden=true;
+  document.body.classList.toggle('is-search',view==='search');
   $('v-'+view).classList.add('on');
   window.scrollTo(0,0);
   $('stripTxt').textContent = 'A curated directory for consumer enterprise and luxury';
 }
+/* the search page shows the footer at the end of its own scrolling pane */
+(function(){var f=document.querySelector('footer.foot');document.querySelector('.fields').appendChild(f.cloneNode(true))})();
 window.addEventListener('hashchange',route);
 route();
 </script>
