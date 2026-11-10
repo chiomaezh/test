@@ -30,9 +30,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .strip .s1{animation:stripA 16s ease-in-out infinite}
 .strip .s2{animation:stripB 16s ease-in-out infinite}
 @keyframes stripA{0%{opacity:0}4%{opacity:1}46%{opacity:1}50%,100%{opacity:0}}
-@keyframes stripB{0%,50%{opacity:0}54%{opacity:1}96%{opacity:1}100%{opacity:0}}
-@media(prefers-reduced-motion:reduce){.strip .s1{animation:none;opacity:1}.strip .s2{animation:none;opacity:0}}
-.strip a{color:var(--bg);text-decoration:none}
+@keyframes stripB{0%,50%{opacity:0;visibility:hidden}54%,96%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){.strip .s1{animation:none;opacity:1}.strip .s2{animation:none;opacity:0;visibility:hidden}}
+.strip a{color:var(--bg);text-decoration:underline;text-underline-offset:3px}
 
 /* header */
 .head{display:flex;justify-content:space-between;align-items:center;padding:20px var(--gutter);border-bottom:.5px solid var(--border)}
@@ -172,7 +172,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 </head>
 <body>
 
-<div class="strip"><span class="s1">A curated directory for consumer enterprise and luxury</span><span class="s2">Powered by sabi.london</span></div>
+<div class="strip"><span class="s1">A curated directory for consumer enterprise and luxury</span><span class="s2">Powered by <a href="https://www.sabi.london">sabi.london</a></span></div>
 
 <header class="head">
   <a class="logo" href="#/" aria-label="+bureau">+bureau</a>
@@ -241,8 +241,8 @@ var CONFIG = {
   MAX_BOOKMARKS: 50
 };
 
-var CATS = ['Legal', 'Environment & Sustainability', 'Consumer & Market Insights', 'Sales & Merchandising', 'Space', 'Public Relations & Communications', 'Events', 'Consulting & Mentoring', 'Finance', 'Creative Content & Production', 'Media', 'Curation & Sourcing', 'Human Resources & Education', 'Networking & Community'];
-var TAGS = ['Food & Beverage', 'Beauty & Cosmetics', 'Fashion & Accessories', 'Health & Wellness', 'Art & Design', 'Private Equity', 'Venture Capital', 'Employee Training', 'Consulting', 'Mentoring', 'Editorial', 'Books & Publishing', 'Technology', 'Investor', 'Sample sales', 'Showroom', 'Wholesale', 'Hospitality', 'Social Media', 'Trend forecasting', 'Research', 'Advertising', 'Resale', 'Content production', 'Travel', 'Retail', 'Job board', 'Influencer marketing', 'Affiliate marketing', 'Sports', 'Casting', 'Model management', 'Talent management', 'Coworking space', 'Studio space', 'Vintage & Antiques', 'Press & News', 'Creative direction', 'Grants & Awards', 'AI', 'Real estate', "Members' club", 'Email marketing', 'Newsletter', 'E-commerce', 'Shipping & fulfilment', 'Office resources', 'Recruitment', 'Translation', 'Tax', 'Accounting', 'Intellectual property', 'Website', 'Brand partnerships', 'Exhibition space', 'Appointments', 'Licensing', 'Trade show', 'Automotive', 'Photography & Videography', 'Entertainment', 'Portfolio', 'Private transport', 'Business accelerator', 'Storage', 'Media training', 'Meeting space', 'Music', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Quality, Safety & Compliance', 'Certification'];
+var CATS = ['Public Relations & Communications', 'Media', 'Creative Content & Production', 'Events', 'Space', 'Networking & Community', 'Human Resources & Education', 'Consulting & Mentoring', 'Consumer & Market Insights', 'Sales & Merchandising', 'Curation & Sourcing', 'Finance', 'Legal', 'Environment & Sustainability'];
+var TAGS = ['Art & Design', 'Fashion & Accessories', 'Beauty & Cosmetics', 'Health & Wellness', 'Sports', 'Food & Beverage', 'Hospitality', 'Travel', 'Technology', 'AI', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Website', 'E-commerce', 'Retail', 'Wholesale', 'Showroom', 'Sample sales', 'Resale', 'Vintage & Antiques', 'Shipping & fulfilment', 'Storage', 'Trade show', 'Exhibition space', 'Brand partnerships', 'Advertising', 'Influencer marketing', 'Affiliate marketing', 'Social Media', 'Email marketing', 'Newsletter', 'Editorial', 'Books & Publishing', 'Press & News', 'Media training', 'Content production', 'Photography & Videography', 'Studio space', 'Creative direction', 'Portfolio', 'Entertainment', 'Music', 'Casting', 'Model management', 'Talent management', 'Trend forecasting', 'Research', 'Consulting', 'Mentoring', 'Business accelerator', 'Grants & Awards', 'Venture Capital', 'Private Equity', 'Investor', 'Real estate', 'Accounting', 'Tax', 'Licensing', 'Intellectual property', 'Quality, Safety & Compliance', 'Certification', 'Recruitment', 'Job board', 'Employee Training', 'Translation', 'Coworking space', 'Meeting space', 'Office resources', "Members' club", 'Appointments', 'Private transport', 'Automotive'];
 
 /* ════════════════════════════════════════════════════════════
    DATA — the test dataset, loaded exactly as exported from the sheet.
@@ -357,8 +357,8 @@ function renderSearch(){
     if(!cats.length) return optBtn(t,'tag','pill',true,!selTags[t]);          /* no category: all tags greyed; unselected ones locked */
     var dim=CONFIG.DIM_TAGS&&count(cats,[t])===0;                            /* greyed if no company in the chosen categories has it (selected tags too; they stay removable) */
     return optBtn(t,'tag','pill',dim,dim||(atMaxT&&!selTags[t]))}).join('');
-  $('catMeta').textContent=cats.length?cats.length+' / '+CONFIG.MAX_CATEGORIES+' selected':CATS.length+' categories';
-  $('tagMeta').textContent=tags.length?tags.length+' / '+CONFIG.MAX_TAGS+' selected':TAGS.length+' tags';
+  $('catMeta').textContent=cats.length+' / '+CONFIG.MAX_CATEGORIES+' selected';
+  $('tagMeta').textContent=tags.length+' / '+CONFIG.MAX_TAGS+' selected';
 
   var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
   $('chosen').innerHTML=chips;
