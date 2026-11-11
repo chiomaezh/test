@@ -32,6 +32,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 @keyframes stripA{0%{opacity:0}4%{opacity:1}46%{opacity:1}50%,100%{opacity:0}}
 @keyframes stripB{0%,50%{opacity:0;visibility:hidden}54%,96%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 @media(prefers-reduced-motion:reduce){.strip .s1{animation:none;opacity:1}.strip .s2{animation:none;opacity:0;visibility:hidden}}
+/* PC: no animation - tagline on the left, "powered by" on the right */
+@media(min-width:1001px){
+  .strip{display:flex;justify-content:space-between;align-items:center;text-align:left}
+  .strip .s1,.strip .s2{animation:none;opacity:1;visibility:visible}
+}
 .strip a{color:var(--bg);text-decoration:underline;text-underline-offset:3px}
 
 /* header */
@@ -219,7 +224,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 
 <footer class="foot">
   <div>
-    <p>+bureau is a curated directory by SABI London,<br>built to demystify and connect the world of consumer enterprise. <br class="br-desk">Selected by hand, not exhaustive.</p>
+    <p>+bureau is a directory by SABI, curated for the world of consumer enterprise. <br class="br-desk">Selected by hand, not exhaustive.</p>
     <p class="c">© 2026 SABI LDN</p>
   </div>
 </footer>
@@ -242,7 +247,7 @@ var CONFIG = {
 };
 
 var CATS = ['Public Relations & Communications', 'Media', 'Creative Content & Production', 'Events', 'Space', 'Networking & Community', 'Human Resources & Education', 'Consulting & Mentoring', 'Consumer & Market Insights', 'Sales & Merchandising', 'Curation & Sourcing', 'Finance', 'Legal', 'Environment & Sustainability'];
-var TAGS = ['Art & Design', 'Fashion & Accessories', 'Beauty & Cosmetics', 'Health & Wellness', 'Sports', 'Food & Beverage', 'Hospitality', 'Travel', 'Technology', 'AI', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Website', 'E-commerce', 'Retail', 'Wholesale', 'Showroom', 'Sample sales', 'Resale', 'Vintage & Antiques', 'Shipping & fulfilment', 'Storage', 'Trade show', 'Exhibition space', 'Brand partnerships', 'Advertising', 'Influencer marketing', 'Affiliate marketing', 'Social Media', 'Email marketing', 'Newsletter', 'Editorial', 'Books & Publishing', 'Press & News', 'Media training', 'Content production', 'Photography & Videography', 'Studio space', 'Creative direction', 'Portfolio', 'Entertainment', 'Music', 'Casting', 'Model management', 'Talent management', 'Trend forecasting', 'Research', 'Consulting', 'Mentoring', 'Business accelerator', 'Grants & Awards', 'Venture Capital', 'Private Equity', 'Investor', 'Real estate', 'Accounting', 'Tax', 'Licensing', 'Intellectual property', 'Quality, Safety & Compliance', 'Certification', 'Recruitment', 'Job board', 'Employee Training', 'Translation', 'Coworking space', 'Meeting space', 'Office resources', "Members' club", 'Appointments', 'Private transport', 'Automotive'];
+var TAGS = ['Art & Design', 'Fashion & Accessories', 'Beauty & Cosmetics', 'Health & Wellness', 'Sports', 'Food & Beverage', 'Hospitality', 'Travel', 'Automotive', 'Technology', 'AI', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Website', 'E-commerce', 'Retail', 'Wholesale', 'Showroom', 'Sample sales', 'Trade show', 'Resale', 'Vintage & Antiques', 'Shipping & fulfilment', 'Storage', 'Exhibition space', 'Advertising', 'Brand partnerships', 'Social Media', 'Influencer marketing', 'Affiliate marketing', 'Email marketing', 'Newsletter', 'Editorial', 'Translation', 'Books & Publishing', 'Press & News', 'Media training', 'Content production', 'Music', 'Photography & Videography', 'Studio space', 'Creative direction', 'Casting', 'Model management', 'Talent management', 'Entertainment', 'Trend forecasting', 'Research', 'Consulting', 'Mentoring', 'Business accelerator', 'Grants & Awards', 'Venture Capital', 'Private Equity', 'Investor', 'Real estate', 'Accounting', 'Tax', 'Licensing', 'Intellectual property', 'Quality, Safety & Compliance', 'Certification', 'Employee Training', 'Job board', 'Appointments', 'Recruitment', 'Office resources', 'Coworking space', 'Meeting space', "Members' club", 'Private transport'];
 
 /* ════════════════════════════════════════════════════════════
    DATA — the test dataset, loaded exactly as exported from the sheet.
