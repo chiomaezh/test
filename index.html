@@ -75,7 +75,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .go{font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 22px;border-radius:6px;color:var(--bg);background:#2E000D;border:.5px solid #2E000D;display:flex;justify-content:space-between;align-items:center;gap:20px}
 .go:hover{opacity:1;background:#1f0009}
 .go[hidden]{display:none}
-.head-r .go-head{padding:8px 13px;gap:11px;font-size:9.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
+.go .mag{flex:none;display:block}
+.head-r .go-head{text-transform:lowercase;padding:8px 13px;gap:5.5px;font-size:9.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
 .go[disabled]{opacity:.35;cursor:not-allowed}
 .hint{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.5px;line-height:1.5;margin-top:-14px}
 .hint:empty{display:none}
@@ -182,7 +183,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 <header class="head">
   <a class="logo" href="#/" aria-label="+bureau">+bureau</a>
   <div class="head-r">
-    <button class="go go-head" id="goBtn" type="button"><span>See results</span><span aria-hidden="true">→</span></button>
+    <button class="go go-head" id="goBtn" type="button"><span>See results</span><svg class="mag" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10.4" cy="5.6" r="4.2"/><path d="M7.3 8.7 1.5 14.5"/></svg></button>
   </div>
 </header>
 
