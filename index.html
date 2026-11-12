@@ -173,7 +173,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .row{grid-template-columns:1fr 36px;row-gap:6px}
   .row .ds,.row .m{grid-column:1/2}
   .row .bk{grid-row:1;grid-column:2}
-  .row .ds,.row .m:nth-child(3){margin-bottom:6px}   /* space under the details and under Ethos: 6px gap -> 12px */
+  .row .ds{margin-bottom:18px}   /* details -> metadata gap: 24px */
+  .row .m:nth-child(3){margin-bottom:6px}   /* space under the details and under Ethos: 6px gap -> 12px */
   .row:not(.hd){padding-bottom:54px}                 /* space under the last piece of metadata: 54px */
   .row .m:empty{display:none}   /* phone: an empty Ethos / HQ leaves no gap */
   .row.hd{display:none}
@@ -481,13 +482,11 @@ function renderProfile(id){
   var pick=function(all,sel){return all.filter(function(x){return sel[x]})};
   var dash=function(a){return a.length?esc(a.join(', ')):'—'};
   var selC=pick(c.cats,selCats), selT=pick(c.tags,selTags);
-  var rows=[['Ethos',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+esc(x[1])+'</dd>'});
   var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(c.site.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))+'</a>':'';
+  var rows=[['Website',site],['HQ',hqRaw(c)],['Ethos',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
     '<div>'+back+'</div>'+
     '<div><h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
-      (site?'<p class="p-site">'+site+'</p>':'')+
-      (hqRaw(c)?'<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:0;margin-bottom:28px"><dt>HQ</dt><dd>'+esc(hqRaw(c))+'</dd></dl></div>':'')+
       '<p class="p-desc">'+esc(c.desc)+'</p>'+
       (rows.length?'<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:44px">'+rows.join('')+'</dl></div>':'')+
       '</div>'+
