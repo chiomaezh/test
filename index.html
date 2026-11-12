@@ -70,7 +70,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .chosen{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 #chosen:empty{display:none}   /* one chip per row */
 .chip{display:inline-flex;gap:8px;align-items:center;font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:var(--text);color:var(--bg);padding:6px 9px;border-radius:5px}
-.chip i{font-style:normal;opacity:.7;font-size:22px;line-height:0;position:relative;top:1px}
+.chip .x{flex:none;display:block;opacity:.7}
 .chip.ghost{background:transparent;color:var(--text);opacity:.5;padding-left:0}
 .go{font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 22px;border-radius:6px;color:var(--bg);background:#2E000D;border:.5px solid #2E000D;display:flex;justify-content:space-between;align-items:center;gap:20px}
 .go:hover{opacity:1;background:#1f0009}
@@ -107,7 +107,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 
 /* ── Results ── */
 .wide{width:100%;padding:32px var(--gutter);display:flex;flex-direction:column;gap:28px}
-.r-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.r-top{margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
 .r-top .chosen{max-width:640px;align-items:flex-end}
 .back{font-weight:400;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid var(--border);padding-bottom:2px;white-space:nowrap;display:inline-block}
 .r-title{font-weight:400;font-size:clamp(17px,calc(3vw - 4px),21px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
@@ -149,6 +149,9 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .foot nav{display:flex;gap:2.5rem;align-items:flex-start}
 .foot nav a{font-weight:300;font-size:13px}
 
+@media(min-width:1001px){
+  .row .bk{font-size:32px;line-height:16px;align-self:start}   /* bigger arrow without pushing the row text down */
+}
 @media(max-width:1000px){
   /* Phone / tablet: header and the search-results panel stay frozen at the top; only categories and tags scroll beneath */
   .head{position:sticky;top:0;z-index:30;background:var(--bg);height:52px;padding-top:0;padding-bottom:0}
@@ -384,7 +387,7 @@ function optBtn(label,type,cls,dim,locked){
   var sel=(type==='cat'?selCats:selTags)[label];
   return '<button type="button" class="'+cls+(dim?' off':'')+'" data-type="'+type+'" data-v="'+esc(label)+'" aria-pressed="'+(!!sel)+'"'+(locked?' disabled':'')+'><span>'+esc(label)+'</span></button>';
 }
-function chip(v,type){return '<button type="button" class="chip" data-type="'+type+'" data-v="'+esc(v)+'" aria-label="Remove '+esc(v)+'">'+esc(v)+' <i>×</i></button>'}
+function chip(v,type){return '<button type="button" class="chip" data-type="'+type+'" data-v="'+esc(v)+'" aria-label="Remove '+esc(v)+'">'+esc(v)+'<svg class="x" viewBox="0 0 10 10" width="11" height="11" aria-hidden="true"><path d="M1 1 9 9M9 1 1 9" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>'}
 /* When categories change, drop any selected tag that no company in the remaining categories has,
    so a greyed-out tag always looks (and is) unselected. */
 function pruneTags(){
