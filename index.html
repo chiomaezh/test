@@ -28,7 +28,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .strip span{grid-area:1/1;opacity:0}
 /* 16s loop: tagline ~8s, fades out, then "powered by" fades in for ~8s, and round again */
 .strip .s1{animation:stripA 16s ease-in-out infinite}
-.strip .s2{animation:stripB 16s ease-in-out infinite;justify-self:end;text-align:right}
+.strip .s2{animation:stripB 16s ease-in-out infinite}
 @keyframes stripA{0%{opacity:0}4%{opacity:1}46%{opacity:1}50%,100%{opacity:0}}
 @keyframes stripB{0%,50%{opacity:0;visibility:hidden}54%,96%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 @media(prefers-reduced-motion:reduce){.strip .s1{animation:none;opacity:1}.strip .s2{animation:none;opacity:0;visibility:hidden}}
@@ -70,13 +70,13 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .chosen{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 #chosen:empty{display:none}   /* one chip per row */
 .chip{display:inline-flex;gap:8px;align-items:center;font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:var(--text);color:var(--bg);padding:6px 9px;border-radius:5px}
-.chip i{font-style:normal;opacity:.7}
+.chip i{font-style:normal;opacity:.7;font-size:22px;line-height:0;position:relative;top:1px}
 .chip.ghost{background:transparent;color:var(--text);opacity:.5;padding-left:0}
 .go{font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:14px 22px;border-radius:6px;color:var(--bg);background:#2E000D;border:.5px solid #2E000D;display:flex;justify-content:space-between;align-items:center;gap:20px}
 .go:hover{opacity:1;background:#1f0009}
 .go[hidden]{display:none}
 .go .mag{flex:none;display:block}
-.head-r .go-head{text-transform:lowercase;padding:8px 13px;gap:5.5px;font-size:11.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
+.head-r .go-head{font-weight:400;text-transform:lowercase;padding:8px 13px;gap:5.5px;font-size:11.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
 .go[disabled]{opacity:.35;cursor:not-allowed}
 .hint{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.5px;line-height:1.5;margin-top:-14px}
 .hint:empty{display:none}
@@ -157,13 +157,15 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .rail-in{padding-bottom:32px}   /* space above the panel's bottom line = space below the header line */
   .fields{flex:1}
   #chosen,.r-top .chosen{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:8px;max-width:none}
-  .r-top{flex-direction:column;flex-wrap:nowrap;gap:20px}   /* phone: selected filters sit side by side to save height */
+  .r-top{flex-direction:column;flex-wrap:nowrap;gap:40px}
+  .r-title{margin-top:40px}   /* phone: selected filters sit side by side to save height */
   .counter-n{font-size:80px}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
   .row{grid-template-columns:1fr 36px;row-gap:6px}
   .row .ds,.row .m{grid-column:1/2}
   .row .bk{grid-row:1;grid-column:2}
+  .row .m:empty{display:none}   /* phone: an empty Ethos / HQ leaves no gap */
   .row.hd{display:none}
 }
 @media(max-width:720px){
@@ -406,7 +408,7 @@ $('goBtn').addEventListener('click',function(){ if(!$('goBtn').disabled){shown=C
 /* ═══ Results view ═══ */
 var resultsObserver=null;
 function rowHtml(c){
-  return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
+  return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosRaw(c))+'</span><span class="m">'+esc(hqRaw(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
 }
 function renderResults(){
   if(resultsObserver){resultsObserver.disconnect();resultsObserver=null}
@@ -435,8 +437,10 @@ function watchSentinel(){
   resultsObserver.observe(sen);
 }
 function pad(n){return (n<10?'0':'')+n}
-function hq(c){return [c.city,c.country].filter(Boolean).join(', ')||'—'}
-function ethosTxt(c){return c.ethos.length?c.ethos.join(' · '):'—'}
+function hqRaw(c){return [c.city,c.country].filter(Boolean).join(', ')}
+function ethosRaw(c){return c.ethos.join(' · ')}
+function hq(c){return hqRaw(c)||'—'}          /* profile page keeps the dash */
+function ethosTxt(c){return ethosRaw(c)||'—'}
 
 /* ═══ Profile view ═══ */
 function similar(c){
@@ -479,7 +483,7 @@ function renderProfile(id){
 function renderSaved(){
   var a=getSaved().map(function(i){return DB[i]}).filter(Boolean);
   $('savedBox').innerHTML='<div><a class="back" href="#/">← Search</a><h1 class="r-title">Saved ('+a.length+'/'+CONFIG.MAX_BOOKMARKS+')</h1></div>'+
-    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
+    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosRaw(c))+'</span><span class="m">'+esc(hqRaw(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
     '<p class="mono" style="font-size:11px;letter-spacing:.8px;opacity:.6">Saved companies live on this device only.</p>';
 }
 
