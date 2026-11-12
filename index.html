@@ -136,7 +136,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .bm{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;margin-top:28px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;border:.5px solid var(--border);border-radius:6px;padding:13px 18px}
 .bm[aria-pressed=true]{background:var(--text);color:var(--bg)}
 .sec-title{font-family:var(--font-mono);font-weight:300;font-size:14px;line-height:1.1;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink,#211D1D);opacity:1}
-.sim{margin-top:28px}
+.sim{margin-top:14px}
 .p-meta{margin-top:0}
 .p-chips{margin-top:34px}
 @media(max-width:1000px){.p-chips{flex-direction:row;flex-wrap:wrap;gap:8px;margin-top:24px}}
@@ -248,7 +248,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 
 <footer class="foot">
   <div>
-    <p>+bureau is a directory by SABI, curated for the world of consumer enterprise. <br class="br-desk">Selected by hand, not exhaustive.</p>
+    <p>+bureau is a directory curated by SABI<br>for the world of consumer enterprise and luxury.<br>Selected by hand, not exhaustive.</p>
     <p class="c">© 2026 SABI LDN</p>
   </div>
 </footer>
@@ -480,6 +480,12 @@ function similar(c){
   }).filter(function(x){return x.score>=3}).sort(function(a,b){return b.score-a.score}).forEach(function(x){out.push(x)});
   return out.slice(0,5);
 }
+function niceUrl(u){
+  /* display form: www.domain.com/path (link target is untouched). www. is only added to bare domains, never to subdomains like blog.x.com */
+  var t=u.replace(/^https?:\/\//,'').replace(/[?#].*$/,'').replace(/\/$/,''), host=t.split('/')[0], parts=host.split('.');
+  var n=/^(co|com|org|net|ac|gov)\.[a-z]{2}$/i.test(parts.slice(-2).join('.'))?3:2;
+  return (parts[0].toLowerCase()!=='www'&&parts.length<=n-0&&parts.length===n)?'www.'+t:t;
+}
 function renderProfile(id){
   var c=DB[id]; if(!c){location.hash='#/';return}
   var sim=similar(c);
@@ -490,7 +496,7 @@ function renderProfile(id){
   var pick=function(all,sel){return all.filter(function(x){return sel[x]})};
   var dash=function(a){return a.length?esc(a.join(', ')):'—'};
   var selC=pick(c.cats,selCats), selT=pick(c.tags,selTags);
-  var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(c.site.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))+'</a>':'';
+  var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(niceUrl(c.site))+'</a>':'';
   var rows=[['Website',site],['HQ',hqRaw(c)],['Ethos',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
     '<div>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
