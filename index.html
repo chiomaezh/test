@@ -28,7 +28,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .strip span{grid-area:1/1;opacity:0}
 /* 16s loop: tagline ~8s, fades out, then "powered by" fades in for ~8s, and round again */
 .strip .s1{animation:stripA 16s ease-in-out infinite}
-.strip .s2{animation:stripB 16s ease-in-out infinite}
+.strip .s2{animation:stripB 16s ease-in-out infinite;justify-self:end;text-align:right}
 @keyframes stripA{0%{opacity:0}4%{opacity:1}46%{opacity:1}50%,100%{opacity:0}}
 @keyframes stripB{0%,50%{opacity:0;visibility:hidden}54%,96%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
 @media(prefers-reduced-motion:reduce){.strip .s1{animation:none;opacity:1}.strip .s2{animation:none;opacity:0;visibility:hidden}}
@@ -108,6 +108,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 /* ── Results ── */
 .wide{width:100%;padding:32px var(--gutter);display:flex;flex-direction:column;gap:28px}
 .r-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.r-top .chosen{max-width:640px;align-items:flex-end}
 .back{font-weight:400;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid var(--border);padding-bottom:2px;white-space:nowrap;display:inline-block}
 .r-title{font-weight:400;font-size:clamp(17px,calc(3vw - 4px),21px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
 .rows{border-top:.5px solid var(--border)}
@@ -119,7 +120,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .row .m{opacity:.8;line-height:1.5}
 .row .bk{justify-self:end;font-family:var(--font-mono);font-size:16px}
 .rows .row.hd{font-family:var(--font-mono);font-size:11px;letter-spacing:1.3px;text-transform:uppercase;opacity:.6;padding-top:12px;padding-bottom:12px;pointer-events:none}
-.more{align-self:center;border:.5px solid var(--border);border-radius:6px;padding:12px 22px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+#sentinel{height:1px}
 .empty{font-family:var(--font-mono);font-weight:300;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:60px 0;text-align:center}
 
 /* ── Profile ── */
@@ -155,7 +156,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .rail{flex:none;max-height:58vh;max-height:58dvh;border-right:0;border-bottom:.5px solid var(--border)}
   .rail-in{padding-bottom:32px}   /* space above the panel's bottom line = space below the header line */
   .fields{flex:1}
-  #chosen{flex-direction:row;flex-wrap:wrap}   /* phone: selected filters sit side by side to save height */
+  #chosen,.r-top .chosen{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:8px;max-width:none}
+  .r-top{flex-direction:column;flex-wrap:nowrap;gap:20px}   /* phone: selected filters sit side by side to save height */
   .counter-n{font-size:80px}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
@@ -397,23 +399,40 @@ function toggle(type,v){
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-type]'); if(!b||b.disabled)return;
   if(b.closest('#v-search')) toggle(b.dataset.type,b.dataset.v);
-  else if(b.closest('#resultsBox')&&b.classList.contains('chip')) { toggle(b.dataset.type,b.dataset.v); if(keys(selCats).length>=CONFIG.MIN_CATEGORIES) renderResults(); else location.hash='#/'; }
+  else if(b.closest('#resultsBox')&&b.classList.contains('chip')) { toggle(b.dataset.type,b.dataset.v); if(keys(selCats).length>=CONFIG.MIN_CATEGORIES){ shown=CONFIG.PAGE_SIZE; renderResults(); } else location.hash='#/'; }
 });
 $('goBtn').addEventListener('click',function(){ if(!$('goBtn').disabled){shown=CONFIG.PAGE_SIZE;location.hash='#/results'} });
 
 /* ═══ Results view ═══ */
+var resultsObserver=null;
+function rowHtml(c){
+  return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
+}
 function renderResults(){
+  if(resultsObserver){resultsObserver.disconnect();resultsObserver=null}
   var cats=keys(selCats), tags=keys(selTags);
   lastResults=run(cats,tags);
   var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
-  var rows=lastResults.slice(0,shown).map(function(c,i){
-    return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
-  }).join('');
+  shown=Math.min(Math.max(shown,CONFIG.PAGE_SIZE),Math.max(lastResults.length,CONFIG.PAGE_SIZE));
+  var rows=lastResults.slice(0,shown).map(rowHtml).join('');
   $('resultsBox').innerHTML=
-    '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen" style="max-width:640px;align-items:flex-end">'+chips+'</div></div>'+
-    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Ethos</span><span>HQ</span><span></span></div>'+rows+'</div>':'<p class="empty">No matches</p>')+
-    (lastResults.length>shown?'<button class="more" id="moreBtn" type="button">Show more ('+(lastResults.length-shown)+')</button>':'');
-  var m=$('moreBtn'); if(m)m.onclick=function(){shown+=CONFIG.PAGE_SIZE;renderResults()};
+    '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen">'+chips+'</div></div>'+
+    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Ethos</span><span>HQ</span><span></span></div><div id="rowsBody">'+rows+'</div></div><div id="sentinel"></div>':'<p class="empty">No matches</p>');
+  watchSentinel();
+}
+/* Continuous scroll: when the end of the list nears the screen, the next batch is added */
+function watchSentinel(){
+  var sen=$('sentinel'); if(!sen) return;
+  if(!('IntersectionObserver' in window)){ $('rowsBody').insertAdjacentHTML('beforeend',lastResults.slice(shown).map(rowHtml).join('')); shown=lastResults.length; return; }
+  resultsObserver=new IntersectionObserver(function(es){
+    if(!es[0].isIntersecting) return;
+    if(shown>=lastResults.length){resultsObserver.disconnect();return}
+    var from=shown; shown=Math.min(shown+CONFIG.PAGE_SIZE,lastResults.length);
+    $('rowsBody').insertAdjacentHTML('beforeend',lastResults.slice(from,shown).map(rowHtml).join(''));
+    if(shown>=lastResults.length){resultsObserver.disconnect();return}
+    resultsObserver.unobserve(sen); resultsObserver.observe(sen);   /* re-check straight away in case it is still in view */
+  },{rootMargin:'600px 0px'});
+  resultsObserver.observe(sen);
 }
 function pad(n){return (n<10?'0':'')+n}
 function hq(c){return [c.city,c.country].filter(Boolean).join(', ')||'—'}
