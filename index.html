@@ -135,8 +135,10 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .imprint .sp{height:12px;grid-column:1/-1}
 .bm{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;margin-top:28px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;border:.5px solid var(--border);border-radius:6px;padding:13px 18px}
 .bm[aria-pressed=true]{background:var(--text);color:var(--bg)}
-.sim{margin-top:56px}
-.sim-i{display:grid;grid-template-columns:32px 1fr;column-gap:12px;padding:14px 0;border-bottom:.5px solid var(--border);text-decoration:none;text-align:left;width:100%}
+.sec-title{font-family:var(--font-mono);font-weight:300;font-size:14px;line-height:1.1;letter-spacing:1.3px;text-transform:uppercase;color:var(--ink,#211D1D);opacity:1}
+.sim{margin-top:28px}
+.p-meta{margin-top:0}
+.sim-i{display:grid;grid-template-columns:1fr;padding:14px 0;border-bottom:.5px solid var(--border);text-decoration:none;text-align:left;width:100%}
 .sim-i:first-of-type{border-top:.5px solid var(--border)}
 .sim-i .i{font-family:var(--font-mono);font-weight:300;font-size:11px;opacity:.6;padding-top:3px}
 .sim-i b{font-weight:500;font-size:15px}
@@ -151,7 +153,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
 
 @media(min-width:1001px){
   .row .ds{margin-right:128px}   /* Details -> Ethos gap: 32px column gap + 128px = 160px */
-  .row .bk{font-size:32px;line-height:16px;align-self:start}   /* bigger arrow without pushing the row text down */
+  .row .bk{font-size:0;line-height:0;align-self:start;width:32px;height:16px;position:relative;justify-self:end}
+  .row:not(.hd) .bk::after{content:'';position:absolute;right:0;top:0;width:32px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M1 8.4H30.5M23.5 1.6 30.5 8.4 23.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M1 8.4H30.5M23.5 1.6 30.5 8.4 23.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%}   /* bigger arrow without pushing the row text down */
 }
 @media(max-width:1000px){
   /* Phone / tablet: header and the search-results panel stay frozen at the top; only categories and tags scroll beneath */
@@ -475,14 +478,17 @@ function renderProfile(id){
     return '<a class="sim-i" href="#/c/'+x.o.id+'"><span><b>'+esc(x.o.name)+'</b><p>'+esc(x.why)+'</p></span></a>';
   }).join('');
   var back=lastResults.length?'<a class="back" href="#/results">← Back to results</a>':'<a class="back" href="#/">← Search</a>';
-  var dash=function(a){return a.length?esc(a.join(' / ')):'—'};
+  var pick=function(all,sel){return all.filter(function(x){return sel[x]})};
+  var dash=function(a){return a.length?esc(a.join(', ')):'—'};
+  var selC=pick(c.cats,selCats), selT=pick(c.tags,selTags);
   $('profBox').innerHTML=
-    '<div>'+back+'<p class="mono up" style="font-size:11px;letter-spacing:1.3px;margin-top:28px;opacity:.6">Imprint</p>'+
-      '<div class="imprint"><dl><dt>HQ</dt><dd>'+esc(hq(c))+'</dd><dt>Founder</dt><dd>—</dd><dt>Website</dt><dd>—</dd></dl></div></div>'+
-    '<div><span class="tag-label">'+esc(c.cats[0]||'')+'</span><h1 class="p-name">'+esc(c.name)+'</h1><p class="p-desc">'+esc(c.desc)+'</p>'+
-      '<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:44px"><dt>Categories</dt><dd>'+dash(c.cats)+'</dd><dt>Tags</dt><dd>'+dash(c.tags)+'</dd><dt>Ethos</dt><dd>'+dash(c.ethos)+'</dd><dt>Model</dt><dd>'+(esc(c.model)||'—')+'</dd></dl></div>'+
+    '<div>'+back+'</div>'+
+    '<div><h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
+      '<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:0;margin-bottom:28px"><dt>Website</dt><dd>—</dd><dt>HQ</dt><dd>'+esc(hq(c))+'</dd></dl></div>'+
+      '<p class="p-desc">'+esc(c.desc)+'</p>'+
+      '<div class="imprint"><dl style="grid-template-columns:140px 1fr;margin-top:44px"><dt>Ethos</dt><dd>'+dash(c.ethos)+'</dd><dt>Model</dt><dd>'+(esc(c.model)||'—')+'</dd><dt>Categories</dt><dd>'+dash(selC)+'</dd><dt>Tags</dt><dd>'+dash(selT)+'</dd></dl></div>'+
       '</div>'+
-    '<div><span class="tag-label">Similar leads</span><div class="sim">'+(simHtml||'<p class="mono" style="font-size:12px">No credible matches yet.</p>')+'</div></div>';
+    '<div><span class="sec-title">Similar leads</span><div class="sim">'+(simHtml||'<p class="mono" style="font-size:12px">No credible matches yet.</p>')+'</div></div>';
 }
 
 /* ═══ Saved view ═══ */
