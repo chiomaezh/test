@@ -150,6 +150,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .foot nav a{font-weight:300;font-size:13px}
 
 @media(min-width:1001px){
+  .row .ds{margin-right:96px}   /* Details -> Ethos gap: 32px column gap + 96px = 128px (4x) */
   .row .bk{font-size:32px;line-height:16px;align-self:start}   /* bigger arrow without pushing the row text down */
 }
 @media(max-width:1000px){
@@ -168,6 +169,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .row{grid-template-columns:1fr 36px;row-gap:6px}
   .row .ds,.row .m{grid-column:1/2}
   .row .bk{grid-row:1;grid-column:2}
+  .row .ds,.row .m:nth-child(3){margin-bottom:6px}   /* space under the details and under Ethos: 6px gap -> 12px */
+  .row:not(.hd){padding-bottom:36px}                 /* space under the last piece of metadata: 18px -> 36px */
   .row .m:empty{display:none}   /* phone: an empty Ethos / HQ leaves no gap */
   .row.hd{display:none}
 }
