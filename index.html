@@ -76,7 +76,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .go:hover{opacity:1;background:#1f0009}
 .go[hidden]{display:none}
 .go .mag{flex:none;display:block}
-.head-r .go-head{text-transform:lowercase;padding:8px 13px;gap:5.5px;font-size:9.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
+.head-r .go-head{text-transform:lowercase;padding:8px 13px;gap:5.5px;font-size:11.1px;letter-spacing:1.05px;border-radius:4px}   /* 70% of the previous 13px / 11px-padding button */
 .go[disabled]{opacity:.35;cursor:not-allowed}
 .hint{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:.5px;line-height:1.5;margin-top:-14px}
 .hint:empty{display:none}
@@ -111,14 +111,14 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .back{font-weight:400;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid var(--border);padding-bottom:2px;white-space:nowrap;display:inline-block}
 .r-title{font-weight:400;font-size:clamp(21px,3vw,25px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
 .rows{border-top:.5px solid var(--border)}
-.row{display:grid;grid-template-columns:48px minmax(160px,1.1fr) 2.2fr minmax(120px,.8fr) minmax(140px,.9fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
+.row{display:grid;grid-template-columns:minmax(160px,1.1fr) 2.2fr minmax(140px,.9fr) minmax(120px,.8fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
 .row:hover{background:var(--tint);opacity:1}
-.row .i,.row .m{font-family:var(--font-mono);font-weight:300;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
-.row .nm{font-weight:500;font-size:16px;letter-spacing:.2px}
-.row .ds{font-weight:300;font-size:14px;line-height:1.55}
+.row .m{font-family:var(--font-mono);font-weight:300;font-size:7.5px;letter-spacing:1px;text-transform:uppercase}
+.row .nm{font-weight:500;font-size:12px;letter-spacing:.2px}
+.row .ds{font-weight:300;font-size:10px;line-height:1.55}
 .row .m{opacity:.8;line-height:1.5}
 .row .bk{justify-self:end;font-family:var(--font-mono);font-size:16px}
-.rows .row.hd{font-family:var(--font-mono);font-size:11px;letter-spacing:1.3px;text-transform:uppercase;opacity:.6;padding-top:12px;padding-bottom:12px;pointer-events:none}
+.rows .row.hd{font-family:var(--font-mono);font-size:7px;letter-spacing:1.3px;text-transform:uppercase;opacity:.6;padding-top:12px;padding-bottom:12px;pointer-events:none}
 .more{align-self:center;border:.5px solid var(--border);border-radius:6px;padding:12px 22px;font-weight:500;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
 .empty{font-family:var(--font-mono);font-weight:300;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:60px 0;text-align:center}
 
@@ -159,9 +159,9 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .counter-n{font-size:80px}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
-  .row{grid-template-columns:36px 1fr 36px;row-gap:6px}
-  .row .ds,.row .m{grid-column:2/3}
-  .row .bk{grid-row:1;grid-column:3}
+  .row{grid-template-columns:1fr 36px;row-gap:6px}
+  .row .ds,.row .m{grid-column:1/2}
+  .row .bk{grid-row:1;grid-column:2}
   .row.hd{display:none}
 }
 @media(max-width:720px){
@@ -407,11 +407,11 @@ function renderResults(){
   lastResults=run(cats,tags);
   var chips=cats.map(function(c){return chip(c,'cat')}).concat(tags.map(function(t){return chip(t,'tag')})).join('');
   var rows=lastResults.slice(0,shown).map(function(c,i){
-    return '<a class="row" href="#/c/'+c.id+'"><span class="i">'+pad(i+1)+'</span><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(hq(c))+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
+    return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
   }).join('');
   $('resultsBox').innerHTML=
     '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen" style="max-width:640px;align-items:flex-end">'+chips+'</div></div>'+
-    (lastResults.length?'<div class="rows"><div class="row hd"><span>No.</span><span>Company</span><span>Details</span><span>HQ</span><span>Ethos</span><span></span></div>'+rows+'</div>':'<p class="empty">No matches</p>')+
+    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Ethos</span><span>HQ</span><span></span></div>'+rows+'</div>':'<p class="empty">No matches</p>')+
     (lastResults.length>shown?'<button class="more" id="moreBtn" type="button">Show more ('+(lastResults.length-shown)+')</button>':'');
   var m=$('moreBtn'); if(m)m.onclick=function(){shown+=CONFIG.PAGE_SIZE;renderResults()};
 }
@@ -443,7 +443,7 @@ function renderProfile(id){
   var c=DB[id]; if(!c){location.hash='#/';return}
   var sim=similar(c);
   var simHtml=sim.map(function(x,i){
-    return '<a class="sim-i" href="#/c/'+x.o.id+'"><span class="i">'+pad(i+1)+'</span><span><b>'+esc(x.o.name)+'</b><p>'+esc(x.why)+'</p></span></a>';
+    return '<a class="sim-i" href="#/c/'+x.o.id+'"><span><b>'+esc(x.o.name)+'</b><p>'+esc(x.why)+'</p></span></a>';
   }).join('');
   var back=lastResults.length?'<a class="back" href="#/results">← Back to results</a>':'<a class="back" href="#/">← Search</a>';
   var dash=function(a){return a.length?esc(a.join(' / ')):'—'};
@@ -460,7 +460,7 @@ function renderProfile(id){
 function renderSaved(){
   var a=getSaved().map(function(i){return DB[i]}).filter(Boolean);
   $('savedBox').innerHTML='<div><a class="back" href="#/">← Search</a><h1 class="r-title">Saved ('+a.length+'/'+CONFIG.MAX_BOOKMARKS+')</h1></div>'+
-    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="i">'+pad(i+1)+'</span><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(hq(c))+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
+    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosTxt(c))+'</span><span class="m">'+esc(hq(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
     '<p class="mono" style="font-size:11px;letter-spacing:.8px;opacity:.6">Saved companies live on this device only.</p>';
 }
 
