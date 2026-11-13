@@ -116,7 +116,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .row{display:grid;grid-template-columns:minmax(160px,1.1fr) 2.2fr minmax(140px,.9fr) minmax(120px,.8fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
 .row:hover{background:var(--tint);opacity:1}
 .row .m{font-family:var(--font-mono);font-weight:300;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
-.row .nm{font-weight:500;font-size:16px;letter-spacing:.2px}
+.row .nm{font-weight:500;font-size:15px;letter-spacing:.2px}
 .row .ds{font-weight:300;font-size:14px;line-height:1.55}
 .row .m{opacity:.8;line-height:1.5}
 .row .bk{justify-self:end;font-family:var(--font-mono);font-size:16px}
@@ -161,8 +161,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
 
 @media(min-width:1001px){
   .row .ds{margin-right:128px}   /* Details -> Ethos gap: 32px column gap + 128px = 160px */
-  .row .bk{font-size:0;line-height:0;align-self:start;width:32px;height:16px;position:relative;justify-self:end}
-  .row:not(.hd) .bk::after{content:'';position:absolute;right:0;top:0;width:32px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M1 8.4H30.5M23.5 1.6 30.5 8.4 23.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M1 8.4H30.5M23.5 1.6 30.5 8.4 23.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%}   /* bigger arrow without pushing the row text down */
+  .row .bk{font-size:0;line-height:0;align-self:start;width:22px;height:16px;position:relative;justify-self:end}
+  .row:not(.hd) .bk::after{content:'';position:absolute;right:0;top:0;width:22px;height:16px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 16'%3E%3Cpath d='M1 8.4H20.5M13.5 1.6 20.5 8.4 13.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 16'%3E%3Cpath d='M1 8.4H20.5M13.5 1.6 20.5 8.4 13.5 15.2' fill='none' stroke='black' stroke-width='1.25'/%3E%3C/svg%3E") no-repeat center/100% 100%}   /* bigger arrow without pushing the row text down */
 }
 @media(max-width:1000px){
   /* Phone / tablet: header and the search-results panel stay frozen at the top; only categories and tags scroll beneath */
