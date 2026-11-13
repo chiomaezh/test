@@ -61,7 +61,7 @@ body.is-search{height:100vh;height:100dvh;overflow:hidden;overscroll-behavior-x:
 body.is-search>.foot{display:none}
 body.is-search main,body.is-search .view.on{min-height:0}
 .search{display:grid;grid-template-columns:minmax(278px,25.4%) 1fr;grid-template-rows:minmax(0,1fr);flex:1;width:100%;min-height:0;overflow:hidden}
-.rail{border-right:.5px solid var(--border);padding:0 var(--gutter);overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:none;min-height:0}
+.rail{border-right:.5px solid var(--border);padding:0 var(--gutter);overflow-y:hidden;overflow-x:hidden;overscroll-behavior-x:none;min-height:0}
 .rail-in{padding:32px 0 28px;display:flex;flex-direction:column;gap:28px}
 .tag-label{display:inline-block;align-self:flex-start;background:var(--tint);font-family:var(--font-mono);font-weight:400;font-size:11px;letter-spacing:1.3px;line-height:1.2;text-transform:uppercase;padding:8px 14px;border-radius:6px}
 .intro{font-size:15px;line-height:1.5;font-weight:400;max-width:30ch}
@@ -168,7 +168,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
   /* Phone / tablet: header and the search-results panel stay frozen at the top; only categories and tags scroll beneath */
   .head{position:sticky;top:0;z-index:30;background:var(--bg);height:52px;padding-top:0;padding-bottom:0}
   .search{display:flex;flex-direction:column}
-  .rail{flex:none;max-height:58vh;max-height:58dvh;border-right:0;border-bottom:.5px solid var(--border)}
+  .rail{flex:none;border-right:0;border-bottom:.5px solid var(--border)}
   .rail-in{padding-bottom:32px}   /* space above the panel's bottom line = space below the header line */
   .fields{flex:1}
   #chosen{margin-top:-7px}   /* chips sit at exactly the same height as on the results page */
