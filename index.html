@@ -511,7 +511,7 @@ function renderProfile(id){
   var dash=function(a){return a.length?esc(a.join(', ')):'—'};
   var selC=pick(c.cats,selCats), selT=pick(c.tags,selTags);
   var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(niceUrl(c.site))+'</a>':'';
-  var rows=[['Website',site],['HQ',hqRaw(c)],['Of note',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
+  var rows=[['Website',site],['HQ',hqRaw(c)],['Categories',selC.join(', ')],['Tags',selT.join(', ')],['Of note',c.ethos.join(', ')],['Model',c.model||'']].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
     '<div>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
     '<div>'+back.replace('class="back"','class="back back-top"')+'<h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
