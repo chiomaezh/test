@@ -448,7 +448,7 @@ function renderResults(){
   var rows=lastResults.slice(0,shown).map(rowHtml).join('');
   $('resultsBox').innerHTML=
     '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen">'+chips+'</div></div>'+
-    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Ethos</span><span>HQ</span><span></span></div><div id="rowsBody">'+rows+'</div></div><div id="sentinel"></div>':'<p class="empty">No matches</p>');
+    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Of note</span><span>HQ</span><span></span></div><div id="rowsBody">'+rows+'</div></div><div id="sentinel"></div>':'<p class="empty">No matches</p>');
   watchSentinel();
 }
 /* Continuous scroll: when the end of the list nears the screen, the next batch is added */
@@ -508,7 +508,7 @@ function renderProfile(id){
   var dash=function(a){return a.length?esc(a.join(', ')):'—'};
   var selC=pick(c.cats,selCats), selT=pick(c.tags,selTags);
   var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(niceUrl(c.site))+'</a>':'';
-  var rows=[['Website',site],['HQ',hqRaw(c)],['Ethos',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
+  var rows=[['Website',site],['HQ',hqRaw(c)],['Of note',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
     '<div>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
     '<div><h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
