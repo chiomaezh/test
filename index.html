@@ -111,6 +111,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .r-top{margin-bottom:6px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
 .r-top .chosen{max-width:640px;align-items:flex-end}
 .back{font-weight:400;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border-bottom:.5px solid var(--border);padding-bottom:2px;white-space:nowrap;display:inline-block}
+.back.back-top{display:none}
 .r-title{font-weight:400;font-size:clamp(15px,calc(3vw - 6px),19px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
 .rows{border-top:.5px solid var(--border)}
 .row{display:grid;grid-template-columns:minmax(160px,1.1fr) 2.2fr minmax(140px,.9fr) minmax(120px,.8fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
@@ -144,7 +145,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .reset[hidden]{display:none}
 @media(max-width:1000px){.p-chips{flex-direction:row;flex-wrap:wrap;gap:8px;margin-top:0;order:1}
   .prof>div:nth-child(1){display:flex;flex-direction:column}
-  .prof>div:nth-child(1) .back{order:2;align-self:flex-start;margin-top:24px}}
+  .prof>div:nth-child(1) .back{order:2;align-self:flex-start;margin-top:24px}
+  .back.back-top{display:inline-block;margin:0 0 32px}}
 .p-site{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:.8px;margin:0 0 28px}
 .sim-i{display:grid;grid-template-columns:1fr;padding:14px 0;border-bottom:.5px solid var(--border);text-decoration:none;text-align:left;width:100%}
 .sim-i:first-of-type{border-top:.5px solid var(--border)}
@@ -179,7 +181,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .prof{grid-template-columns:1fr}
   .prof>div+div{border-left:0;border-top:.5px solid var(--border)}
   /* phone order: main panel, then similar leads, then back link + chosen filters */
-  .prof>div:nth-child(2){order:1;border-top:0;padding-top:64px;padding-bottom:64px}
+  .prof>div:nth-child(2){order:1;border-top:0;padding-top:32px;padding-bottom:64px}
   .p-name{font-size:clamp(23px,calc(3.4vw - 3px),37px)}
   .p-desc{font-size:15px}
   .prof>div:nth-child(3){order:2;padding-bottom:34px}
@@ -511,7 +513,7 @@ function renderProfile(id){
   var rows=[['Website',site],['HQ',hqRaw(c)],['Of note',c.ethos.join(', ')],['Model',c.model||''],['Categories',selC.join(', ')],['Tags',selT.join(', ')]].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
     '<div>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
-    '<div><h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
+    '<div>'+back.replace('class="back"','class="back back-top"')+'<h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
       '<p class="p-desc">'+esc(c.desc)+'</p>'+
       (rows.length?'<div class="imprint"><dl style="grid-template-columns:105px 1fr;margin-top:44px">'+rows.join('')+'</dl></div>':'')+
       '</div>'+
