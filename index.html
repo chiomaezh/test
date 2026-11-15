@@ -347,9 +347,61 @@ function list(s,alias){
   });
   return out;
 }
-var DB = RAW.map(function(r,i){
-  return {id:i,name:r[1],cats:list(r[0],ALIAS_CAT),desc:r[2],tags:list(r[3],ALIAS_TAG),similar:list(r[4]),ethos:list(r[5]),model:r[6],city:r[7],country:r[8],site:r[9]||''};
-});
+function buildDB(raw){
+  return raw.map(function(r,i){
+    return {id:i,name:r[1],cats:list(r[0],ALIAS_CAT),desc:r[2],tags:list(r[3],ALIAS_TAG),similar:list(r[4]),ethos:list(r[5]),model:r[6],city:r[7],country:r[8],site:r[9]||''};
+  });
+}
+var DB = buildDB(RAW);   /* built-in sample data; replaced by the live sheet below when it loads */
+
+/* ═══ Live data: published Google Sheet (CSV) ═══
+   Edit the sheet and the site follows within a few minutes. Columns are matched by HEADING, so their order doesn't matter.
+   If the sheet can't be reached, the built-in data above is used instead. */
+var SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQG4r_MCwDPlvqoweYlKuewQ4O4tO9q7_hfoN6I0J9H8WWpRMs0wXNcgsmwxNwBFoFb4i2_UUowVg-Z/pub?gid=0&single=true&output=csv';
+var SHEET_COLS={   /* our field -> accepted headings (case / spacing / punctuation ignored) */
+  cat:['category','categories'], name:['company','companyname','name','lead'], desc:['details','detail','description'],
+  tags:['tags','tag'], similar:['similar','similarleads','similarcompanies'], ethos:['ofnote','ethos','distinctions'],
+  model:['model','businessmodel'], city:['city','hqcity','location'], country:['country','hqcountry'],
+  site:['website','url','link','site'], live:['live','published','publish','show']
+};
+function parseCSV(t){
+  var rows=[],row=[],f='',q=false,i=0,ch;
+  t=t.replace(/^\uFEFF/,'');
+  for(;i<t.length;i++){
+    ch=t[i];
+    if(q){ if(ch==='"'){ if(t[i+1]==='"'){f+='"';i++} else q=false } else f+=ch }
+    else if(ch==='"') q=true;
+    else if(ch===','){ row.push(f); f='' }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&t[i+1]==='\n')i++; row.push(f); f=''; rows.push(row); row=[] }
+    else f+=ch;
+  }
+  if(f!==''||row.length){ row.push(f); rows.push(row) }
+  return rows;
+}
+function sheetToRaw(rows){
+  if(rows.length<2) return null;
+  var norm=function(h){return String(h).toLowerCase().replace(/[^a-z0-9]/g,'')}, hd=rows[0].map(norm), ix={};
+  Object.keys(SHEET_COLS).forEach(function(k){ ix[k]=-1; SHEET_COLS[k].some(function(a){var j=hd.indexOf(a); if(j>-1){ix[k]=j;return true}}) });
+  if(ix.name<0||ix.cat<0) return null;   /* not the directory tab: keep built-in data */
+  var get=function(r,k){return ix[k]<0?'':String(r[ix[k]]==null?'':r[ix[k]]).trim()};
+  var out=[];
+  rows.slice(1).forEach(function(r){
+    if(!get(r,'name')) return;
+    if(ix.live>-1 && !/^(true|yes|y|1|x|✓|✔)$/i.test(get(r,'live'))) return;   /* only ticked rows go on the site */
+    out.push([get(r,'cat'),get(r,'name'),get(r,'desc'),get(r,'tags'),get(r,'similar'),get(r,'ethos'),get(r,'model'),get(r,'city'),get(r,'country'),get(r,'site')]);
+  });
+  return out;
+}
+function loadSheet(done){
+  var finished=false, end=function(){ if(!finished){finished=true;done()} };
+  setTimeout(end,5000);   /* never keep the visitor waiting more than 5s */
+  try{
+    fetch(SHEET_URL,{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.text() })
+    .then(function(t){ var raw=sheetToRaw(parseCSV(t)); if(raw&&raw.length){ RAW=raw; DB=buildDB(raw) } })
+    .catch(function(e){ console.warn('Sheet not loaded, using built-in data',e) })
+    .then(end);
+  }catch(e){ end() }
+}
 
 /* ═══ State ═══ */
 var selCats={}, selTags={}, shown=CONFIG.PAGE_SIZE, lastResults=[];
@@ -553,7 +605,7 @@ loadSel();
 $('resetBtn').addEventListener('click',function(){selCats={};selTags={};saveSel();renderSearch()});
 /* browser top bar: dark while the strip is in view, paper once it has scrolled away */
 (function(){var m=document.getElementById('themeColor');function u(){m.setAttribute('content',(window.scrollY<36)?'#170006':'#FAFBE3')}addEventListener('scroll',u,{passive:true});addEventListener('hashchange',u);u()})();
-route();
+loadSheet(route);
 </script>
   <!-- ═══════════ Custom cursor: asterisk (experimental) ═══════════
        Mouse / trackpad only (phones and tablets are untouched).
