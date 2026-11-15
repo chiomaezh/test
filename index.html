@@ -209,6 +209,11 @@ body.is-search main,body.is-search .view.on{min-height:0}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 @media(min-width:721px){.br-ph{display:none}}
+/* phone: the strip is pinned to the very top of the screen (like sabi.london) so iPhone Safari tints its top bar to match; the page is pushed down by the strip's height */
+@media(max-width:1000px){
+  .strip{position:fixed;top:0;left:0;right:0;z-index:60}
+  body{padding-top:var(--stripH,36px)}
+}
 </style>
 </head>
 <body>
@@ -605,6 +610,7 @@ window.addEventListener('hashchange',route);
 loadSel();
 $('resetBtn').addEventListener('click',function(){selCats={};selTags={};saveSel();renderSearch()});
 /* browser top bar: dark while the strip is in view, paper once it has scrolled away */
+(function(){var st=document.querySelector('.strip');function h(){document.documentElement.style.setProperty('--stripH',st.offsetHeight+'px')}h();addEventListener('resize',h);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(h)})();
 (function(){var m=document.getElementById('themeColor');function u(){m.setAttribute('content',(window.scrollY<36)?'#170006':'#FAFBE3')}addEventListener('scroll',u,{passive:true});addEventListener('hashchange',u);u()})();
 loadSheet(route);
 </script>
