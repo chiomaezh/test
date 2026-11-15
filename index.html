@@ -146,7 +146,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
 @media(max-width:1000px){.p-chips{flex-direction:row;flex-wrap:wrap;gap:8px;margin-top:0;order:1}
   .prof>div:nth-child(1){display:flex;flex-direction:column}
   .prof>div:nth-child(1) .back{order:2;align-self:flex-start;margin-top:24px}
-  .back.back-top{display:inline-block;margin:0 0 32px}}
+  .back.back-top{display:inline-block;margin:0 0 32px}
+  .prof>div.no-search{display:none}}   /* no saved search: the top link is enough, drop the bottom one */
 .p-site{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:.8px;margin:0 0 28px}
 .sim-i{display:grid;grid-template-columns:1fr;padding:14px 0;border-bottom:.5px solid var(--border);text-decoration:none;text-align:left;width:100%}
 .sim-i:first-of-type{border-top:.5px solid var(--border)}
@@ -565,7 +566,7 @@ function renderProfile(id){
   var site=c.site?'<a href="'+esc(c.site)+'" target="_blank" rel="noopener" style="text-transform:none;letter-spacing:.4px">'+esc(niceUrl(c.site))+'</a>':'';
   var rows=[['Website',site],['HQ',hqRaw(c)],['Categories',selC.join(', ')],['Tags',selT.join(', ')],['Of note',c.ethos.join(', ')],['Model',c.model||'']].filter(function(x){return String(x[1]).trim()}).map(function(x){return '<dt>'+x[0]+'</dt><dd>'+(x[0]==='Website'?x[1]:esc(x[1]))+'</dd>'});
   $('profBox').innerHTML=
-    '<div>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
+    '<div'+(hasSearch?'':' class="no-search"')+'>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
     '<div>'+back.replace('class="back"','class="back back-top"')+'<h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
       '<p class="p-desc">'+esc(c.desc)+'</p>'+
       (rows.length?'<div class="imprint"><dl style="grid-template-columns:105px 1fr;margin-top:44px">'+rows.join('')+'</dl></div>':'')+
