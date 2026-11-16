@@ -290,7 +290,7 @@ var CONFIG = {
 };
 
 var CATS = ['Public Relations & Communications', 'Media', 'Creative Content & Production', 'Events', 'Space', 'Networking & Community', 'Human Resources & Education', 'Consulting & Mentoring', 'Consumer & Market Insights', 'Sales & Merchandising', 'Curation & Sourcing', 'Finance', 'Legal', 'Environment & Sustainability'];
-var TAGS = ['Art & Design', 'Fashion & Accessories', 'Beauty & Cosmetics', 'Health & Wellness', 'Sports', 'Food & Beverage', 'Hospitality', 'Travel', 'Automotive', 'Technology', 'AI', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Website', 'E-commerce', 'Retail', 'Wholesale', 'Showroom', 'Sample sales', 'Trade show', 'Resale', 'Vintage & Antiques', 'Shipping & fulfilment', 'Storage', 'Exhibition space', 'Advertising', 'Brand partnerships', 'Social Media', 'Influencer marketing', 'Affiliate marketing', 'Email marketing', 'Newsletter', 'Editorial', 'Translation', 'Books & Publishing', 'Press & News', 'Media training', 'Content production', 'Music', 'Photography & Videography', 'Studio space', 'Creative direction', 'Casting', 'Model management', 'Talent management', 'Entertainment', 'Trend forecasting', 'Research', 'Consulting', 'Mentoring', 'Business accelerator', 'Grants & Awards', 'Venture Capital', 'Private Equity', 'Investor', 'Real estate', 'Accounting', 'Tax', 'Licensing', 'Intellectual property', 'Quality, Safety & Compliance', 'Certification', 'Employee Training', 'Job board', 'Appointments', 'Recruitment', 'Office resources', 'Coworking space', 'Meeting space', "Members' club", 'Private transport'];
+var TAGS = ['Art & Design', 'Fashion', 'Beauty & Cosmetics', 'Health & Wellness', 'Sports', 'Food & Beverage', 'Hospitality', 'Travel', 'Automotive', 'Technology', 'AI', 'Virtual Reality (VR) & Augmented Reality (AR)', 'Website', 'E-commerce', 'Retail', 'Wholesale', 'Showroom', 'Sample sales', 'Trade show', 'Resale', 'Vintage & Antiques', 'Shipping & fulfilment', 'Storage', 'Exhibition space', 'Advertising', 'Brand partnerships', 'Social Media', 'Influencer marketing', 'Affiliate marketing', 'Email marketing', 'Newsletter', 'Editorial', 'Translation', 'Books & Publishing', 'Press & News', 'Media training', 'Content production', 'Music', 'Photography & Videography', 'Studio space', 'Creative direction', 'Casting', 'Model management', 'Talent management', 'Entertainment', 'Trend forecasting', 'Research', 'Consulting', 'Mentoring', 'Business accelerator', 'Grants & Awards', 'Venture Capital', 'Private Equity', 'Investor', 'Real estate', 'Accounting', 'Tax', 'Licensing', 'Intellectual property', 'Quality, Safety & Compliance', 'Certification', 'Employee Training', 'Job board', 'Appointments', 'Recruitment', 'Office resources', 'Coworking space', 'Meeting space', "Members' club", 'Private transport'];
 
 /* ════════════════════════════════════════════════════════════
    DATA — the test dataset, loaded exactly as exported from the sheet.
@@ -340,7 +340,7 @@ var RAW = [
 /* The sample uses a few labels that differ from the taxonomy in the brief.
    They are mapped here so those companies stay reachable; edit or empty this to see the raw behaviour. */
 var ALIAS_CAT = {'Spaces':'Space'};
-var ALIAS_TAG = {'News':'Press & News'};
+var ALIAS_TAG = {'News':'Press & News','Fashion & Accessories':'Fashion'};   /* old spellings still in the sheet or sample data map to the current tag name */
 
 function list(s,alias){
   var out=[], keep=CATS.concat(TAGS).filter(function(l){return l.indexOf(',')>-1});   /* labels that contain a comma, e.g. "Quality, Safety & Compliance" */
