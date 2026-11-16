@@ -114,7 +114,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .back.back-top{display:none}
 .r-title{font-weight:400;font-size:clamp(15px,calc(3vw - 6px),19px);letter-spacing:2px;text-transform:uppercase;line-height:1.1;margin-top:20px}
 .rows{border-top:.5px solid var(--border)}
-.row{display:grid;grid-template-columns:minmax(160px,1.1fr) 2.2fr minmax(140px,.9fr) minmax(120px,.8fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
+.row{display:grid;grid-template-columns:minmax(160px,1.1fr) 2.4fr minmax(180px,1.1fr) minmax(130px,.8fr) 44px;gap:var(--gutter);align-items:baseline;padding:18px 8px;border-bottom:.5px solid var(--border);text-decoration:none;width:100%;text-align:left}
 .row:hover{background:var(--tint);opacity:1}
 .row .m{font-family:var(--font-mono);font-weight:300;font-size:11.5px;letter-spacing:1px;text-transform:uppercase}
 .row .nm{font-weight:500;font-size:15px;letter-spacing:.2px}
@@ -130,7 +130,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
 .prof>div{padding:32px var(--gutter)}
 .prof>div+div{border-left:.5px solid var(--border)}
 .p-name{font-weight:400;font-size:clamp(21px,calc(3.4vw - 8px),32px);line-height:1.05;letter-spacing:.5px;margin:20px 0 24px}
-.p-desc{font-weight:300;font-size:14px;line-height:1.75;max-width:60ch}
+.p-desc{font-weight:300;font-size:14px;line-height:1.75;max-width:60ch;white-space:pre-line}
 .imprint dl{display:grid;grid-template-columns:110px 1fr;row-gap:14px;column-gap:16px;margin-top:20px}
 .imprint dt{font-family:var(--font-mono);font-weight:300;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;opacity:.6;padding-top:2px}
 .imprint dd{font-family:var(--font-mono);font-weight:300;font-size:12px;letter-spacing:.8px;text-transform:uppercase;line-height:1.6}
@@ -193,7 +193,8 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .row .ds,.row .m{grid-column:1/2}
   .row .bk{grid-row:1;grid-column:2}
   .row .ds{margin-bottom:18px}   /* details -> metadata gap: 24px */
-  .row .m:nth-child(3){margin-bottom:6px}   /* space under the details and under Ethos: 6px gap -> 12px */
+  .row .nm{order:-3}.row .ds{order:-2}.row .m:nth-child(4){order:-1}   /* phone: name, details, HQ, then categories & tags */
+  .row .m:nth-child(4){margin-bottom:6px}   /* 12px between HQ and categories & tags */
   .row:not(.hd){padding-bottom:54px}                 /* space under the last piece of metadata: 54px */
   .row .m:empty{display:none}   /* phone: an empty Ethos / HQ leaves no gap */
   .row.hd{display:none}
@@ -355,7 +356,8 @@ function list(s,alias){
 }
 function buildDB(raw){
   return raw.map(function(r,i){
-    return {id:i,name:r[1],cats:list(r[0],ALIAS_CAT),desc:r[2],tags:list(r[3],ALIAS_TAG),similar:list(r[4]),ethos:list(r[5]),model:r[6],city:r[7],country:r[8],site:r[9]||''};
+    var f=r[10]||r[2]||'';   /* "Details formatted" column (with *italics*) if present, else plain Details */
+    return {id:i,name:r[1],cats:list(r[0],ALIAS_CAT),desc:f.replace(/\*([^*\n]+?)\*/g,'$1'),dh:esc(f).replace(/\*([^*\n]+?)\*/g,'<em>$1</em>'),tags:list(r[3],ALIAS_TAG),similar:list(r[4]),ethos:list(r[5]),model:r[6],city:r[7],country:r[8],site:r[9]||''};
   });
 }
 var DB = buildDB(RAW);   /* built-in sample data; replaced by the live sheet below when it loads */
@@ -365,7 +367,7 @@ var DB = buildDB(RAW);   /* built-in sample data; replaced by the live sheet bel
    If the sheet can't be reached, the built-in data above is used instead. */
 var SHEET_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vQG4r_MCwDPlvqoweYlKuewQ4O4tO9q7_hfoN6I0J9H8WWpRMs0wXNcgsmwxNwBFoFb4i2_UUowVg-Z/pub?gid=0&single=true&output=csv';
 var SHEET_COLS={   /* our field -> accepted headings (case / spacing / punctuation ignored) */
-  cat:['category','categories'], name:['company','companyname','name','lead'], desc:['details','detail','description'],
+  cat:['category','categories'], name:['company','companyname','name','lead'], desc:['details','detail','description'], descf:['detailsformatted','detailsitalics','detailsformatting'],
   tags:['tags','tag'], similar:['similar','similarleads','similarcompanies'], ethos:['ofnote','ethos','distinctions'],
   model:['model','businessmodel'], city:['city','hqcity','location'], country:['country','hqcountry'],
   site:['website','url','link','site'], live:['live','published','publish','show']
@@ -394,7 +396,7 @@ function sheetToRaw(rows){
   rows.slice(1).forEach(function(r){
     if(!get(r,'name')) return;
     if(ix.live>-1 && !/^(true|yes|y|1|x|✓|✔)$/i.test(get(r,'live'))) return;   /* only ticked rows go on the site */
-    out.push([get(r,'cat'),get(r,'name'),get(r,'desc'),get(r,'tags'),get(r,'similar'),get(r,'ethos'),get(r,'model'),get(r,'city'),get(r,'country'),get(r,'site')]);
+    out.push([get(r,'cat'),get(r,'name'),get(r,'desc'),get(r,'tags'),get(r,'similar'),get(r,'ethos'),get(r,'model'),get(r,'city'),get(r,'country'),get(r,'site'),get(r,'descf')]);
   });
   return out;
 }
@@ -497,8 +499,12 @@ $('goBtn').addEventListener('click',function(){ if(!$('goBtn').disabled){shown=C
 
 /* ═══ Results view ═══ */
 var resultsObserver=null;
+/* the searched-for categories and tags this company matched: categories first, then tags */
+function filtersOf(c){
+  return c.cats.filter(function(x){return selCats[x]}).concat(c.tags.filter(function(x){return selTags[x]})).join(', ');
+}
 function rowHtml(c){
-  return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosRaw(c))+'</span><span class="m">'+esc(hqRaw(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
+  return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+c.dh+'</span><span class="m">'+esc(filtersOf(c))+'</span><span class="m">'+esc(hqRaw(c))+'</span><span class="bk" aria-hidden="true">'+(isSaved(c.id)?'●':'→')+'</span></a>';
 }
 function renderResults(){
   if(resultsObserver){resultsObserver.disconnect();resultsObserver=null}
@@ -509,7 +515,7 @@ function renderResults(){
   var rows=lastResults.slice(0,shown).map(rowHtml).join('');
   $('resultsBox').innerHTML=
     '<div class="r-top"><div><a class="back" href="#/">← Refine search</a><h1 class="r-title">'+lastResults.length+' '+(lastResults.length===1?'result':'results')+'</h1></div><div class="chosen">'+chips+'</div></div>'+
-    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Of note</span><span>HQ</span><span></span></div><div id="rowsBody">'+rows+'</div></div><div id="sentinel"></div>':'<p class="empty">No matches</p>');
+    (lastResults.length?'<div class="rows"><div class="row hd"><span>Company</span><span>Details</span><span>Categories &amp; tags</span><span>HQ</span><span></span></div><div id="rowsBody">'+rows+'</div></div><div id="sentinel"></div>':'<p class="empty">No matches</p>');
   watchSentinel();
 }
 /* Continuous scroll: when the end of the list nears the screen, the next batch is added */
@@ -573,7 +579,7 @@ function renderProfile(id){
   $('profBox').innerHTML=
     '<div'+(hasSearch?'':' class="no-search"')+'>'+back+(keys(selCats).length?'<div class="chosen p-chips">'+keys(selCats).concat(keys(selTags)).map(function(v){return '<span class="chip">'+esc(v)+'</span>'}).join('')+'</div>':'')+'</div>'+
     '<div>'+back.replace('class="back"','class="back back-top"')+'<h1 class="p-name" style="margin-top:0">'+esc(c.name)+'</h1>'+
-      '<p class="p-desc">'+esc(c.desc)+'</p>'+
+      '<p class="p-desc">'+c.dh+'</p>'+
       (rows.length?'<div class="imprint"><dl style="grid-template-columns:105px 1fr;margin-top:44px">'+rows.join('')+'</dl></div>':'')+
       '</div>'+
     '<div><span class="sec-title">Similar leads</span><div class="sim">'+(simHtml||'<p class="mono" style="font-size:12px">No credible matches yet.</p>')+'</div></div>';
@@ -583,7 +589,7 @@ function renderProfile(id){
 function renderSaved(){
   var a=getSaved().map(function(i){return DB[i]}).filter(Boolean);
   $('savedBox').innerHTML='<div><a class="back" href="#/">← Search</a><h1 class="r-title">Saved ('+a.length+'/'+CONFIG.MAX_BOOKMARKS+')</h1></div>'+
-    (a.length?'<div class="rows">'+a.map(function(c,i){return '<a class="row" href="#/c/'+c.id+'"><span class="nm">'+esc(c.name)+'</span><span class="ds">'+esc(c.desc)+'</span><span class="m">'+esc(ethosRaw(c))+'</span><span class="m">'+esc(hqRaw(c))+'</span><span class="bk" aria-hidden="true">→</span></a>'}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
+    (a.length?'<div class="rows">'+a.map(function(c){return rowHtml(c)}).join('')+'</div>':'<p class="empty">Nothing saved on this device yet</p>')+
     '<p class="mono" style="font-size:11px;letter-spacing:.8px;opacity:.6">Saved companies live on this device only.</p>';
 }
 
