@@ -195,7 +195,7 @@ body.is-search main,body.is-search .view.on{min-height:0}
   .row .bk{grid-row:1;grid-column:2}
   .row .ds{margin-bottom:18px}   /* details -> metadata gap: 24px */
   .row .nm{order:-3}.row .ds{order:-2}.row .m:nth-child(4){order:-1}   /* phone: name, details, HQ, then categories & tags */
-  .row .m:nth-child(4){margin-bottom:6px;opacity:1}   /* HQ line: location in full black */
+  .row .m:nth-child(4){margin-bottom:18px;opacity:1}   /* HQ line: location in full black; 24px above it and 24px below it */
   .row .hql{display:inline;margin-right:12px;opacity:.8}   /* "HQ" label in the same muted mono style as the categories & tags line */   /* 12px between HQ and categories & tags */
   .row:not(.hd){padding-bottom:54px}                 /* space under the last piece of metadata: 54px */
   .row .m:empty{display:none}   /* phone: an empty Ethos / HQ leaves no gap */
@@ -596,8 +596,18 @@ function renderSaved(){
 }
 
 /* ═══ Router ═══ */
-function saveSel(){try{sessionStorage.setItem('bureauSel',JSON.stringify({c:selCats,t:selTags}))}catch(e){}}
-function loadSel(){try{var v=JSON.parse(sessionStorage.getItem('bureauSel')||'null'); if(v){selCats=v.c||{};selTags=v.t||{}}}catch(e){}}
+/* A search lasts 20 minutes from the last activity, then it is cleared and the visitor is returned to a fresh search page */
+var SEARCH_TTL=20*60*1000, lastActive=Date.now();
+function hasSel(){return keys(selCats).length>0||keys(selTags).length>0}
+function saveSel(){try{sessionStorage.setItem('bureauSel',JSON.stringify({c:selCats,t:selTags,ts:lastActive}))}catch(e){}}
+function loadSel(){try{var v=JSON.parse(sessionStorage.getItem('bureauSel')||'null'); if(v){ if(v.ts&&Date.now()-v.ts>SEARCH_TTL){sessionStorage.removeItem('bureauSel')} else {selCats=v.c||{};selTags=v.t||{};lastActive=v.ts||Date.now()} }}catch(e){}}
+function checkExpiry(){
+  if(hasSel()&&Date.now()-lastActive>SEARCH_TTL){
+    selCats={};selTags={};saveSel();renderSearch();
+    if(location.hash==='#/results'||location.hash==='#/saved') location.hash='#/';
+  }
+}
+function touch(){checkExpiry(); lastActive=Date.now(); if(hasSel()) saveSel()}
 function route(){
   saveSel();
   var h=location.hash||'#/', m;
@@ -616,6 +626,9 @@ function route(){
 (function(){var f=document.querySelector('footer.foot');document.querySelector('.fields').appendChild(f.cloneNode(true))})();
 window.addEventListener('hashchange',route);
 loadSel();
+['pointerdown','keydown','touchstart','wheel'].forEach(function(ev){document.addEventListener(ev,touch,{capture:true,passive:true})});
+var _scrollT=0; document.addEventListener('scroll',function(){var n=Date.now(); if(n-_scrollT>5000){_scrollT=n; touch()}},{capture:true,passive:true});
+setInterval(checkExpiry,30000);
 $('resetBtn').addEventListener('click',function(){selCats={};selTags={};saveSel();renderSearch()});
 /* browser top bar: dark while the strip is in view, paper once it has scrolled away */
 (function(){var st=document.querySelector('.strip');function h(){document.documentElement.style.setProperty('--stripH',st.offsetHeight+'px')}h();addEventListener('resize',h);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(h)})();
